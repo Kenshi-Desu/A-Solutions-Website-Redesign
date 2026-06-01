@@ -85,7 +85,7 @@ export default function MissionVision() {
               ) : (
                 <Save size={18} />
               )}
-              <span>{isSaving ? 'Updating...' : 'Update Global Content'}</span>
+              <span>{isSaving ? 'Saving...' : 'Save Changes'}</span>
             </button>
           </div>
         </form>
