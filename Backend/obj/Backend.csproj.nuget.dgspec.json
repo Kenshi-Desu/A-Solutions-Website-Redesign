@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kenta\\OneDrive\\Documents\\SCHOOL\\2nd YEAR\\OJT\\A+ Solutions Redesign\\Backend\\Backend.csproj": {}
+    "C:\\Projects\\A+ Solutions Redesign\\A-Solutions-Website-Redesign\\Backend\\Backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kenta\\OneDrive\\Documents\\SCHOOL\\2nd YEAR\\OJT\\A+ Solutions Redesign\\Backend\\Backend.csproj": {
+    "C:\\Projects\\A+ Solutions Redesign\\A-Solutions-Website-Redesign\\Backend\\Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kenta\\OneDrive\\Documents\\SCHOOL\\2nd YEAR\\OJT\\A+ Solutions Redesign\\Backend\\Backend.csproj",
+        "projectUniqueName": "C:\\Projects\\A+ Solutions Redesign\\A-Solutions-Website-Redesign\\Backend\\Backend.csproj",
         "projectName": "Backend",
-        "projectPath": "C:\\Users\\kenta\\OneDrive\\Documents\\SCHOOL\\2nd YEAR\\OJT\\A+ Solutions Redesign\\Backend\\Backend.csproj",
+        "projectPath": "C:\\Projects\\A+ Solutions Redesign\\A-Solutions-Website-Redesign\\Backend\\Backend.csproj",
         "packagesPath": "C:\\Users\\kenta\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kenta\\OneDrive\\Documents\\SCHOOL\\2nd YEAR\\OJT\\A+ Solutions Redesign\\Backend\\obj\\",
+        "outputPath": "C:\\Projects\\A+ Solutions Redesign\\A-Solutions-Website-Redesign\\Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\kenta\\AppData\\Roaming\\NuGet\\NuGet.Config"
