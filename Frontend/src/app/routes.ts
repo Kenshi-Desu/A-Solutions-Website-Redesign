@@ -11,6 +11,9 @@ import Dashboard from './pages/admin/Dashboard';
 import Employees from './pages/admin/Employees';
 import MissionVision from './pages/admin/MissionVision';
 import ContactInfo from './pages/admin/ContactInfo';
+import CoreValues from './pages/admin/CoreValues';
+import EventDetails from './pages/admin/EventDetails';
+import Timeline from './pages/admin/Timeline';
 import PlaceholderPage from './pages/admin/PlaceholderPage';
 
 export const router = createBrowserRouter([
@@ -34,19 +37,19 @@ export const router = createBrowserRouter([
     Component: AdminLayout,
     children: [
       { index: true, Component: Dashboard },
-      { path: 'employees', Component: Employees },
+      { path: 'employees', Component: PlaceholderPage },
       { path: 'mission-vision', Component: MissionVision },
       { path: 'contact-info', Component: ContactInfo },
+      { path: 'core-values', Component: CoreValues },
+      { path: 'event-details', Component: EventDetails },
+      { path: 'timeline', Component: Timeline },
       { path: 'offers', Component: PlaceholderPage },
       { path: 'achievements', Component: PlaceholderPage },
       { path: 'feedback', Component: PlaceholderPage },
       { path: 'partners', Component: PlaceholderPage },
-      { path: 'event-details', Component: PlaceholderPage },
-      { path: 'timeline', Component: PlaceholderPage },
       { path: 'highlights', Component: PlaceholderPage },
       { path: 'sponsors', Component: PlaceholderPage },
       { path: 'news-sync', Component: PlaceholderPage },
-      { path: 'core-values', Component: PlaceholderPage },
     ],
   },
 ]);

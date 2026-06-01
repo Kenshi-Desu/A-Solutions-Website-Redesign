@@ -31,7 +31,7 @@ export default function AdminLayout() {
       icon: Globe,
       items: [
         { path: '/admin/offers', label: 'Manage Offers/Services' },
-        { path: '/admin/achievements', label: 'Manage Achievements' },
+        { path: '/admin/achievements', label: 'Manage Achievements/Awards' },
         { path: '/admin/feedback', label: 'Manage Feedback/Testimonials' },
         { path: '/admin/partners', label: 'Manage Partners' },
       ]
