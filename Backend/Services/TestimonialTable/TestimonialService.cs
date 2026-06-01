@@ -70,9 +70,9 @@ public class TestimonialService : ITestimonialService
         };
     }
 
-    public async Task<TestimonialResponse> UpdateAsync(TestimonialPatchRequest request)
+    public async Task<TestimonialResponse> UpdateAsync(int id, TestimonialPatchRequest request)
     {
-        var testimonial = await _context.Testimonials.FindAsync(request.Id);
+        var testimonial = await _context.Testimonials.FindAsync(id);
         if (testimonial == null) return null;
 
         testimonial.Rate = request.Rate;

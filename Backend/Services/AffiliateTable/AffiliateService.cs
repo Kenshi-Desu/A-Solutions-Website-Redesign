@@ -74,9 +74,9 @@ public class AffiliateService : IAffiliateService
         };
     }
 
-    public async Task<AffiliateResponse> UpdateAsync(AffiliatePatchRequest request)
+    public async Task<AffiliateResponse> UpdateAsync(int id, AffiliatePatchRequest request)
     {
-        var affiliate = await _context.Affiliates.FindAsync(request.Id);
+        var affiliate = await _context.Affiliates.FindAsync(id);
         if (affiliate == null) return null;
 
         affiliate.Name = request.Name;

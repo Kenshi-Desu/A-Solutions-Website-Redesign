@@ -7,6 +7,6 @@ public interface IAffiliateService
     Task<IEnumerable<AffiliateResponse>> GetAllAsync();
     Task<AffiliateResponse> GetByIdAsync(int id);
     Task<AffiliateResponse> CreateAsync(AffiliatePostRequest request);
-    Task<AffiliateResponse> UpdateAsync(AffiliatePatchRequest request);
+    Task<AffiliateResponse> UpdateAsync(int id, AffiliatePatchRequest request);
     Task<bool> DeleteAsync(int id);
 }

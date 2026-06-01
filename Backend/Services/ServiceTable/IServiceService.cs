@@ -2,7 +2,7 @@ using A_Solutions_Website_Redesign.Backend.Model.Dtos;
 
 namespace A_Solutions_Website_Redesign.Backend.Services;
 
-public interface IServicesService
+public interface IServiceService
 {
     Task<IEnumerable<ServiceResponse>> GetAllAsync();
     Task<ServiceResponse> GetByIdAsync(int id);

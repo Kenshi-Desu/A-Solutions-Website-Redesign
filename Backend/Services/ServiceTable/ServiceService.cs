@@ -5,7 +5,7 @@ using A_Solutions_Website_Redesign.Backend.Model.Entities;
 
 namespace A_Solutions_Website_Redesign.Backend.Services;
 
-public class ServiceService : IServicesService
+public class ServiceService : IServiceService
 {
     private readonly AppDbContext _context;
 
