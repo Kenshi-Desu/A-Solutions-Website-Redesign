@@ -7,6 +7,6 @@ public interface ITestimonialService
     Task<IEnumerable<TestimonialResponse>> GetAllAsync();
     Task<TestimonialResponse> GetByIdAsync(int id);
     Task<TestimonialResponse> CreateAsync(TestimonialPostRequest request);
-    Task<TestimonialResponse> UpdateAsync(TestimonialPatchRequest request);
+    Task<TestimonialResponse> UpdateAsync(int id, TestimonialPatchRequest request);
     Task<bool> DeleteAsync(int id);
 }
