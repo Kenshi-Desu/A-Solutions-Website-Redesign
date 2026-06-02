@@ -2,41 +2,42 @@ using System.ComponentModel.DataAnnotations;
 
 namespace A_Solutions_Website_Redesign.Backend.Model.Dtos;
 
-public class ServiceResponse
+public class OCRCEventHighlightsResponse
 {
+    [Key]
     public int Id { get; set; }
     [Required]
     public required string Title { get; set; }
+    public int EventYear { get; set; }
     [Required]
-    public required string ShortDescription { get; set; }
+    public required string Description { get; set; }
     [Required]
-    public required string IconName { get; set; }
+    public required string ImageUrl { get; set; }
     public int DisplayOrder { get; set; }
-    public bool IsActive { get; set; }
 }
 
-public class ServicePostRequest
+public class OCRCEventHighlightsPostRequest
 {
     [Required]
     public required string Title { get; set; }
+    public int EventYear { get; set; }
     [Required]
-    public required string ShortDescription { get; set; }
+    public required string Description { get; set; }
     [Required]
-    public required string IconName { get; set; }
+    public required string ImageUrl { get; set; }
     public int DisplayOrder { get; set; }
-    public bool IsActive { get; set; }
 }
 
-public class ServicePatchRequest
+public class OCRCEventHighlightsPatchRequest
 {
     [Required]
     public int Id { get; set; }
     [Required]
     public required string Title { get; set; }
+    public int EventYear { get; set; }
     [Required]
-    public required string ShortDescription { get; set; }
+    public required string Description { get; set; }
     [Required]
-    public required string IconName { get; set; }
+    public required string ImageUrl { get; set; }
     public int DisplayOrder { get; set; }
-    public bool IsActive { get; set; }
 }
