@@ -6,9 +6,12 @@ namespace A_Solutions_Website_Redesign.Backend.Model.Dtos
     {
         public int Id { get; set; }
         public int Rate { get; set; }
-        public string AuthorName { get; set; }
-        public string AuthorRole { get; set; }
-        public string Content { get; set; }
+        [Required]
+        public required string AuthorName { get; set; }
+        [Required]
+        public required string AuthorRole { get; set; }
+        [Required]
+        public required string Content { get; set; }
         public bool IsApproved { get; set; }
     }
 
@@ -17,9 +20,11 @@ namespace A_Solutions_Website_Redesign.Backend.Model.Dtos
         [Required]
         public int Rate { get; set; }
         [Required]
-        public string AuthorName { get; set; }
-        public string AuthorRole { get; set; }
-        public string Content { get; set; }
+        public required string AuthorName { get; set; }
+        [Required]
+        public required string AuthorRole { get; set; }
+        [Required]
+        public required string Content { get; set; }
         public bool IsApproved { get; set; }
     }
 
@@ -30,9 +35,11 @@ namespace A_Solutions_Website_Redesign.Backend.Model.Dtos
         [Required]
         public int Rate { get; set; }
         [Required]
-        public string AuthorName { get; set; }
-        public string AuthorRole { get; set; }
-        public string Content { get; set; }
+        public required string AuthorName { get; set; }
+        [Required]
+        public required string AuthorRole { get; set; }
+        [Required]
+        public required string Content { get; set; }
         public bool IsApproved { get; set; }
     }
 }

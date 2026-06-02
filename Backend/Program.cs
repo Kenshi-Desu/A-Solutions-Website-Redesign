@@ -1,19 +1,29 @@
-using Microsoft.EntityFrameworkCore;
-using A_Solutions_Website_Redesign.Backend.Data;
+using Supabase;
 using A_Solutions_Website_Redesign.Backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var supabaseUrl = builder.Configuration["Supabase:Url"];
+var supabaseKey = builder.Configuration["Supabase:Key"];
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options
-        .UseNpgsql(connectionString)
-        .UseSnakeCaseNamingConvention()
-);
+if (string.IsNullOrEmpty(supabaseUrl) || string.IsNullOrEmpty(supabaseKey))
+{
+    throw new InvalidOperationException("Supabase URL or Publishable Key configuration is missing or empty in appsettings.json.");
+}
+
+builder.Services.AddSingleton(provider =>
+    new Supabase.Client(supabaseUrl, supabaseKey, new Supabase.SupabaseOptions
+    {
+        AutoRefreshToken = true,
+        AutoConnectRealtime = true
+    }));
 
 // Add services to the container.
-builder.Services.AddScoped<IServicesService, ServiceService>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
+builder.Services.AddScoped<IAffiliateService, AffiliateService>();
+builder.Services.AddScoped<IAchievementService, AchievementService>();
+builder.Services.AddScoped<ITestimonialService, TestimonialService>();
+
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();

@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using A_Solutions_Website_Redesign.Backend.Data;
 using A_Solutions_Website_Redesign.Backend.Model.Dtos;
 using A_Solutions_Website_Redesign.Backend.Model.Entities;
 
@@ -7,17 +5,20 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class TestimonialService : ITestimonialService
 {
-    private readonly AppDbContext _context;
+    private readonly Supabase.Client _supabaseClient;
 
-    public TestimonialService(AppDbContext context)
+    public TestimonialService(Supabase.Client supabaseClient)
     {
-        _context = context;
+        _supabaseClient = supabaseClient;
     }
 
     public async Task<IEnumerable<TestimonialResponse>> GetAllAsync()
     {
-        return await _context.Testimonials
-            .Select(t => new TestimonialResponse
+        await _supabaseClient.InitializeAsync();
+
+        var response = await _supabaseClient.From<Testimonial>().Get();
+
+        return response.Models.Select(t => new TestimonialResponse
             {
                 Id = t.Id,
                 Rate = t.Rate,
@@ -26,27 +27,36 @@ public class TestimonialService : ITestimonialService
                 Content = t.Content,
                 IsApproved = t.IsApproved,
             })
-            .ToListAsync();
+            .ToList();
     }
 
     public async Task<TestimonialResponse> GetByIdAsync(int id)
     {
-        var testimonial = await _context.Testimonials.FindAsync(id);
-        if (testimonial == null) return null;
+        await _supabaseClient.InitializeAsync();
+
+        var response = await _supabaseClient
+            .From<Testimonial>()
+            .Match(new Dictionary<string, string> { { "id", id.ToString() } })
+            .Single();
+
+        if (response == null) 
+            throw new InvalidOperationException("Testimonial not found.");
 
         return new TestimonialResponse
         {
-            Id = testimonial.Id,
-            Rate = testimonial.Rate,
-            AuthorName = testimonial.AuthorName,
-            AuthorRole = testimonial.AuthorRole,
-            Content = testimonial.Content,
-            IsApproved = testimonial.IsApproved,
+            Id = response.Id,
+            Rate = response.Rate,
+            AuthorName = response.AuthorName,
+            AuthorRole = response.AuthorRole,
+            Content = response.Content,
+            IsApproved = response.IsApproved,
         };
     }
 
     public async Task<TestimonialResponse> CreateAsync(TestimonialPostRequest request)
     {
+        await _supabaseClient.InitializeAsync();
+
         var testimonial = new Testimonial
         {
             Rate = request.Rate,
@@ -56,51 +66,68 @@ public class TestimonialService : ITestimonialService
             IsApproved = request.IsApproved,
         };
 
-        _context.Testimonials.Add(testimonial);
-        await _context.SaveChangesAsync();
+        var response = await _supabaseClient.From<Testimonial>().Insert(testimonial);
+        var createdTestimonial = response.Model;
+
+        if (createdTestimonial == null) 
+            throw new InvalidOperationException("Failed to save record to Supabase backend database.");
 
         return new TestimonialResponse
         {
-            Id = testimonial.Id,
-            Rate = testimonial.Rate,
-            AuthorName = testimonial.AuthorName,
-            AuthorRole = testimonial.AuthorRole,
-            Content = testimonial.Content,
-            IsApproved = testimonial.IsApproved,
+            Id = createdTestimonial.Id,
+            Rate = createdTestimonial.Rate,
+            AuthorName = createdTestimonial.AuthorName,
+            AuthorRole = createdTestimonial.AuthorRole,
+            Content = createdTestimonial.Content,
+            IsApproved = createdTestimonial.IsApproved,
         };
     }
 
     public async Task<TestimonialResponse> UpdateAsync(int id, TestimonialPatchRequest request)
     {
-        var testimonial = await _context.Testimonials.FindAsync(id);
-        if (testimonial == null) return null;
+        await _supabaseClient.InitializeAsync();
 
-        testimonial.Rate = request.Rate;
-        testimonial.AuthorName = request.AuthorName;
-        testimonial.AuthorRole = request.AuthorRole;
-        testimonial.Content = request.Content;
-        testimonial.IsApproved = request.IsApproved;
+        var testimonialToUpdate = new Testimonial
+        {
+            Id = id,
+            Rate = request.Rate,
+            AuthorName = request.AuthorName,
+            AuthorRole = request.AuthorRole,
+            Content = request.Content,
+            IsApproved = request.IsApproved,
+        };
 
-        await _context.SaveChangesAsync();
+        var response = await _supabaseClient.From<Testimonial>().Update(testimonialToUpdate);
+        var updatedTestimonial = response.Model;
+
+        if (updatedTestimonial == null) 
+            throw new InvalidOperationException("Failed to update testimonial.");
 
         return new TestimonialResponse
         {
-            Id = testimonial.Id,
-            Rate = testimonial.Rate,
-            AuthorName = testimonial.AuthorName,
-            AuthorRole = testimonial.AuthorRole,
-            Content = testimonial.Content,
-            IsApproved = testimonial.IsApproved,
+            Id = updatedTestimonial.Id,
+            Rate = updatedTestimonial.Rate,
+            AuthorName = updatedTestimonial.AuthorName,
+            AuthorRole = updatedTestimonial.AuthorRole,
+            Content = updatedTestimonial.Content,
+            IsApproved = updatedTestimonial.IsApproved,
         };
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var testimonial = await _context.Testimonials.FindAsync(id);
-        if (testimonial == null) return false;
+        await _supabaseClient.InitializeAsync();
 
-        _context.Testimonials.Remove(testimonial);
-        await _context.SaveChangesAsync();
-        return true;
+        var testimonialToDelete = new Testimonial { Id = id };
+
+        try
+        {
+            await _supabaseClient.From<Testimonial>().Delete(testimonialToDelete);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

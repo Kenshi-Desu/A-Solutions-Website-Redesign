@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using A_Solutions_Website_Redesign.Backend.Data;
 using A_Solutions_Website_Redesign.Backend.Model.Dtos;
 using A_Solutions_Website_Redesign.Backend.Model.Entities;
 
@@ -7,19 +5,22 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class AffiliateService : IAffiliateService
 {
-    private readonly AppDbContext _context;
+    private readonly Supabase.Client _supabaseClient;
 
-    public AffiliateService(AppDbContext context)
+    public AffiliateService(Supabase.Client supabaseClient)
     {
-        _context = context;
+        _supabaseClient = supabaseClient;
     }
 
     public async Task<IEnumerable<AffiliateResponse>> GetAllAsync()
     {
-        return await _context.Affiliates
-            .Select(a => new AffiliateResponse
-            {
-                Id = a.Id,
+        await _supabaseClient.InitializeAsync();
+
+        var response = await _supabaseClient.From<Affiliate>().Get();
+
+        return response.Models.Select(a => new AffiliateResponse
+        {
+            Id = a.Id,
                 Name = a.Name,
                 LogoImageUrl = a.LogoImageUrl,
                 WebsiteUrl = a.WebsiteUrl,
@@ -27,28 +28,36 @@ public class AffiliateService : IAffiliateService
                 AffiliateType = a.AffiliateType,
                 IsActive = a.IsActive,
             })
-            .ToListAsync();
+            .ToList();
     }
 
     public async Task<AffiliateResponse> GetByIdAsync(int id)
     {
-        var affiliate = await _context.Affiliates.FindAsync(id);
-        if (affiliate == null) return null;
+        await _supabaseClient.InitializeAsync();
+
+        var response = await _supabaseClient
+            .From<Affiliate>()
+            .Match(new Dictionary<string, string> { { "id", id.ToString() } })
+            .Single();
+
+        if (response == null) throw new InvalidOperationException("Affiliate not found.");
 
         return new AffiliateResponse
         {
-            Id = affiliate.Id,
-            Name = affiliate.Name,
-            LogoImageUrl = affiliate.LogoImageUrl,
-            WebsiteUrl = affiliate.WebsiteUrl,
-            DisplayOrder = affiliate.DisplayOrder,
-            AffiliateType = affiliate.AffiliateType,
-            IsActive = affiliate.IsActive,
+            Id = response.Id,
+            Name = response.Name,
+            LogoImageUrl = response.LogoImageUrl,
+            WebsiteUrl = response.WebsiteUrl,
+            DisplayOrder = response.DisplayOrder,
+            AffiliateType = response.AffiliateType,
+            IsActive = response.IsActive,
         };
     }
 
     public async Task<AffiliateResponse> CreateAsync(AffiliatePostRequest request)
     {
+        await _supabaseClient.InitializeAsync();
+
         var affiliate = new Affiliate
         {
             Name = request.Name,
@@ -59,54 +68,70 @@ public class AffiliateService : IAffiliateService
             IsActive = request.IsActive,
         };
 
-        _context.Affiliates.Add(affiliate);
-        await _context.SaveChangesAsync();
+        var response = await _supabaseClient.From<Affiliate>().Insert(affiliate);
+        var createdAffiliate = response.Model;
+
+        if (createdAffiliate == null) 
+            throw new InvalidOperationException("Failed to create affiliate.");
 
         return new AffiliateResponse
         {
-            Id = affiliate.Id,
-            Name = affiliate.Name,
-            LogoImageUrl = affiliate.LogoImageUrl,
-            WebsiteUrl = affiliate.WebsiteUrl,
-            DisplayOrder = affiliate.DisplayOrder,
-            AffiliateType = affiliate.AffiliateType,
-            IsActive = affiliate.IsActive,
+            Id = createdAffiliate.Id,
+            Name = createdAffiliate.Name,
+            LogoImageUrl = createdAffiliate.LogoImageUrl,
+            WebsiteUrl = createdAffiliate.WebsiteUrl,
+            DisplayOrder = createdAffiliate.DisplayOrder,
+            AffiliateType = createdAffiliate.AffiliateType,
+            IsActive = createdAffiliate.IsActive,
         };
     }
 
     public async Task<AffiliateResponse> UpdateAsync(int id, AffiliatePatchRequest request)
     {
-        var affiliate = await _context.Affiliates.FindAsync(id);
-        if (affiliate == null) return null;
+        await _supabaseClient.InitializeAsync();
 
-        affiliate.Name = request.Name;
-        affiliate.LogoImageUrl = request.LogoImageUrl;
-        affiliate.WebsiteUrl = request.WebsiteUrl;
-        affiliate.DisplayOrder = request.DisplayOrder;
-        affiliate.AffiliateType = request.AffiliateType;
-        affiliate.IsActive = request.IsActive;
+        var AffiliateToUpdate = new Affiliate
+        {
+            Id = id,
+            Name = request.Name,
+            LogoImageUrl = request.LogoImageUrl,
+            WebsiteUrl = request.WebsiteUrl,
+            DisplayOrder = request.DisplayOrder,
+            AffiliateType = request.AffiliateType,
+            IsActive = request.IsActive,
+        };
+        var response = await _supabaseClient.From<Affiliate>().Update(AffiliateToUpdate);
+        var updatedAffiliate = response.Model;
 
-        await _context.SaveChangesAsync();
+        if (updatedAffiliate == null) 
+            throw new InvalidOperationException("Affiliate not found.");
 
         return new AffiliateResponse
         {
-            Id = affiliate.Id,
-            Name = affiliate.Name,
-            LogoImageUrl = affiliate.LogoImageUrl,
-            WebsiteUrl = affiliate.WebsiteUrl,
-            DisplayOrder = affiliate.DisplayOrder,
-            AffiliateType = affiliate.AffiliateType,
-            IsActive = affiliate.IsActive,
+            Id = updatedAffiliate.Id,
+            Name = updatedAffiliate.Name,
+            LogoImageUrl = updatedAffiliate.LogoImageUrl,
+            WebsiteUrl = updatedAffiliate.WebsiteUrl,
+            DisplayOrder = updatedAffiliate.DisplayOrder,
+            AffiliateType = updatedAffiliate.AffiliateType,
+            IsActive = updatedAffiliate.IsActive,
         };
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var affiliate = await _context.Affiliates.FindAsync(id);
-        if (affiliate == null) return false;
+        await _supabaseClient.InitializeAsync();
 
-        _context.Affiliates.Remove(affiliate);
-        await _context.SaveChangesAsync();
-        return true;
+        var affiliateToDelete = new Affiliate { Id = id };
+
+        try
+        {
+            await _supabaseClient.From<Affiliate>().Delete(affiliateToDelete);
+            return true;
+        }
+        catch 
+        {
+            return false;
+        }
     }
 }
