@@ -5,9 +5,12 @@ namespace A_Solutions_Website_Redesign.Backend.Model.Dtos
     public class ServiceResponse
     {
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string ShortDescription { get; set; }
-        public string IconName { get; set; }
+        [Required]
+        public required string Title { get; set; }
+        [Required]
+        public required string ShortDescription { get; set; }
+        [Required]
+        public required string IconName { get; set; }
         public int DisplayOrder { get; set; }
         public bool IsActive { get; set; }
     }
@@ -15,9 +18,11 @@ namespace A_Solutions_Website_Redesign.Backend.Model.Dtos
     public class ServicePostRequest
     {
         [Required]
-        public string Title { get; set; }
-        public string ShortDescription { get; set; }
-        public string IconName { get; set; }
+        public required string Title { get; set; }
+        [Required]
+        public required string ShortDescription { get; set; }
+        [Required]
+        public required string IconName { get; set; }
         public int DisplayOrder { get; set; }
         public bool IsActive { get; set; }
     }
@@ -27,9 +32,11 @@ namespace A_Solutions_Website_Redesign.Backend.Model.Dtos
         [Required]
         public int Id { get; set; }
         [Required]
-        public string Title { get; set; }
-        public string ShortDescription { get; set; }
-        public string IconName { get; set; }
+        public required string Title { get; set; }
+        [Required]
+        public required string ShortDescription { get; set; }
+        [Required]
+        public required string IconName { get; set; }
         public int DisplayOrder { get; set; }
         public bool IsActive { get; set; }
     }

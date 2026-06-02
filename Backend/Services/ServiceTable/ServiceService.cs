@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using A_Solutions_Website_Redesign.Backend.Data;
 using A_Solutions_Website_Redesign.Backend.Model.Dtos;
 using A_Solutions_Website_Redesign.Backend.Model.Entities;
 
@@ -7,17 +5,20 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class ServiceService : IServiceService
 {
-    private readonly AppDbContext _context;
+    private readonly Supabase.Client _supabaseClient;
 
-    public ServiceService(AppDbContext context)
+    public ServiceService(Supabase.Client supabaseClient)
     {
-        _context = context;
+        _supabaseClient = supabaseClient;
     }
 
     public async Task<IEnumerable<ServiceResponse>> GetAllAsync()
     {
-        return await _context.Services
-            .Select(s => new ServiceResponse
+        await _supabaseClient.InitializeAsync();
+
+        var response = await _supabaseClient.From<Service>().Get();
+
+        return response.Models.Select(s => new ServiceResponse
             {
                 Id = s.Id,
                 Title = s.Title,
@@ -26,27 +27,35 @@ public class ServiceService : IServiceService
                 DisplayOrder = s.DisplayOrder,
                 IsActive = s.IsActive,
             })
-            .ToListAsync();
+            .ToList();
     }
 
     public async Task<ServiceResponse> GetByIdAsync(int id)
     {
-        var service = await _context.Services.FindAsync(id);
-        if (service == null) return null;
+        await _supabaseClient.InitializeAsync();
+
+        var response = await _supabaseClient
+            .From<Service>()
+            .Match(new Dictionary<string, string> { { "id", id.ToString() } })
+            .Single();
+
+        if (response == null) throw new InvalidOperationException("Service not found.");
 
         return new ServiceResponse
         {
-            Id = service.Id,
-            Title = service.Title,
-            ShortDescription = service.ShortDescription,
-            IconName = service.IconName,
-            DisplayOrder = service.DisplayOrder,
-            IsActive = service.IsActive,
+            Id = response.Id,
+            Title = response.Title,
+            ShortDescription = response.ShortDescription,
+            IconName = response.IconName,
+            DisplayOrder = response.DisplayOrder,
+            IsActive = response.IsActive,
         };
     }
 
     public async Task<ServiceResponse> CreateAsync(ServicePostRequest request)
     {
+        await _supabaseClient.InitializeAsync();
+        
         var service = new Service
         {
             Title = request.Title,
@@ -56,52 +65,69 @@ public class ServiceService : IServiceService
             IsActive = request.IsActive,
         };
 
-        _context.Services.Add(service);
-        await _context.SaveChangesAsync();
+        var response = await _supabaseClient.From<Service>().Insert(service);
+        var createdService = response.Model;
+        
+        if (createdService == null) 
+            throw new InvalidOperationException("Failed to create service.");
 
         return new ServiceResponse
         {
-            Id = service.Id,
-            Title = service.Title,
-            ShortDescription = service.ShortDescription,
-            IconName = service.IconName,
-            DisplayOrder = service.DisplayOrder,
-            IsActive = service.IsActive,
+            Id = createdService.Id,
+            Title = createdService.Title,
+            ShortDescription = createdService.ShortDescription,
+            IconName = createdService.IconName,
+            DisplayOrder = createdService.DisplayOrder,
+            IsActive = createdService.IsActive,
         };
     }
 
 
     public async Task<ServiceResponse> UpdateAsync(int id, ServicePatchRequest request)
     {
-        var service = await _context.Services.FindAsync(id);
-        if (service == null) return null;
+        await _supabaseClient.InitializeAsync();
 
-        service.Title = request.Title;
-        service.ShortDescription = request.ShortDescription;
-        service.IconName = request.IconName;
-        service.DisplayOrder = request.DisplayOrder;
-        service.IsActive = request.IsActive;
+        var serviceToUpdate = new Service
+        {
+            Id = id,
+            Title = request.Title,
+            ShortDescription = request.ShortDescription,
+            IconName = request.IconName,
+            DisplayOrder = request.DisplayOrder,
+            IsActive = request.IsActive,
+        };
 
-        await _context.SaveChangesAsync();
+        var response = await _supabaseClient.From<Service>().Update(serviceToUpdate);
+        var updatedService = response.Model;
+
+        if (updatedService == null) 
+            throw new InvalidOperationException("Failed to update service.");
 
         return new ServiceResponse
         {
-            Id = service.Id,
-            Title = service.Title,
-            ShortDescription = service.ShortDescription,
-            IconName = service.IconName,
-            DisplayOrder = service.DisplayOrder,
-            IsActive = service.IsActive,
+            Id = updatedService.Id,
+            Title = updatedService.Title,
+            ShortDescription = updatedService.ShortDescription,
+            IconName = updatedService.IconName,
+            DisplayOrder = updatedService.DisplayOrder,
+            IsActive = updatedService.IsActive,
         };
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var service = await _context.Services.FindAsync(id);
-        if (service == null) return false;
+        await _supabaseClient.InitializeAsync();
 
-        _context.Services.Remove(service);
-        await _context.SaveChangesAsync();
-        return true;
+        var serviceToDelete = new Service { Id = id };
+
+        try
+        {
+            await _supabaseClient.From<Service>().Delete(serviceToDelete);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

@@ -6,10 +6,13 @@ namespace A_Solutions_Website_Redesign.Backend.Model.Dtos
     {
         [Key]
         public int Id { get; set; }
-        public string Title { get; set; }
+        [Required]
+        public required string Title { get; set; }
         public int AchievementYear { get; set; }
-        public string Description { get; set; }
-        public string ImageUrl { get; set; }
+        [Required]
+        public required string Description { get; set; }
+        [Required]
+        public required string ImageUrl { get; set; }
         public int AchivementType { get; set; }
         public int DisplayOrder { get; set; }
     }
@@ -17,10 +20,12 @@ namespace A_Solutions_Website_Redesign.Backend.Model.Dtos
     public class AchievementPostRequest
     {
         [Required]
-        public string Title { get; set; }
+        public required string Title { get; set; }
         public int AchievementYear { get; set; }
-        public string Description { get; set; }
-        public string ImageUrl { get; set; }
+        [Required]
+        public required string Description { get; set; }
+        [Required]
+        public required string ImageUrl { get; set; }
         public int AchivementType { get; set; }
         public int DisplayOrder { get; set; }
     }
@@ -30,10 +35,12 @@ namespace A_Solutions_Website_Redesign.Backend.Model.Dtos
         [Required]
         public int Id { get; set; }
         [Required]
-        public string Title { get; set; }
+        public required string Title { get; set; }
         public int AchievementYear { get; set; }
-        public string Description { get; set; }
-        public string ImageUrl { get; set; }
+        [Required]
+        public required string Description { get; set; }
+        [Required]
+        public required string ImageUrl { get; set; }
         public int AchivementType { get; set; }
         public int DisplayOrder { get; set; }
     }
