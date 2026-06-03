@@ -18,12 +18,12 @@ public class OCRCTimelineService : IOCRCTimelineService
 
         var response = await _supabaseClient.From<OCRCTimeline>().Get();
 
-        return response.Models.Select(o => new OCRCTimelineResponse
+        return response.Models.Select(t => new OCRCTimelineResponse
         {
-            Id = o.Id,
-            TimelineYear = o.TimelineYear,
-            EventDescription = o.EventDescription,
-            DisplayOrder = o.DisplayOrder,
+            Id = t.Id,
+            TimelineYear = t.TimelineYear,
+            EventDescription = t.EventDescription,
+            DisplayOrder = t.DisplayOrder,
         }).ToList();
     }
 
