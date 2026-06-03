@@ -16,7 +16,7 @@ public class CoreValuesResponse
     public int DisplayOrder { get; set; }
 }
 
-public class CoreValuesRequest
+public class CoreValuesPostRequest
 {
     [Required]
     public required string Title { get; set; }
@@ -27,7 +27,7 @@ public class CoreValuesRequest
     public int DisplayOrder { get; set; }
 }
 
-public class CoreValuesPostRequest
+public class CoreValuesPatchRequest
 {
     [Required]
     public int Id { get; set; }
