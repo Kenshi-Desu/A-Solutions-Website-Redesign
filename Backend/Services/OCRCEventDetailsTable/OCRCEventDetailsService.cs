@@ -6,7 +6,7 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class OCRCEventDetailsService : SingletonServiceBase<OCRCEventDetails, OCRCEventDetailsResponse, OCRCEventDetailsPatchRequest>, IOCRCEventDetailsService
 {
-    public OCRCEventDetailsService(Supabase.Client supabaseClient) : base(supabaseClient)
+    public OCRCEventDetailsService(Supabase.Client supabaseClient, ILogger<OCRCEventDetailsService> logger) : base(supabaseClient, logger)
     {
     }
 

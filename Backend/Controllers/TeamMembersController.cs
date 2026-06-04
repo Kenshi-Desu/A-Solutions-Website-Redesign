@@ -16,59 +16,51 @@ public class TeamMembersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllTeamMembers()
+    public async Task<IActionResult> GetAllTeamMemberss()
     {
-        var teamMembersS = await _teamMembersService.GetAllAsync();
-        return Ok(teamMembersS);
+        var teamMemberss = await _teamMembersService.GetAllAsync();
+        return Ok(teamMemberss);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTeamMembersById(int id)
     {
-        var teamMembersS = await _teamMembersService.GetByIdAsync(id);
-        if (teamMembersS == null)
-        {
-            return NotFound();
-        }
-        return Ok(teamMembersS);
+        var teamMembers = await _teamMembersService.GetByIdAsync(id);
+        
+        return Ok(teamMembers);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTeamMembers([FromBody] TeamMembersPostRequest teamMembersSDto)
+    public async Task<IActionResult> CreateTeamMembers([FromBody] TeamMembersPostRequest teamMembersDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var createdTeamMembers = await _teamMembersService.CreateAsync(teamMembersSDto);
+        var createdTeamMembers = await _teamMembersService.CreateAsync(teamMembersDto);
+        
         return CreatedAtAction(nameof(GetTeamMembersById), new { id = createdTeamMembers.Id }, createdTeamMembers);
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateTeamMembers(int id, [FromBody] TeamMembersPatchRequest teamMembersSDto)
+    public async Task<IActionResult> UpdateTeamMembers(int id, [FromBody] TeamMembersPatchRequest teamMembersDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var updatedTeamMembers = await _teamMembersService.UpdateAsync(id, teamMembersSDto);
-        if (updatedTeamMembers == null)
-        {
-            return NotFound();
-        }
+        var updatedTeamMembers = await _teamMembersService.UpdateAsync(id, teamMembersDto);
+        
         return Ok(updatedTeamMembers);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTeamMembers(int id)
     {
-        var result = await _teamMembersService.DeleteAsync(id);
-        if (!result)
-        {
-            return NotFound();
-        }
+        await _teamMembersService.DeleteAsync(id);
+        
         return NoContent();
     }
 }

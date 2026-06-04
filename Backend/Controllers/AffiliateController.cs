@@ -6,11 +6,11 @@ namespace A_Solutions_Website_Redesign.Backend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AffiliateController : ControllerBase
+public class AffiliatesController : ControllerBase
 {
     private readonly IAffiliateService _affiliateService;
 
-    public AffiliateController(IAffiliateService affiliateService)
+    public AffiliatesController(IAffiliateService affiliateService)
     {
         _affiliateService = affiliateService;
     }
@@ -26,10 +26,7 @@ public class AffiliateController : ControllerBase
     public async Task<IActionResult> GetAffiliateById(int id)
     {
         var affiliate = await _affiliateService.GetByIdAsync(id);
-        if (affiliate == null)
-        {
-            return NotFound();
-        }
+        
         return Ok(affiliate);
     }
 
@@ -42,6 +39,7 @@ public class AffiliateController : ControllerBase
         }
 
         var createdAffiliate = await _affiliateService.CreateAsync(affiliateDto);
+        
         return CreatedAtAction(nameof(GetAffiliateById), new { id = createdAffiliate.Id }, createdAffiliate);
     }
 
@@ -54,21 +52,15 @@ public class AffiliateController : ControllerBase
         }
 
         var updatedAffiliate = await _affiliateService.UpdateAsync(id, affiliateDto);
-        if (updatedAffiliate == null)
-        {
-            return NotFound();
-        }
+        
         return Ok(updatedAffiliate);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAffiliate(int id)
     {
-        var result = await _affiliateService.DeleteAsync(id);
-        if (!result)
-        {
-            return NotFound();
-        }
+        await _affiliateService.DeleteAsync(id);
+        
         return NoContent();
     }
 }

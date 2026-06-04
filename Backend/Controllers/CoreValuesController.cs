@@ -8,67 +8,59 @@ namespace A_Solutions_Website_Redesign.Backend.Controllers;
 [Route("api/[controller]")]
 public class CoreValuesController : ControllerBase
 {
-    private readonly ICoreValuesService _coreValueService;
+    private readonly ICoreValuesService _coreValuesService;
 
-    public CoreValuesController(ICoreValuesService coreValueService)
+    public CoreValuesController(ICoreValuesService coreValuesService)
     {
-        _coreValueService = coreValueService;
+        _coreValuesService = coreValuesService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllCoreValues()
+    public async Task<IActionResult> GetAllCoreValuess()
     {
-        var coreValueS = await _coreValueService.GetAllAsync();
-        return Ok(coreValueS);
+        var coreValuess = await _coreValuesService.GetAllAsync();
+        return Ok(coreValuess);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCoreValuesById(int id)
     {
-        var coreValueS = await _coreValueService.GetByIdAsync(id);
-        if (coreValueS == null)
-        {
-            return NotFound();
-        }
-        return Ok(coreValueS);
+        var coreValues = await _coreValuesService.GetByIdAsync(id);
+        
+        return Ok(coreValues);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCoreValues([FromBody] CoreValuesPostRequest coreValueSDto)
+    public async Task<IActionResult> CreateCoreValues([FromBody] CoreValuesPostRequest coreValuesDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var createdCoreValues = await _coreValueService.CreateAsync(coreValueSDto);
+        var createdCoreValues = await _coreValuesService.CreateAsync(coreValuesDto);
+        
         return CreatedAtAction(nameof(GetCoreValuesById), new { id = createdCoreValues.Id }, createdCoreValues);
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateCoreValues(int id, [FromBody] CoreValuesPatchRequest coreValueSDto)
+    public async Task<IActionResult> UpdateCoreValues(int id, [FromBody] CoreValuesPatchRequest coreValuesDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var updatedCoreValues = await _coreValueService.UpdateAsync(id, coreValueSDto);
-        if (updatedCoreValues == null)
-        {
-            return NotFound();
-        }
+        var updatedCoreValues = await _coreValuesService.UpdateAsync(id, coreValuesDto);
+        
         return Ok(updatedCoreValues);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCoreValues(int id)
     {
-        var result = await _coreValueService.DeleteAsync(id);
-        if (!result)
-        {
-            return NotFound();
-        }
+        await _coreValuesService.DeleteAsync(id);
+        
         return NoContent();
     }
 }

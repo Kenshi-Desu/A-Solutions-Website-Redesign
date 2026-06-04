@@ -6,7 +6,7 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class CoreValuesService : CrudServiceBase<CoreValues, CoreValuesResponse, CoreValuesPostRequest, CoreValuesPatchRequest>, ICoreValuesService
 {
-    public CoreValuesService(Supabase.Client supabaseClient) : base(supabaseClient)
+    public CoreValuesService(Supabase.Client supabaseClient, ILogger<CoreValuesService> logger) : base(supabaseClient, logger)
     {
     }
 

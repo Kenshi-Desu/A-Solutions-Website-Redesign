@@ -6,7 +6,7 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class OCRCEventHighlightsService : CrudServiceBase<OCRCEventHighlights, OCRCEventHighlightsResponse, OCRCEventHighlightsPostRequest, OCRCEventHighlightsPatchRequest>, IOCRCEventHighlightsService
 {
-    public OCRCEventHighlightsService(Supabase.Client supabaseClient) : base(supabaseClient)
+    public OCRCEventHighlightsService(Supabase.Client supabaseClient, ILogger<OCRCEventHighlightsService> logger) : base(supabaseClient, logger)
     {
     }
 

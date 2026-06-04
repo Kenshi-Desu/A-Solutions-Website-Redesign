@@ -6,11 +6,13 @@ namespace A_Solutions_Website_Redesign.Backend.Services.Base;
 public abstract class SingletonServiceBase<TEntity, TResponseDto, TPatchDto> : ISingletonServiceBase<TResponseDto, TPatchDto> where TEntity : BaseModel, new()
 {
     protected readonly Supabase.Client _supabaseClient;
+    protected readonly ILogger _logger;
     protected const int SingletonId = 1;
 
-    protected SingletonServiceBase(Supabase.Client supabaseClient)
+    protected SingletonServiceBase(Supabase.Client supabaseClient, ILogger logger)
     {
         _supabaseClient = supabaseClient;
+        _logger = logger;
     }
 
     protected abstract void ApplyPatch(TPatchDto dto, TEntity entity);
@@ -35,7 +37,10 @@ public abstract class SingletonServiceBase<TEntity, TResponseDto, TPatchDto> : I
         
         var updatedEntity = response.Model;
         if (updatedEntity == null)
+        {
+            _logger.LogWarning("Database update failed for {EntityType}.", typeof(TEntity).Name);
             throw new FailedToUpdateException($"Failed to update {typeof(TEntity).Name} singleton record.");
+        }
 
         // Return mapped DTO response
         return MapToResponse(updatedEntity);

@@ -16,20 +16,17 @@ public class OCRCEventHighlightsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllOCRCEventHighlights()
+    public async Task<IActionResult> GetAllOCRCEventHighlightss()
     {
-        var eventHighlights = await _eventHighlightsService.GetAllAsync();
-        return Ok(eventHighlights);
+        var eventHighlightss = await _eventHighlightsService.GetAllAsync();
+        return Ok(eventHighlightss);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetOCRCEventHighlightsById(int id)
     {
         var eventHighlights = await _eventHighlightsService.GetByIdAsync(id);
-        if (eventHighlights == null)
-        {
-            return NotFound();
-        }
+        
         return Ok(eventHighlights);
     }
 
@@ -41,8 +38,9 @@ public class OCRCEventHighlightsController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var createdEventHighlights = await _eventHighlightsService.CreateAsync(eventHighlightsDto);
-        return CreatedAtAction(nameof(GetOCRCEventHighlightsById), new { id = createdEventHighlights.Id }, createdEventHighlights);
+        var createdOCRCEventHighlights = await _eventHighlightsService.CreateAsync(eventHighlightsDto);
+        
+        return CreatedAtAction(nameof(GetOCRCEventHighlightsById), new { id = createdOCRCEventHighlights.Id }, createdOCRCEventHighlights);
     }
 
     [HttpPatch("{id}")]
@@ -53,22 +51,16 @@ public class OCRCEventHighlightsController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var updatedEventHighlights = await _eventHighlightsService.UpdateAsync(id, eventHighlightsDto);
-        if (updatedEventHighlights == null)
-        {
-            return NotFound();
-        }
-        return Ok(updatedEventHighlights);
+        var updatedOCRCEventHighlights = await _eventHighlightsService.UpdateAsync(id, eventHighlightsDto);
+        
+        return Ok(updatedOCRCEventHighlights);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteOCRCEventHighligts(int id)
+    public async Task<IActionResult> DeleteOCRCEventHighlights(int id)
     {
-        var result = await _eventHighlightsService.DeleteAsync(id);
-        if (!result)
-        {
-            return NotFound();
-        }
+        await _eventHighlightsService.DeleteAsync(id);
+        
         return NoContent();
     }
 }

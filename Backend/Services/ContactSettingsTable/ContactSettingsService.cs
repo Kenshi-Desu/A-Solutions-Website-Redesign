@@ -6,7 +6,7 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class ContactSettingsService : SingletonServiceBase<ContactSettings, ContactSettingsResponse, ContactSettingsPatchRequest>, IContactSettingsService
 {
-    public ContactSettingsService(Supabase.Client supabaseClient) : base(supabaseClient)
+    public ContactSettingsService(Supabase.Client supabaseClient, ILogger<ContactSettingsService> logger) : base(supabaseClient, logger)
     {
     }
 

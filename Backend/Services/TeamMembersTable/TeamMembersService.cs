@@ -6,7 +6,7 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class TeamMembersService : CrudServiceBase<TeamMembers, TeamMembersResponse, TeamMembersPostRequest, TeamMembersPatchRequest>, ITeamMembersService
 {
-    public TeamMembersService(Supabase.Client supabaseClient) : base(supabaseClient)
+    public TeamMembersService(Supabase.Client supabaseClient, ILogger<TeamMembersService> logger) : base(supabaseClient, logger)
     {
     }
 

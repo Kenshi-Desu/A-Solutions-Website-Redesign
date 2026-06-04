@@ -6,11 +6,11 @@ namespace A_Solutions_Website_Redesign.Backend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TestimonialController : ControllerBase
+public class TestimonialsController : ControllerBase
 {
     private readonly ITestimonialService _testimonialService;
 
-    public TestimonialController(ITestimonialService testimonialService)
+    public TestimonialsController(ITestimonialService testimonialService)
     {
         _testimonialService = testimonialService;
     }
@@ -26,10 +26,7 @@ public class TestimonialController : ControllerBase
     public async Task<IActionResult> GetTestimonialById(int id)
     {
         var testimonial = await _testimonialService.GetByIdAsync(id);
-        if (testimonial == null)
-        {
-            return NotFound();
-        }
+        
         return Ok(testimonial);
     }
 
@@ -42,6 +39,7 @@ public class TestimonialController : ControllerBase
         }
 
         var createdTestimonial = await _testimonialService.CreateAsync(testimonialDto);
+        
         return CreatedAtAction(nameof(GetTestimonialById), new { id = createdTestimonial.Id }, createdTestimonial);
     }
 
@@ -54,21 +52,15 @@ public class TestimonialController : ControllerBase
         }
 
         var updatedTestimonial = await _testimonialService.UpdateAsync(id, testimonialDto);
-        if (updatedTestimonial == null)
-        {
-            return NotFound();
-        }
+        
         return Ok(updatedTestimonial);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTestimonial(int id)
     {
-        var deleted = await _testimonialService.DeleteAsync(id);
-        if (!deleted)
-        {
-            return NotFound();
-        }
+        await _testimonialService.DeleteAsync(id);
+        
         return NoContent();
     }
 }

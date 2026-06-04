@@ -6,11 +6,11 @@ namespace A_Solutions_Website_Redesign.Backend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ServiceController : ControllerBase
+public class ServicesController : ControllerBase
 {
     private readonly IServiceService _serviceService;
 
-    public ServiceController(IServiceService serviceService)
+    public ServicesController(IServiceService serviceService)
     {
         _serviceService = serviceService;
     }
@@ -26,10 +26,7 @@ public class ServiceController : ControllerBase
     public async Task<IActionResult> GetServiceById(int id)
     {
         var service = await _serviceService.GetByIdAsync(id);
-        if (service == null)
-        {
-            return NotFound();
-        }
+        
         return Ok(service);
     }
 
@@ -42,6 +39,7 @@ public class ServiceController : ControllerBase
         }
 
         var createdService = await _serviceService.CreateAsync(serviceDto);
+        
         return CreatedAtAction(nameof(GetServiceById), new { id = createdService.Id }, createdService);
     }
 
@@ -54,21 +52,15 @@ public class ServiceController : ControllerBase
         }
 
         var updatedService = await _serviceService.UpdateAsync(id, serviceDto);
-        if (updatedService == null)
-        {
-            return NotFound();
-        }
+        
         return Ok(updatedService);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteService(int id)
     {
-        var deleted = await _serviceService.DeleteAsync(id);
-        if (!deleted)
-        {
-            return NotFound();
-        }
+        await _serviceService.DeleteAsync(id);
+        
         return NoContent();
     }
 }

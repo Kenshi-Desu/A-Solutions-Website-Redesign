@@ -6,7 +6,7 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class AchievementService : CrudServiceBase<Achievement, AchievementResponse, AchievementPostRequest, AchievementPatchRequest>, IAchievementService
 {
-    public AchievementService(Supabase.Client supabaseClient) : base(supabaseClient)
+    public AchievementService(Supabase.Client supabaseClient, ILogger<AchievementService> logger) : base(supabaseClient, logger)
     {
     }
 

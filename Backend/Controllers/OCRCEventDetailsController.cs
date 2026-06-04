@@ -15,42 +15,23 @@ public class OCRCEventDetailsController : ControllerBase
         _eventDetailsService = eventDetailsService;
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetOCRCEventDetailsById(int id)
+    [HttpGet]
+    public async Task<IActionResult> GetOCRCEventDetailss()
     {
-        var eventDetails = await _eventDetailsService.GetByIdAsync(id);
-        if (eventDetails == null)
-        {
-            return NotFound();
-        }
-        return Ok(eventDetails);
+        var eventDetailss = await _eventDetailsService.GetAsync();
+        return Ok(eventDetailss);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateOCRCEventDetails([FromBody] OCRCEventDetailsPostRequest eventDetailsDto)
+    [HttpPatch]
+    public async Task<IActionResult> UpdateOCRCEventDetails([FromBody] OCRCEventDetailsPatchRequest eventDetailsDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
+
+        var updatedOCRCEventDetails = await _eventDetailsService.UpdateAsync(eventDetailsDto);
         
-        var createdEventDetails = await _eventDetailsService.CreateAsync(eventDetailsDto);
-        return CreatedAtAction(nameof(GetOCRCEventDetailsById), new {id = createdEventDetails.Id}, createdEventDetails);
-    }
-
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateOCRCEventDetails(int id, [FromBody] OCRCEventDetailsPatchRequest eventDetailsDto)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var updateEventDetails = await _eventDetailsService.UpdateAsync(id, eventDetailsDto);
-        if (updateEventDetails == null)
-        {
-            return NotFound();
-        }
-        return Ok(updateEventDetails);
+        return Ok(updatedOCRCEventDetails);
     }
 }
