@@ -3,7 +3,7 @@ using A_Solutions_Website_Redesign.Backend.Exceptions;
 
 namespace A_Solutions_Website_Redesign.Backend.Services.Base;
 
-public abstract class SingletonServiceBase<TEntity, TResponseDto, TPatchDto> where TEntity : BaseModel, new()
+public abstract class SingletonServiceBase<TEntity, TResponseDto, TPatchDto> : ISingletonServiceBase<TResponseDto, TPatchDto> where TEntity : BaseModel, new()
 {
     protected readonly Supabase.Client _supabaseClient;
     protected const int SingletonId = 1;
@@ -16,7 +16,32 @@ public abstract class SingletonServiceBase<TEntity, TResponseDto, TPatchDto> whe
     protected abstract void ApplyPatch(TPatchDto dto, TEntity entity);
     protected abstract TResponseDto MapToResponse(TEntity entity);
 
-    protected virtual async Task<TEntity> GetAsync()
+    public virtual async Task<TResponseDto> GetAsync()
+    {
+        var entity = await GetEntityAsync();
+        return MapToResponse(entity);
+    }
+
+    public virtual async Task<TResponseDto> UpdateAsync(TPatchDto dto)
+    {
+        // Fetch raw database entity (TEntity) securely
+        var entity = await GetEntityAsync();
+
+        // Apply DTO updates directly to the entity
+        ApplyPatch(dto, entity);
+
+        await _supabaseClient.InitializeAsync();
+        var response = await _supabaseClient.From<TEntity>().Update(entity);
+        
+        var updatedEntity = response.Model;
+        if (updatedEntity == null)
+            throw new FailedToUpdateException($"Failed to update {typeof(TEntity).Name} singleton record.");
+
+        // Return mapped DTO response
+        return MapToResponse(updatedEntity);
+    }
+
+    protected virtual async Task<TEntity> GetEntityAsync()
     {
         await _supabaseClient.InitializeAsync();
 
@@ -28,22 +53,5 @@ public abstract class SingletonServiceBase<TEntity, TResponseDto, TPatchDto> whe
             throw new NotFoundException($"{typeof(TEntity).Name} configuration not found. Please ensure row ID={SingletonId} exists in the database.");
 
         return result;
-    }
-
-    public virtual async Task<TResponseDto> UpdateAsync(TPatchDto dto)
-    {
-        // Fetches raw entity (throws NotFoundException automatically if missing)
-        var entity = await GetAsync();
-
-        ApplyPatch(dto, entity);
-
-        await _supabaseClient.InitializeAsync();
-        var response = await _supabaseClient.From<TEntity>().Update(entity);
-        
-        var updatedEntity = response.Model;
-        if (updatedEntity == null)
-            throw new FailedToUpdateException($"Failed to update {typeof(TEntity).Name} singleton record.");
-
-        return MapToResponse(updatedEntity);
     }
 }

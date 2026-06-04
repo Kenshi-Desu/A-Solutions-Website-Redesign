@@ -1,10 +1,8 @@
 using A_Solutions_Website_Redesign.Backend.Model.Dtos;
+using A_Solutions_Website_Redesign.Backend.Services.Base;
 
 namespace A_Solutions_Website_Redesign.Backend.Services;
 
-public interface IMissionVisionService
+public interface IMissionVisionService : ISingletonServiceBase<MissionVisionResponse, MissionVisionPatchRequest>
 {
-    Task<MissionVisionResponse> GetByIdAsync(int id);
-    Task<MissionVisionResponse> CreateAsync(MissionVisionPostRequest request);
-    Task<MissionVisionResponse> UpdateAsync(int id, MissionVisionPatchRequest request);
 }

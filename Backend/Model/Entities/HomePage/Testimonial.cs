@@ -27,4 +27,6 @@ public class Testimonial : BaseModel
     public string Content { get; set; }
     [Column("is_approved")]
     public bool IsApproved { get; set; }
+    [Column("created_at")]
+    public DateTime CreatedAt { get; set; }
 }
