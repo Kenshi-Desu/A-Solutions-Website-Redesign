@@ -3,7 +3,7 @@ using A_Solutions_Website_Redesign.Backend.Exceptions;
 
 namespace A_Solutions_Website_Redesign.Backend.Services.Base;
 
-public abstract class CrudServiceBase<TEntity, TResponseDto, TPostDto, TPatchDto> where TEntity : BaseModel, new ()
+public abstract class CrudServiceBase<TEntity, TResponseDto, TPostDto, TPatchDto> : ICrudServiceBase<TResponseDto, TPostDto, TPatchDto> where TEntity : BaseModel, new ()
 {
     protected readonly Supabase.Client _supabaseClient;
 

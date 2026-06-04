@@ -1,12 +1,8 @@
 using A_Solutions_Website_Redesign.Backend.Model.Dtos;
+using A_Solutions_Website_Redesign.Backend.Services.Base;
 
 namespace A_Solutions_Website_Redesign.Backend.Services;
 
-public interface IOCRCEventHighlightsService
+public interface IOCRCEventHighlightsService : ICrudServiceBase<OCRCEventHighlightsResponse, OCRCEventHighlightsPostRequest, OCRCEventHighlightsPatchRequest>
 {
-    Task<IEnumerable<OCRCEventHighlightsResponse>> GetAllAsync();
-    Task<OCRCEventHighlightsResponse> GetByIdAsync(int id);
-    Task<OCRCEventHighlightsResponse> CreateAsync(OCRCEventHighlightsPostRequest request);
-    Task<OCRCEventHighlightsResponse> UpdateAsync(int id, OCRCEventHighlightsPatchRequest request);
-    Task<bool> DeleteAsync(int id);
 }

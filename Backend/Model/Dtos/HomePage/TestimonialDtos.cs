@@ -13,6 +13,7 @@ public class TestimonialResponse
     [Required]
     public required string Content { get; set; }
     public bool IsApproved { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
 
 public class TestimonialPostRequest

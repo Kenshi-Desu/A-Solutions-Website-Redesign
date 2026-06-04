@@ -1,10 +1,8 @@
 using A_Solutions_Website_Redesign.Backend.Model.Dtos;
+using A_Solutions_Website_Redesign.Backend.Services.Base;
 
 namespace A_Solutions_Website_Redesign.Backend.Services;
 
-public interface IOCRCEventDetailsService
+public interface IOCRCEventDetailsService : ISingletonServiceBase<OCRCEventDetailsResponse, OCRCEventDetailsPatchRequest>
 {
-    Task<OCRCEventDetailsResponse> GetByIdAsync(int id);
-    Task<OCRCEventDetailsResponse> CreateAsync(OCRCEventDetailsPostRequest request);
-    Task<OCRCEventDetailsResponse> UpdateAsync(int id, OCRCEventDetailsPatchRequest request);
 }

@@ -1,12 +1,8 @@
 using A_Solutions_Website_Redesign.Backend.Model.Dtos;
+using A_Solutions_Website_Redesign.Backend.Services.Base;
 
 namespace A_Solutions_Website_Redesign.Backend.Services;
 
-public interface IOCRCTimelineService
+public interface IOCRCTimelineService : ICrudServiceBase<OCRCTimelineResponse, OCRCTimelinePostRequest, OCRCTimelinePatchRequest>
 {
-    Task<IEnumerable<OCRCTimelineResponse>> GetAllAsync();
-    Task<OCRCTimelineResponse> GetByIdAsync(int id);
-    Task<OCRCTimelineResponse> CreateAsync(OCRCTimelinePostRequest request);
-    Task<OCRCTimelineResponse> UpdateAsync(int id, OCRCTimelinePatchRequest request);
-    Task<bool> DeleteAsync(int id);
 }

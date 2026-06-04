@@ -1,12 +1,8 @@
 using A_Solutions_Website_Redesign.Backend.Model.Dtos;
+using A_Solutions_Website_Redesign.Backend.Services.Base;
 
 namespace A_Solutions_Website_Redesign.Backend.Services;
 
-public interface ICoreValuesService
+public interface ICoreValuesService : ICrudServiceBase<CoreValuesResponse, CoreValuesPostRequest, CoreValuesPatchRequest>
 {
-    Task<IEnumerable<CoreValuesResponse>> GetAllAsync();
-    Task<CoreValuesResponse> GetByIdAsync(int id);
-    Task<CoreValuesResponse> CreateAsync(CoreValuesPostRequest request);
-    Task<CoreValuesResponse> UpdateAsync(int id, CoreValuesPatchRequest request);
-    Task<bool> DeleteAsync(int id);
 }

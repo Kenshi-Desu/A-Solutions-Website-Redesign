@@ -1,120 +1,41 @@
 using A_Solutions_Website_Redesign.Backend.Model.Dtos;
 using A_Solutions_Website_Redesign.Backend.Model.Entities;
+using A_Solutions_Website_Redesign.Backend.Services.Base;
 
 namespace A_Solutions_Website_Redesign.Backend.Services;
 
-public class CoreValuesService : ICoreValuesService
+public class CoreValuesService : CrudServiceBase<CoreValues, CoreValuesResponse, CoreValuesPostRequest, CoreValuesPatchRequest>, ICoreValuesService
 {
-    private readonly Supabase.Client _supabaseClient;
-
-    public CoreValuesService(Supabase.Client supabaseClient)
+    public CoreValuesService(Supabase.Client supabaseClient) : base(supabaseClient)
     {
-        _supabaseClient = supabaseClient;
     }
 
-    public async Task<IEnumerable<CoreValuesResponse>> GetAllAsync()
+    protected override CoreValues MapToEntity(CoreValuesPostRequest dto)
     {
-        await _supabaseClient.InitializeAsync();
-
-        var response = await _supabaseClient.From<CoreValues>().Get();
-
-        return response.Models.Select(cv => new CoreValuesResponse
+        return new CoreValues
         {
-            Id = cv.Id,
-            Title = cv.Title,
-            Description = cv.Description,
-            DisplayOrder = cv.DisplayOrder,
-        }).ToList();
-    }
-
-    public async Task<CoreValuesResponse> GetByIdAsync(int id)
-    {
-        await _supabaseClient.InitializeAsync();
-
-        var response = await _supabaseClient
-            .From<CoreValues>()
-            .Match(new Dictionary<string, string> { { "id", id.ToString() } })
-            .Single(); 
-
-        if (response == null) throw new InvalidOperationException("CoreValues not found.");
-
-        return new CoreValuesResponse
-        {
-            Id = response.Id,
-            Title = response.Title,
-            Description = response.Description,
-            DisplayOrder = response.DisplayOrder,
+            Title = dto.Title,
+            Description = dto.Description,
+            DisplayOrder = dto.DisplayOrder
         };
     }
 
-
-    public async Task<CoreValuesResponse> CreateAsync(CoreValuesPostRequest request)
+    protected override void ApplyPatch(CoreValuesPatchRequest dto, CoreValues entity)
     {
-        await _supabaseClient.InitializeAsync();
-
-        var CoreValues = new CoreValues
-        {
-            Title = request.Title,
-            Description = request.Description,
-            DisplayOrder = request.DisplayOrder,
-        };
-
-        var response = await _supabaseClient.From<CoreValues>().Insert(CoreValues);
-        var createdCoreValues = response.Model; 
-
-        if (createdCoreValues == null)
-            throw new InvalidOperationException("Failed to save record to Supabase backend database.");
-
-        return new CoreValuesResponse
-        {
-            Id = createdCoreValues.Id,
-            Title = createdCoreValues.Title,
-            Description = createdCoreValues.Description,
-            DisplayOrder = createdCoreValues.DisplayOrder,
-        };
-    }
-
-    public async Task<CoreValuesResponse> UpdateAsync(int id, CoreValuesPatchRequest request)
-    {
-        await _supabaseClient.InitializeAsync();
-
-        var CoreValuesToUpdate = new CoreValues
-        {
-            Id = id,
-            Title = request.Title,
-            Description = request.Description,
-            DisplayOrder = request.DisplayOrder,
-        };
-
-        var response = await _supabaseClient.From<CoreValues>().Update(CoreValuesToUpdate);
-        var updatedCoreValues = response.Model;
-
-        if (updatedCoreValues == null) 
-            throw new InvalidOperationException("Failed to update CoreValues.");
-
-        return new CoreValuesResponse
-        {
-            Id = updatedCoreValues.Id,
-            Title = updatedCoreValues.Title,
-            Description = updatedCoreValues.Description,
-            DisplayOrder = updatedCoreValues.DisplayOrder,
-        };
-    }
-
-    public async Task<bool> DeleteAsync(int id)
-    {
-        await _supabaseClient.InitializeAsync();
-
-        var CoreValuesToDelete = new CoreValues { Id = id };
+        if (!string.IsNullOrEmpty(dto.Title)) entity.Title = dto.Title;
+        if (!string.IsNullOrEmpty(dto.Description)) entity.Description = dto.Description;
         
-        try
+        entity.DisplayOrder = dto.DisplayOrder;
+    }
+
+    protected override CoreValuesResponse MapToResponse(CoreValues entity)
+    {
+        return new CoreValuesResponse
         {
-            await _supabaseClient.From<CoreValues>().Delete(CoreValuesToDelete);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
+            Id = entity.Id,
+            Title = entity.Title,
+            Description = entity.Description,
+            DisplayOrder = entity.DisplayOrder
+        };
     }
 }
