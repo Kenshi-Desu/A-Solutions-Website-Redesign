@@ -1,4 +1,5 @@
 using Supabase;
+using Serilog;
 using A_Solutions_Website_Redesign.Backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,11 +19,26 @@ builder.Services.AddSingleton(provider =>
         AutoConnectRealtime = true
     }));
 
+builder.Host.UseSerilog((context, configuration) => 
+    configuration
+        .MinimumLevel.Information() // Sets the default minimum log level
+        .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning) // Hides spammy Microsoft framework logs
+        .WriteTo.Console() // Writes logs to your terminal
+        .WriteTo.File("Logs/api-log-.txt", rollingInterval: RollingInterval.Day) // Creates a new log file every day
+);
+
 // Add services to the container.
 builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<IAffiliateService, AffiliateService>();
 builder.Services.AddScoped<IAchievementService, AchievementService>();
 builder.Services.AddScoped<ITestimonialService, TestimonialService>();
+builder.Services.AddScoped<IOCRCEventDetailsService, OCRCEventDetailsService>();
+builder.Services.AddScoped<IOCRCEventHighlightsService, OCRCEventHighlightsService>();
+builder.Services.AddScoped<IOCRCTimelineService, OCRCTimelineService>();
+builder.Services.AddScoped<IMissionVisionService, MissionVisionService>();
+builder.Services.AddScoped<ICoreValuesService, CoreValuesService>();
+builder.Services.AddScoped<ITeamMembersService, TeamMembersService>();
+builder.Services.AddScoped<IContactSettingsService, ContactSettingsService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -30,6 +46,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseMiddleware<A_Solutions_Website_Redesign.Backend.Middleware.ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

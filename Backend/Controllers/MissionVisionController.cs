@@ -8,49 +8,30 @@ namespace A_Solutions_Website_Redesign.Backend.Controllers;
 [Route("api/[controller]")]
 public class MissionVisionController : ControllerBase
 {
-    private readonly IMissionVisionService _missionVisionService;
+    private readonly IMissionVisionService _missionVissionService;
 
-    public MissionVisionController(IMissionVisionService missionVisionService)
+    public MissionVisionController(IMissionVisionService missionVissionService)
     {
-        _missionVisionService = missionVisionService;
+        _missionVissionService = missionVissionService;
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetMissionVisionById(int id)
+    [HttpGet]
+    public async Task<IActionResult> GetMissionVisions()
     {
-        var missionVision = await _missionVisionService.GetByIdAsync(id);
-        if (missionVision == null)
-        {
-            return NotFound();
-        }
-        return Ok(missionVision);
+        var missionVissions = await _missionVissionService.GetAsync();
+        return Ok(missionVissions);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateMissionVision([FromBody] MissionVisionPostRequest missionVisionDto)
+    [HttpPatch]
+    public async Task<IActionResult> UpdateMissionVision([FromBody] MissionVisionPatchRequest missionVissionDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
+
+        var updatedMissionVision = await _missionVissionService.UpdateAsync(missionVissionDto);
         
-        var createdMissionVision = await _missionVisionService.CreateAsync(missionVisionDto);
-        return CreatedAtAction(nameof(GetMissionVisionById), new {id = createdMissionVision.Id}, createdMissionVision);
-    }
-
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateMissionVision(int id, [FromBody] MissionVisionPatchRequest missionVisionDto)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var updateMissionVision = await _missionVisionService.UpdateAsync(id, missionVisionDto);
-        if (updateMissionVision == null)
-        {
-            return NotFound();
-        }
-        return Ok(updateMissionVision);
+        return Ok(updatedMissionVision);
     }
 }

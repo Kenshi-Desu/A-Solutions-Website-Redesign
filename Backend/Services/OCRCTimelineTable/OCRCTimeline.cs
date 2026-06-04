@@ -6,7 +6,7 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class OCRCTimelineService : CrudServiceBase<OCRCTimeline, OCRCTimelineResponse, OCRCTimelinePostRequest, OCRCTimelinePatchRequest>, IOCRCTimelineService
 {
-    public OCRCTimelineService(Supabase.Client supabaseClient) : base(supabaseClient)
+    public OCRCTimelineService(Supabase.Client supabaseClient, ILogger<OCRCTimelineService> logger) : base(supabaseClient, logger)
     {
     }
 

@@ -6,7 +6,7 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class TestimonialService : CrudServiceBase<Testimonial, TestimonialResponse, TestimonialPostRequest, TestimonialPatchRequest>, ITestimonialService
 {
-    public TestimonialService(Supabase.Client supabaseClient) : base(supabaseClient)
+    public TestimonialService(Supabase.Client supabaseClient, ILogger<TestimonialService> logger) : base(supabaseClient, logger)
     {
     }
 

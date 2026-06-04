@@ -6,10 +6,12 @@ namespace A_Solutions_Website_Redesign.Backend.Services.Base;
 public abstract class CrudServiceBase<TEntity, TResponseDto, TPostDto, TPatchDto> : ICrudServiceBase<TResponseDto, TPostDto, TPatchDto> where TEntity : BaseModel, new ()
 {
     protected readonly Supabase.Client _supabaseClient;
+    protected readonly ILogger _logger;
 
-    protected CrudServiceBase(Supabase.Client supabaseClient)
+    protected CrudServiceBase(Supabase.Client supabaseClient, ILogger logger)
     {
         _supabaseClient = supabaseClient;
+        _logger = logger;
     }
 
     protected abstract TEntity MapToEntity(TPostDto dto);
@@ -40,8 +42,12 @@ public abstract class CrudServiceBase<TEntity, TResponseDto, TPostDto, TPatchDto
 
         var createdEntity = response.Model;
         if (createdEntity == null)
+        {
+            _logger.LogWarning("Database insert failed for {EntityType}", typeof(TEntity).Name);
             throw new FailedToCreateException($"Failed to save {typeof(TEntity).Name} record to Supabase database.");
+        }
         
+        _logger.LogInformation("Successfully inserted new {EntityType} record.", typeof(TEntity).Name);
         return MapToResponse(createdEntity);
     }
 
@@ -56,8 +62,12 @@ public abstract class CrudServiceBase<TEntity, TResponseDto, TPostDto, TPatchDto
 
         var updatedEntity = response.Model;
         if (updatedEntity == null)
+        {
+            _logger.LogWarning("Database update failed for {EntityType} with ID {Id}", typeof(TEntity).Name, id);
             throw new FailedToUpdateException($"Failed to update {typeof(TEntity).Name} record.");
-
+        }
+        
+        _logger.LogInformation("Successfully updated {EntityType} record with ID {Id}.", typeof(TEntity).Name, id);
         return MapToResponse(updatedEntity);
     }
 
@@ -67,6 +77,8 @@ public abstract class CrudServiceBase<TEntity, TResponseDto, TPostDto, TPatchDto
 
         await _supabaseClient.InitializeAsync();
         await _supabaseClient.From<TEntity>().Delete(entity);
+
+        _logger.LogInformation("Successfully deleted {EntityType} record with ID {Id}.", typeof(TEntity).Name, id);
     }
 
     protected virtual async Task<TEntity> GetEntityByIdAsync(int id)

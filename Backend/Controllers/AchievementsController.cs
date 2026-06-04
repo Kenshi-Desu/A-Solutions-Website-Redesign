@@ -26,10 +26,7 @@ public class AchievementsController : ControllerBase
     public async Task<IActionResult> GetAchievementById(int id)
     {
         var achievement = await _achievementService.GetByIdAsync(id);
-        if (achievement == null)
-        {
-            return NotFound();
-        }
+        
         return Ok(achievement);
     }
 
@@ -42,6 +39,7 @@ public class AchievementsController : ControllerBase
         }
 
         var createdAchievement = await _achievementService.CreateAsync(achievementDto);
+        
         return CreatedAtAction(nameof(GetAchievementById), new { id = createdAchievement.Id }, createdAchievement);
     }
 
@@ -54,21 +52,15 @@ public class AchievementsController : ControllerBase
         }
 
         var updatedAchievement = await _achievementService.UpdateAsync(id, achievementDto);
-        if (updatedAchievement == null)
-        {
-            return NotFound();
-        }
+        
         return Ok(updatedAchievement);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAchievement(int id)
     {
-        var result = await _achievementService.DeleteAsync(id);
-        if (!result)
-        {
-            return NotFound();
-        }
+        await _achievementService.DeleteAsync(id);
+        
         return NoContent();
     }
 }

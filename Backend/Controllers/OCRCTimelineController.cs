@@ -6,11 +6,11 @@ namespace A_Solutions_Website_Redesign.Backend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class OCRCTimelineController : ControllerBase
+public class OCRCTimelinesController : ControllerBase
 {
     private readonly IOCRCTimelineService _timelineService;
 
-    public OCRCTimelineController(IOCRCTimelineService timelineService)
+    public OCRCTimelinesController(IOCRCTimelineService timelineService)
     {
         _timelineService = timelineService;
     }
@@ -26,23 +26,21 @@ public class OCRCTimelineController : ControllerBase
     public async Task<IActionResult> GetOCRCTimelineById(int id)
     {
         var timeline = await _timelineService.GetByIdAsync(id);
-        if (timeline == null)
-        {
-            return NotFound();
-        }
+        
         return Ok(timeline);
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateOCRCTimeline([FromBody] OCRCTimelinePostRequest timelineDtos)
+    public async Task<IActionResult> CreateOCRCTimeline([FromBody] OCRCTimelinePostRequest timelineDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var createdTimeline = await _timelineService.CreateAsync(timelineDtos);
-        return CreatedAtAction(nameof(GetOCRCTimelineById), new { id = createdTimeline.Id }, createdTimeline);
+        var createdOCRCTimeline = await _timelineService.CreateAsync(timelineDto);
+        
+        return CreatedAtAction(nameof(GetOCRCTimelineById), new { id = createdOCRCTimeline.Id }, createdOCRCTimeline);
     }
 
     [HttpPatch("{id}")]
@@ -53,22 +51,16 @@ public class OCRCTimelineController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var updatedTimeline = await _timelineService.UpdateAsync(id, timelineDto);
-        if (updatedTimeline == null)
-        {
-            return NotFound();
-        }
-        return Ok(updatedTimeline);
+        var updatedOCRCTimeline = await _timelineService.UpdateAsync(id, timelineDto);
+        
+        return Ok(updatedOCRCTimeline);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteOCRCTimeline(int id)
     {
-        var result = await _timelineService.DeleteAsync(id);
-        if (!result)
-        {
-            return NotFound();
-        }
+        await _timelineService.DeleteAsync(id);
+        
         return NoContent();
     }
 }

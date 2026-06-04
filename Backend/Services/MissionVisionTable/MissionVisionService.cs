@@ -6,7 +6,7 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class MissionVisionService : SingletonServiceBase<MissionVision, MissionVisionResponse, MissionVisionPatchRequest>, IMissionVisionService
 {
-    public MissionVisionService(Supabase.Client supabaseClient) : base(supabaseClient)
+    public MissionVisionService(Supabase.Client supabaseClient, ILogger<MissionVisionService> logger) : base(supabaseClient, logger)
     {
     }
 

@@ -6,7 +6,7 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class AffiliateService : CrudServiceBase<Affiliate, AffiliateResponse, AffiliatePostRequest, AffiliatePatchRequest>, IAffiliateService
 {
-    public AffiliateService(Supabase.Client supabaseClient) : base(supabaseClient)
+    public AffiliateService(Supabase.Client supabaseClient, ILogger<AffiliateService> logger) : base(supabaseClient, logger)
     {
     }
 

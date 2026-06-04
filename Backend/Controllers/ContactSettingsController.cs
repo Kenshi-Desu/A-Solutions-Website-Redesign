@@ -16,59 +16,22 @@ public class ContactSettingsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllContactSettings()
+    public async Task<IActionResult> GetContactSettingss()
     {
-        var contactSettingsS = await _contactSettingsService.GetAllAsync();
-        return Ok(contactSettingsS);
+        var contactSettingss = await _contactSettingsService.GetAsync();
+        return Ok(contactSettingss);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetContactSettingsById(int id)
-    {
-        var contactSettingsS = await _contactSettingsService.GetByIdAsync(id);
-        if (contactSettingsS == null)
-        {
-            return NotFound();
-        }
-        return Ok(contactSettingsS);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateContactSettings([FromBody] ContactSettingsPostRequest contactSettingsSDto)
+    [HttpPatch]
+    public async Task<IActionResult> UpdateContactSettings([FromBody] ContactSettingsPatchRequest contactSettingsDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var createdContactSettings = await _contactSettingsService.CreateAsync(contactSettingsSDto);
-        return CreatedAtAction(nameof(GetContactSettingsById), new { id = createdContactSettings.Id }, createdContactSettings);
-    }
-
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateContactSettings(int id, [FromBody] ContactSettingsPatchRequest contactSettingsSDto)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var updatedContactSettings = await _contactSettingsService.UpdateAsync(id, contactSettingsSDto);
-        if (updatedContactSettings == null)
-        {
-            return NotFound();
-        }
+        var updatedContactSettings = await _contactSettingsService.UpdateAsync(contactSettingsDto);
+        
         return Ok(updatedContactSettings);
-    }
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteContactSettings(int id)
-    {
-        var result = await _contactSettingsService.DeleteAsync(id);
-        if (!result)
-        {
-            return NotFound();
-        }
-        return NoContent();
     }
 }

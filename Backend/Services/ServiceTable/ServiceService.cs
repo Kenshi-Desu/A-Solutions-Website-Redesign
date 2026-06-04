@@ -6,7 +6,7 @@ namespace A_Solutions_Website_Redesign.Backend.Services;
 
 public class ServiceService : CrudServiceBase<Service, ServiceResponse, ServicePostRequest, ServicePatchRequest>, IServiceService
 {
-    public ServiceService(Supabase.Client supabaseClient) : base(supabaseClient)
+    public ServiceService(Supabase.Client supabaseClient, ILogger<ServiceService> logger) : base(supabaseClient, logger)
     {
     }
 
