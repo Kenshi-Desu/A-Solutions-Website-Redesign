@@ -5,14 +5,16 @@
 
   /* A+ Solutions Custom Colors */
   --dark-blue: #2A3A53;
+  --dark-slate-gray: #333333;
   --orange: #E37F4E;
   --light-violet: #6F67BA;
   --white: #FFFFFF;
+  --off-white: #F8F9FA;
 
-  --background: var(--dark-blue);
-  --foreground: var(--white);
-  --card: #1f2937;
-  --card-foreground: var(--white);
+  --background: var(--white);
+  --foreground: var(--dark-slate-gray);
+  --card: rgba(255, 255, 255, 0.7);
+  --card-foreground: var(--dark-slate-gray);
   --popover: #1f2937;
   --popover-foreground: var(--white);
   --primary: var(--light-violet);
