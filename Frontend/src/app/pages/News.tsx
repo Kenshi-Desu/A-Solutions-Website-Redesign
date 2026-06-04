@@ -1,4 +1,4 @@
-import { ExternalLink, Calendar, Facebook } from 'lucide-react';
+import { ExternalLink, Calendar, Facebook, Share2 } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 
 // Mock data for Facebook posts
@@ -49,76 +49,93 @@ const facebookPosts = [
 
 export default function News() {
   return (
-    <div className="min-h-screen bg-[#2A3A53]">
+    <div className="min-h-screen bg-transparent">
       {/* Header Section */}
-      <section className="bg-gradient-to-r from-[#6F67BA] to-[#5d57a0] py-16">
-        <div className="container mx-auto px-4 text-center">
-          <div className="inline-flex items-center space-x-2 mb-4 px-4 py-2 bg-white/20 rounded-full">
+      <section className="relative py-24 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#6F67BA]/80 to-[#5d57a0]/80"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#E37F4E] rounded-full mix-blend-multiply filter blur-3xl opacity-40"></div>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="inline-flex items-center space-x-2 mb-6 px-5 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/40 shadow-sm">
             <Facebook className="text-white" size={20} />
-            <span className="text-white font-semibold tracking-wide uppercase text-sm">
+            <span className="text-white font-bold tracking-wide uppercase text-sm drop-shadow-md">
               Official Feed
             </span>
           </div>
-          <h1 className="text-5xl font-extrabold text-white mb-4">News & Updates</h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 drop-shadow-lg">News & Updates</h1>
+          <p className="text-xl text-white/95 max-w-2xl mx-auto font-medium drop-shadow-md">
             Stay up to date with the latest announcements, events, and student highlights from A+ Solutions.
           </p>
         </div>
       </section>
 
       {/* Grid Layout Section */}
-      <section className="py-20">
+      <section className="py-24 relative z-20 -mt-12">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* We'll use a CSS columns layout for a masonry effect */}
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
             {facebookPosts.map((post) => (
               <div 
                 key={post.id} 
-                className="bg-[#1f2937] rounded-xl overflow-hidden border border-[#6F67BA]/20 hover:border-[#6F67BA] transition-all duration-300 flex flex-col group hover:-translate-y-1 hover:shadow-xl hover:shadow-[#6F67BA]/10"
+                className="break-inside-avoid bg-white/80 backdrop-blur-xl rounded-2xl overflow-hidden border border-white shadow-xl hover:shadow-2xl transition-all duration-500 flex flex-col group transform hover:-translate-y-2"
               >
-                {/* Image Placeholder */}
-                <div className="relative h-56 overflow-hidden">
-                  <ImageWithFallback 
-                    src={post.image} 
-                    alt="Facebook post thumbnail" 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 right-4 bg-[#2A3A53]/80 backdrop-blur-sm p-2 rounded-full">
-                    <Facebook className="text-[#6F67BA] w-5 h-5" />
-                  </div>
+                {/* Facebook header mockup */}
+                <div className="px-6 py-4 flex items-center justify-between border-b border-gray-100 bg-white/60">
+                   <div className="flex items-center space-x-3">
+                     <div className="w-10 h-10 bg-[#2A3A53] rounded-full flex items-center justify-center text-white font-bold">
+                       A+
+                     </div>
+                     <div>
+                       <p className="text-[#2A3A53] font-bold text-sm leading-tight">A+ Solutions</p>
+                       <div className="flex items-center text-gray-500 text-xs mt-0.5 space-x-1">
+                         <span>{post.date}</span>
+                         <span>•</span>
+                         <Facebook size={10} className="text-[#6F67BA]" />
+                       </div>
+                     </div>
+                   </div>
+                   <button className="text-gray-400 hover:text-[#6F67BA] transition-colors">
+                     <Share2 size={18} />
+                   </button>
                 </div>
 
                 {/* Content */}
-                <div className="p-6 flex flex-col flex-grow">
-                  <div className="flex items-center space-x-2 text-gray-400 text-sm mb-4">
-                    <Calendar size={16} />
-                    <span>{post.date}</span>
-                  </div>
-                  
-                  <p className="text-gray-300 line-clamp-4 mb-6 flex-grow">
+                <div className="p-6 flex flex-col flex-grow bg-white/40">
+                  <p className="text-[#333333] mb-5 flex-grow text-[15px] leading-relaxed line-clamp-4">
                     {post.text}
                   </p>
                   
+                  {/* Image Placeholder */}
+                  <div className="relative rounded-xl overflow-hidden shadow-sm mb-6 aspect-video">
+                    <ImageWithFallback 
+                      src={post.image} 
+                      alt="Facebook post thumbnail" 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  
                   {/* Read More Link */}
-                  <a 
-                    href={post.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-2 text-[#E37F4E] font-semibold hover:text-[#d36e3d] transition-colors mt-auto"
-                  >
-                    <span>Read More on Facebook</span>
-                    <ExternalLink size={16} />
-                  </a>
+                  <div className="pt-4 border-t border-gray-100/80">
+                    <a 
+                      href={post.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center w-full py-3 bg-[#E37F4E]/10 text-[#E37F4E] font-bold rounded-xl hover:bg-[#E37F4E] hover:text-white transition-all duration-300 space-x-2"
+                    >
+                      <span>Read More on Facebook</span>
+                      <ExternalLink size={18} />
+                    </a>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
           
-          <div className="mt-16 text-center">
+          <div className="mt-20 text-center relative z-20">
             <a 
               href="https://www.facebook.com/APSDevCenter"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-3 px-8 py-4 bg-[#6F67BA] text-white font-semibold rounded-lg hover:bg-[#5d57a0] transition-all duration-300 transform hover:scale-105 shadow-lg"
+              className="inline-flex items-center justify-center space-x-3 px-10 py-5 bg-[#6F67BA] text-white font-bold rounded-xl hover:bg-[#5d57a0] transition-all duration-300 transform hover:-translate-y-1 shadow-2xl hover:shadow-[#6F67BA]/50 text-lg"
             >
               <Facebook size={24} />
               <span>Follow Us on Facebook</span>

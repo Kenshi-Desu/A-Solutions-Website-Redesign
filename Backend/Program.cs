@@ -21,10 +21,10 @@ builder.Services.AddSingleton(provider =>
 
 builder.Host.UseSerilog((context, configuration) => 
     configuration
-        .MinimumLevel.Information() // Sets the default minimum log level
-        .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning) // Hides spammy Microsoft framework logs
-        .WriteTo.Console() // Writes logs to your terminal
-        .WriteTo.File("Logs/api-log-.txt", rollingInterval: RollingInterval.Day) // Creates a new log file every day
+        .MinimumLevel.Information()
+        .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+        .WriteTo.Console()
+        .WriteTo.File("Logs/api-log-.txt", rollingInterval: RollingInterval.Day)
 );
 
 // Add services to the container.
@@ -43,6 +43,7 @@ builder.Services.AddScoped<IContactSettingsService, ContactSettingsService>();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
