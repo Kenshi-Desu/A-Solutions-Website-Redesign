@@ -6,9 +6,14 @@ import {
   MissionVisionPatchRequest,
 } from "../../api/api-client";
 
+const operations = {
+  get: () => apiClient.missionVisionGET(),
+  update: (body: MissionVisionPatchRequest) =>
+    apiClient.missionVisionPATCH(body),
+};
+
 export function useMissionVisions() {
-  return useSingletonBase<MissionVisionResponse, MissionVisionPatchRequest>({
-    get: () => apiClient.missionVisionGET(),
-    update: (body) => apiClient.missionVisionPATCH(body),
-  });
+  return useSingletonBase<MissionVisionResponse, MissionVisionPatchRequest>(
+    operations,
+  );
 }

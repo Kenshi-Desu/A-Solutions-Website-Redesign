@@ -16,7 +16,7 @@ export function useSingletonBase<T, TPatch = Partial<T>>(
     try {
       setIsLoading(true);
       setError(null);
-      const result = await await operations.get();
+      const result = await operations.get();
       setData(result || null);
     } catch (err: any) {
       console.error("Failed to fetch data:", err);

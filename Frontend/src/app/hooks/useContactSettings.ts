@@ -6,11 +6,14 @@ import {
   ContactSettingsPatchRequest,
 } from "../../api/api-client";
 
+const operations = {
+  get: () => apiClient.contactSettingsGET(),
+  update: (body: ContactSettingsPatchRequest) =>
+    apiClient.contactSettingsPATCH(body),
+};
+
 export function useContactSettingss() {
   return useSingletonBase<ContactSettingsResponse, ContactSettingsPatchRequest>(
-    {
-      get: () => apiClient.contactSettingsGET(),
-      update: (body) => apiClient.contactSettingsPATCH(body),
-    },
+    operations,
   );
 }

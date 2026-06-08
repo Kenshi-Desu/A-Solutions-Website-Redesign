@@ -28,6 +28,6 @@ public class ContactSettings : BaseModel
     [Column("physical_address")]
     public string PhysicalAddress { get; set; }
 
-    [Column("buisiness_hours")]
+    [Column("business_hours")]
     public string BusinessHours { get; set; }
 }

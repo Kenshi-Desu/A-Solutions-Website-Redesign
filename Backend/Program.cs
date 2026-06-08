@@ -27,6 +27,17 @@ builder.Host.UseSerilog((context, configuration) =>
         .WriteTo.File("Logs/api-log-.txt", rollingInterval: RollingInterval.Day)
 );
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        // Replace with your actual frontend URL (e.g. localhost:5173 or localhost:3000)
+        policy.WithOrigins("http://localhost:5173") 
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 // Add services to the container.
 builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<IAffiliateService, AffiliateService>();
@@ -61,6 +72,8 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = string.Empty;
     });
 }
+
+app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
 

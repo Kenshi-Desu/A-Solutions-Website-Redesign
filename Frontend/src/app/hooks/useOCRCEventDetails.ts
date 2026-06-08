@@ -6,12 +6,15 @@ import {
   OCRCEventDetailsPatchRequest,
 } from "../../api/api-client";
 
+const operations = {
+  get: () => apiClient.oCRCEventDetailsGET(),
+  update: (body: OCRCEventDetailsPatchRequest) =>
+    apiClient.oCRCEventDetailsPATCH(body),
+};
+
 export function useOCRCEventDetailss() {
   return useSingletonBase<
     OCRCEventDetailsResponse,
     OCRCEventDetailsPatchRequest
-  >({
-    get: () => apiClient.oCRCEventDetailsGET(),
-    update: (body) => apiClient.oCRCEventDetailsPATCH(body),
-  });
+  >(operations);
 }

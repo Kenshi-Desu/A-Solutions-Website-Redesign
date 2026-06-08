@@ -16,7 +16,7 @@ public class ContactSettingsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<ContactSettingsResponse>> GetContactSettingss()
+    public async Task<ActionResult<ContactSettingsResponse>> GetContactSettings()
     {
         var contactSettingss = await _contactSettingsService.GetAsync();
         return Ok(contactSettingss);
