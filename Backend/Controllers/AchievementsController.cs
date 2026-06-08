@@ -16,14 +16,14 @@ public class AchievementsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAchievements()
+    public async Task<ActionResult<IEnumerable<AchievementResponse>>> GetAllAchievements()
     {
         var achievements = await _achievementService.GetAllAsync();
         return Ok(achievements);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAchievementById(int id)
+    public async Task<ActionResult<AchievementResponse>> GetAchievementById(int id)
     {
         var achievement = await _achievementService.GetByIdAsync(id);
         
@@ -31,7 +31,7 @@ public class AchievementsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateAchievement([FromBody] AchievementPostRequest achievementDto)
+    public async Task<ActionResult<AchievementResponse>> CreateAchievement([FromBody] AchievementPostRequest achievementDto)
     {
         if (!ModelState.IsValid)
         {
@@ -44,7 +44,7 @@ public class AchievementsController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateAchievement(int id, [FromBody] AchievementPatchRequest achievementDto)
+    public async Task<ActionResult<AchievementResponse>> UpdateAchievement(int id, [FromBody] AchievementPatchRequest achievementDto)
     {
         if (!ModelState.IsValid)
         {

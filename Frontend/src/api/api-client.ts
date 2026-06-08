@@ -7,7 +7,259 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-export class Client {
+export interface IClient {
+
+    /**
+     * @return OK
+     */
+    achievementsAll(): Promise<AchievementResponse[]>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    achievementsPOST(body: AchievementPostRequest | undefined): Promise<AchievementResponse>;
+
+    /**
+     * @return OK
+     */
+    achievementsGET(id: number): Promise<AchievementResponse>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    achievementsPATCH(id: number, body: AchievementPatchRequest | undefined): Promise<AchievementResponse>;
+
+    /**
+     * @return OK
+     */
+    achievementsDELETE(id: number): Promise<void>;
+
+    /**
+     * @return OK
+     */
+    affiliatesAll(): Promise<AffiliateResponse[]>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    affiliatesPOST(body: AffiliatePostRequest | undefined): Promise<AffiliateResponse>;
+
+    /**
+     * @return OK
+     */
+    affiliatesGET(id: number): Promise<AffiliateResponse>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    affiliatesPATCH(id: number, body: AffiliatePatchRequest | undefined): Promise<AffiliateResponse>;
+
+    /**
+     * @return OK
+     */
+    affiliatesDELETE(id: number): Promise<void>;
+
+    /**
+     * @return OK
+     */
+    contactSettingsGET(): Promise<ContactSettingsResponse>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    contactSettingsPATCH(body: ContactSettingsPatchRequest | undefined): Promise<ContactSettingsResponse>;
+
+    /**
+     * @return OK
+     */
+    coreValuesAll(): Promise<CoreValuesResponse[]>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    coreValuesPOST(body: CoreValuesPostRequest | undefined): Promise<CoreValuesResponse>;
+
+    /**
+     * @return OK
+     */
+    coreValuesGET(id: number): Promise<CoreValuesResponse>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    coreValuesPATCH(id: number, body: CoreValuesPatchRequest | undefined): Promise<CoreValuesResponse>;
+
+    /**
+     * @return OK
+     */
+    coreValuesDELETE(id: number): Promise<void>;
+
+    /**
+     * @return OK
+     */
+    missionVisionGET(): Promise<MissionVisionResponse>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    missionVisionPATCH(body: MissionVisionPatchRequest | undefined): Promise<MissionVisionResponse>;
+
+    /**
+     * @return OK
+     */
+    oCRCEventDetailsGET(): Promise<OCRCEventDetailsResponse>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    oCRCEventDetailsPATCH(body: OCRCEventDetailsPatchRequest | undefined): Promise<OCRCEventDetailsResponse>;
+
+    /**
+     * @return OK
+     */
+    oCRCEventHighlightsAll(): Promise<OCRCEventHighlightsResponse[]>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    oCRCEventHighlightsPOST(body: OCRCEventHighlightsPostRequest | undefined): Promise<OCRCEventHighlightsResponse>;
+
+    /**
+     * @return OK
+     */
+    oCRCEventHighlightsGET(id: number): Promise<OCRCEventHighlightsResponse>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    oCRCEventHighlightsPATCH(id: number, body: OCRCEventHighlightsPatchRequest | undefined): Promise<OCRCEventHighlightsResponse>;
+
+    /**
+     * @return OK
+     */
+    oCRCEventHighlightsDELETE(id: number): Promise<void>;
+
+    /**
+     * @return OK
+     */
+    oCRCTimelinesAll(): Promise<OCRCTimelineResponse[]>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    oCRCTimelinesPOST(body: OCRCTimelinePostRequest | undefined): Promise<OCRCTimelineResponse>;
+
+    /**
+     * @return OK
+     */
+    oCRCTimelinesGET(id: number): Promise<OCRCTimelineResponse>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    oCRCTimelinesPATCH(id: number, body: OCRCTimelinePatchRequest | undefined): Promise<OCRCTimelineResponse>;
+
+    /**
+     * @return OK
+     */
+    oCRCTimelinesDELETE(id: number): Promise<void>;
+
+    /**
+     * @return OK
+     */
+    servicesAll(): Promise<ServiceResponse[]>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    servicesPOST(body: ServicePostRequest | undefined): Promise<ServiceResponse>;
+
+    /**
+     * @return OK
+     */
+    servicesGET(id: number): Promise<ServiceResponse>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    servicesPATCH(id: number, body: ServicePatchRequest | undefined): Promise<ServiceResponse>;
+
+    /**
+     * @return OK
+     */
+    servicesDELETE(id: number): Promise<void>;
+
+    /**
+     * @return OK
+     */
+    teamMembersAll(): Promise<TeamMembersResponse[]>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    teamMembersPOST(body: TeamMembersPostRequest | undefined): Promise<TeamMembersResponse>;
+
+    /**
+     * @return OK
+     */
+    teamMembersGET(id: number): Promise<TeamMembersResponse>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    teamMembersPATCH(id: number, body: TeamMembersPatchRequest | undefined): Promise<TeamMembersResponse>;
+
+    /**
+     * @return OK
+     */
+    teamMembersDELETE(id: number): Promise<void>;
+
+    /**
+     * @return OK
+     */
+    testimonialsAll(): Promise<TestimonialResponse[]>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    testimonialsPOST(body: TestimonialPostRequest | undefined): Promise<TestimonialResponse>;
+
+    /**
+     * @return OK
+     */
+    testimonialsGET(id: number): Promise<TestimonialResponse>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    testimonialsPATCH(id: number, body: TestimonialPatchRequest | undefined): Promise<TestimonialResponse>;
+
+    /**
+     * @return OK
+     */
+    testimonialsDELETE(id: number): Promise<void>;
+}
+
+export class Client implements IClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -20,41 +272,44 @@ export class Client {
     /**
      * @return OK
      */
-    achievementsGET(): Promise<void> {
+    achievementsAll(): Promise<AchievementResponse[]> {
         let url_ = this.baseUrl + "/api/Achievements";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAchievementsGET(_response);
+            return this.processAchievementsAll(_response);
         });
     }
 
-    protected processAchievementsGET(response: Response): Promise<void> {
+    protected processAchievementsAll(response: Response): Promise<AchievementResponse[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AchievementResponse[];
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<AchievementResponse[]>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    achievementsPOST(body: AchievementPostRequest | undefined): Promise<void> {
+    achievementsPOST(body: AchievementPostRequest | undefined): Promise<AchievementResponse> {
         let url_ = this.baseUrl + "/api/Achievements";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -65,6 +320,7 @@ export class Client {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -73,25 +329,27 @@ export class Client {
         });
     }
 
-    protected processAchievementsPOST(response: Response): Promise<void> {
+    protected processAchievementsPOST(response: Response): Promise<AchievementResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AchievementResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<AchievementResponse>(null as any);
     }
 
     /**
      * @return OK
      */
-    achievementsGET2(id: number): Promise<void> {
+    achievementsGET(id: number): Promise<AchievementResponse> {
         let url_ = this.baseUrl + "/api/Achievements/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -101,34 +359,37 @@ export class Client {
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAchievementsGET2(_response);
+            return this.processAchievementsGET(_response);
         });
     }
 
-    protected processAchievementsGET2(response: Response): Promise<void> {
+    protected processAchievementsGET(response: Response): Promise<AchievementResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AchievementResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<AchievementResponse>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    achievementsPATCH(id: number, body: AchievementPatchRequest | undefined): Promise<void> {
+    achievementsPATCH(id: number, body: AchievementPatchRequest | undefined): Promise<AchievementResponse> {
         let url_ = this.baseUrl + "/api/Achievements/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -142,6 +403,7 @@ export class Client {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -150,19 +412,21 @@ export class Client {
         });
     }
 
-    protected processAchievementsPATCH(response: Response): Promise<void> {
+    protected processAchievementsPATCH(response: Response): Promise<AchievementResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AchievementResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<AchievementResponse>(null as any);
     }
 
     /**
@@ -204,41 +468,44 @@ export class Client {
     /**
      * @return OK
      */
-    affiliatesGET(): Promise<void> {
+    affiliatesAll(): Promise<AffiliateResponse[]> {
         let url_ = this.baseUrl + "/api/Affiliates";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAffiliatesGET(_response);
+            return this.processAffiliatesAll(_response);
         });
     }
 
-    protected processAffiliatesGET(response: Response): Promise<void> {
+    protected processAffiliatesAll(response: Response): Promise<AffiliateResponse[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AffiliateResponse[];
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<AffiliateResponse[]>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    affiliatesPOST(body: AffiliatePostRequest | undefined): Promise<void> {
+    affiliatesPOST(body: AffiliatePostRequest | undefined): Promise<AffiliateResponse> {
         let url_ = this.baseUrl + "/api/Affiliates";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -249,6 +516,7 @@ export class Client {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -257,25 +525,27 @@ export class Client {
         });
     }
 
-    protected processAffiliatesPOST(response: Response): Promise<void> {
+    protected processAffiliatesPOST(response: Response): Promise<AffiliateResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AffiliateResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<AffiliateResponse>(null as any);
     }
 
     /**
      * @return OK
      */
-    affiliatesGET2(id: number): Promise<void> {
+    affiliatesGET(id: number): Promise<AffiliateResponse> {
         let url_ = this.baseUrl + "/api/Affiliates/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -285,34 +555,37 @@ export class Client {
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processAffiliatesGET2(_response);
+            return this.processAffiliatesGET(_response);
         });
     }
 
-    protected processAffiliatesGET2(response: Response): Promise<void> {
+    protected processAffiliatesGET(response: Response): Promise<AffiliateResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AffiliateResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<AffiliateResponse>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    affiliatesPATCH(id: number, body: AffiliatePatchRequest | undefined): Promise<void> {
+    affiliatesPATCH(id: number, body: AffiliatePatchRequest | undefined): Promise<AffiliateResponse> {
         let url_ = this.baseUrl + "/api/Affiliates/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -326,6 +599,7 @@ export class Client {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -334,19 +608,21 @@ export class Client {
         });
     }
 
-    protected processAffiliatesPATCH(response: Response): Promise<void> {
+    protected processAffiliatesPATCH(response: Response): Promise<AffiliateResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as AffiliateResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<AffiliateResponse>(null as any);
     }
 
     /**
@@ -388,13 +664,14 @@ export class Client {
     /**
      * @return OK
      */
-    contactSettingsGET(): Promise<void> {
+    contactSettingsGET(): Promise<ContactSettingsResponse> {
         let url_ = this.baseUrl + "/api/ContactSettings";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
@@ -403,26 +680,28 @@ export class Client {
         });
     }
 
-    protected processContactSettingsGET(response: Response): Promise<void> {
+    protected processContactSettingsGET(response: Response): Promise<ContactSettingsResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ContactSettingsResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ContactSettingsResponse>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    contactSettingsPATCH(body: ContactSettingsPatchRequest | undefined): Promise<void> {
+    contactSettingsPATCH(body: ContactSettingsPatchRequest | undefined): Promise<ContactSettingsResponse> {
         let url_ = this.baseUrl + "/api/ContactSettings";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -433,6 +712,7 @@ export class Client {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -441,59 +721,64 @@ export class Client {
         });
     }
 
-    protected processContactSettingsPATCH(response: Response): Promise<void> {
+    protected processContactSettingsPATCH(response: Response): Promise<ContactSettingsResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ContactSettingsResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ContactSettingsResponse>(null as any);
     }
 
     /**
      * @return OK
      */
-    coreValuesGET(): Promise<void> {
+    coreValuesAll(): Promise<CoreValuesResponse[]> {
         let url_ = this.baseUrl + "/api/CoreValues";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCoreValuesGET(_response);
+            return this.processCoreValuesAll(_response);
         });
     }
 
-    protected processCoreValuesGET(response: Response): Promise<void> {
+    protected processCoreValuesAll(response: Response): Promise<CoreValuesResponse[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as CoreValuesResponse[];
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<CoreValuesResponse[]>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    coreValuesPOST(body: CoreValuesPostRequest | undefined): Promise<void> {
+    coreValuesPOST(body: CoreValuesPostRequest | undefined): Promise<CoreValuesResponse> {
         let url_ = this.baseUrl + "/api/CoreValues";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -504,6 +789,7 @@ export class Client {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -512,25 +798,27 @@ export class Client {
         });
     }
 
-    protected processCoreValuesPOST(response: Response): Promise<void> {
+    protected processCoreValuesPOST(response: Response): Promise<CoreValuesResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as CoreValuesResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<CoreValuesResponse>(null as any);
     }
 
     /**
      * @return OK
      */
-    coreValuesGET2(id: number): Promise<void> {
+    coreValuesGET(id: number): Promise<CoreValuesResponse> {
         let url_ = this.baseUrl + "/api/CoreValues/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -540,34 +828,37 @@ export class Client {
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCoreValuesGET2(_response);
+            return this.processCoreValuesGET(_response);
         });
     }
 
-    protected processCoreValuesGET2(response: Response): Promise<void> {
+    protected processCoreValuesGET(response: Response): Promise<CoreValuesResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as CoreValuesResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<CoreValuesResponse>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    coreValuesPATCH(id: number, body: CoreValuesPatchRequest | undefined): Promise<void> {
+    coreValuesPATCH(id: number, body: CoreValuesPatchRequest | undefined): Promise<CoreValuesResponse> {
         let url_ = this.baseUrl + "/api/CoreValues/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -581,6 +872,7 @@ export class Client {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -589,19 +881,21 @@ export class Client {
         });
     }
 
-    protected processCoreValuesPATCH(response: Response): Promise<void> {
+    protected processCoreValuesPATCH(response: Response): Promise<CoreValuesResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as CoreValuesResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<CoreValuesResponse>(null as any);
     }
 
     /**
@@ -643,13 +937,14 @@ export class Client {
     /**
      * @return OK
      */
-    missionVisionGET(): Promise<void> {
+    missionVisionGET(): Promise<MissionVisionResponse> {
         let url_ = this.baseUrl + "/api/MissionVision";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
@@ -658,26 +953,28 @@ export class Client {
         });
     }
 
-    protected processMissionVisionGET(response: Response): Promise<void> {
+    protected processMissionVisionGET(response: Response): Promise<MissionVisionResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as MissionVisionResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<MissionVisionResponse>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    missionVisionPATCH(body: MissionVisionPatchRequest | undefined): Promise<void> {
+    missionVisionPATCH(body: MissionVisionPatchRequest | undefined): Promise<MissionVisionResponse> {
         let url_ = this.baseUrl + "/api/MissionVision";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -688,6 +985,7 @@ export class Client {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -696,31 +994,34 @@ export class Client {
         });
     }
 
-    protected processMissionVisionPATCH(response: Response): Promise<void> {
+    protected processMissionVisionPATCH(response: Response): Promise<MissionVisionResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as MissionVisionResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<MissionVisionResponse>(null as any);
     }
 
     /**
      * @return OK
      */
-    oCRCEventDetailsGET(): Promise<void> {
+    oCRCEventDetailsGET(): Promise<OCRCEventDetailsResponse> {
         let url_ = this.baseUrl + "/api/OCRCEventDetails";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
@@ -729,26 +1030,28 @@ export class Client {
         });
     }
 
-    protected processOCRCEventDetailsGET(response: Response): Promise<void> {
+    protected processOCRCEventDetailsGET(response: Response): Promise<OCRCEventDetailsResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as OCRCEventDetailsResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<OCRCEventDetailsResponse>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    oCRCEventDetailsPATCH(body: OCRCEventDetailsPatchRequest | undefined): Promise<void> {
+    oCRCEventDetailsPATCH(body: OCRCEventDetailsPatchRequest | undefined): Promise<OCRCEventDetailsResponse> {
         let url_ = this.baseUrl + "/api/OCRCEventDetails";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -759,6 +1062,7 @@ export class Client {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -767,59 +1071,64 @@ export class Client {
         });
     }
 
-    protected processOCRCEventDetailsPATCH(response: Response): Promise<void> {
+    protected processOCRCEventDetailsPATCH(response: Response): Promise<OCRCEventDetailsResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as OCRCEventDetailsResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<OCRCEventDetailsResponse>(null as any);
     }
 
     /**
      * @return OK
      */
-    oCRCEventHighlightsGET(): Promise<void> {
+    oCRCEventHighlightsAll(): Promise<OCRCEventHighlightsResponse[]> {
         let url_ = this.baseUrl + "/api/OCRCEventHighlights";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processOCRCEventHighlightsGET(_response);
+            return this.processOCRCEventHighlightsAll(_response);
         });
     }
 
-    protected processOCRCEventHighlightsGET(response: Response): Promise<void> {
+    protected processOCRCEventHighlightsAll(response: Response): Promise<OCRCEventHighlightsResponse[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as OCRCEventHighlightsResponse[];
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<OCRCEventHighlightsResponse[]>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    oCRCEventHighlightsPOST(body: OCRCEventHighlightsPostRequest | undefined): Promise<void> {
+    oCRCEventHighlightsPOST(body: OCRCEventHighlightsPostRequest | undefined): Promise<OCRCEventHighlightsResponse> {
         let url_ = this.baseUrl + "/api/OCRCEventHighlights";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -830,6 +1139,7 @@ export class Client {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -838,25 +1148,27 @@ export class Client {
         });
     }
 
-    protected processOCRCEventHighlightsPOST(response: Response): Promise<void> {
+    protected processOCRCEventHighlightsPOST(response: Response): Promise<OCRCEventHighlightsResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as OCRCEventHighlightsResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<OCRCEventHighlightsResponse>(null as any);
     }
 
     /**
      * @return OK
      */
-    oCRCEventHighlightsGET2(id: number): Promise<void> {
+    oCRCEventHighlightsGET(id: number): Promise<OCRCEventHighlightsResponse> {
         let url_ = this.baseUrl + "/api/OCRCEventHighlights/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -866,34 +1178,37 @@ export class Client {
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processOCRCEventHighlightsGET2(_response);
+            return this.processOCRCEventHighlightsGET(_response);
         });
     }
 
-    protected processOCRCEventHighlightsGET2(response: Response): Promise<void> {
+    protected processOCRCEventHighlightsGET(response: Response): Promise<OCRCEventHighlightsResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as OCRCEventHighlightsResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<OCRCEventHighlightsResponse>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    oCRCEventHighlightsPATCH(id: number, body: OCRCEventHighlightsPatchRequest | undefined): Promise<void> {
+    oCRCEventHighlightsPATCH(id: number, body: OCRCEventHighlightsPatchRequest | undefined): Promise<OCRCEventHighlightsResponse> {
         let url_ = this.baseUrl + "/api/OCRCEventHighlights/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -907,6 +1222,7 @@ export class Client {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -915,19 +1231,21 @@ export class Client {
         });
     }
 
-    protected processOCRCEventHighlightsPATCH(response: Response): Promise<void> {
+    protected processOCRCEventHighlightsPATCH(response: Response): Promise<OCRCEventHighlightsResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as OCRCEventHighlightsResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<OCRCEventHighlightsResponse>(null as any);
     }
 
     /**
@@ -969,41 +1287,44 @@ export class Client {
     /**
      * @return OK
      */
-    oCRCTimelinesGET(): Promise<void> {
+    oCRCTimelinesAll(): Promise<OCRCTimelineResponse[]> {
         let url_ = this.baseUrl + "/api/OCRCTimelines";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processOCRCTimelinesGET(_response);
+            return this.processOCRCTimelinesAll(_response);
         });
     }
 
-    protected processOCRCTimelinesGET(response: Response): Promise<void> {
+    protected processOCRCTimelinesAll(response: Response): Promise<OCRCTimelineResponse[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as OCRCTimelineResponse[];
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<OCRCTimelineResponse[]>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    oCRCTimelinesPOST(body: OCRCTimelinePostRequest | undefined): Promise<void> {
+    oCRCTimelinesPOST(body: OCRCTimelinePostRequest | undefined): Promise<OCRCTimelineResponse> {
         let url_ = this.baseUrl + "/api/OCRCTimelines";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1014,6 +1335,7 @@ export class Client {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -1022,25 +1344,27 @@ export class Client {
         });
     }
 
-    protected processOCRCTimelinesPOST(response: Response): Promise<void> {
+    protected processOCRCTimelinesPOST(response: Response): Promise<OCRCTimelineResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as OCRCTimelineResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<OCRCTimelineResponse>(null as any);
     }
 
     /**
      * @return OK
      */
-    oCRCTimelinesGET2(id: number): Promise<void> {
+    oCRCTimelinesGET(id: number): Promise<OCRCTimelineResponse> {
         let url_ = this.baseUrl + "/api/OCRCTimelines/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -1050,34 +1374,37 @@ export class Client {
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processOCRCTimelinesGET2(_response);
+            return this.processOCRCTimelinesGET(_response);
         });
     }
 
-    protected processOCRCTimelinesGET2(response: Response): Promise<void> {
+    protected processOCRCTimelinesGET(response: Response): Promise<OCRCTimelineResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as OCRCTimelineResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<OCRCTimelineResponse>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    oCRCTimelinesPATCH(id: number, body: OCRCTimelinePatchRequest | undefined): Promise<void> {
+    oCRCTimelinesPATCH(id: number, body: OCRCTimelinePatchRequest | undefined): Promise<OCRCTimelineResponse> {
         let url_ = this.baseUrl + "/api/OCRCTimelines/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -1091,6 +1418,7 @@ export class Client {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -1099,19 +1427,21 @@ export class Client {
         });
     }
 
-    protected processOCRCTimelinesPATCH(response: Response): Promise<void> {
+    protected processOCRCTimelinesPATCH(response: Response): Promise<OCRCTimelineResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as OCRCTimelineResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<OCRCTimelineResponse>(null as any);
     }
 
     /**
@@ -1153,41 +1483,44 @@ export class Client {
     /**
      * @return OK
      */
-    servicesGET(): Promise<void> {
+    servicesAll(): Promise<ServiceResponse[]> {
         let url_ = this.baseUrl + "/api/Services";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processServicesGET(_response);
+            return this.processServicesAll(_response);
         });
     }
 
-    protected processServicesGET(response: Response): Promise<void> {
+    protected processServicesAll(response: Response): Promise<ServiceResponse[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ServiceResponse[];
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ServiceResponse[]>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    servicesPOST(body: ServicePostRequest | undefined): Promise<void> {
+    servicesPOST(body: ServicePostRequest | undefined): Promise<ServiceResponse> {
         let url_ = this.baseUrl + "/api/Services";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1198,6 +1531,7 @@ export class Client {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -1206,25 +1540,27 @@ export class Client {
         });
     }
 
-    protected processServicesPOST(response: Response): Promise<void> {
+    protected processServicesPOST(response: Response): Promise<ServiceResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ServiceResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ServiceResponse>(null as any);
     }
 
     /**
      * @return OK
      */
-    servicesGET2(id: number): Promise<void> {
+    servicesGET(id: number): Promise<ServiceResponse> {
         let url_ = this.baseUrl + "/api/Services/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -1234,34 +1570,37 @@ export class Client {
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processServicesGET2(_response);
+            return this.processServicesGET(_response);
         });
     }
 
-    protected processServicesGET2(response: Response): Promise<void> {
+    protected processServicesGET(response: Response): Promise<ServiceResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ServiceResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ServiceResponse>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    servicesPATCH(id: number, body: ServicePatchRequest | undefined): Promise<void> {
+    servicesPATCH(id: number, body: ServicePatchRequest | undefined): Promise<ServiceResponse> {
         let url_ = this.baseUrl + "/api/Services/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -1275,6 +1614,7 @@ export class Client {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -1283,19 +1623,21 @@ export class Client {
         });
     }
 
-    protected processServicesPATCH(response: Response): Promise<void> {
+    protected processServicesPATCH(response: Response): Promise<ServiceResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as ServiceResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<ServiceResponse>(null as any);
     }
 
     /**
@@ -1337,41 +1679,44 @@ export class Client {
     /**
      * @return OK
      */
-    teamMembersGET(): Promise<void> {
+    teamMembersAll(): Promise<TeamMembersResponse[]> {
         let url_ = this.baseUrl + "/api/TeamMembers";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processTeamMembersGET(_response);
+            return this.processTeamMembersAll(_response);
         });
     }
 
-    protected processTeamMembersGET(response: Response): Promise<void> {
+    protected processTeamMembersAll(response: Response): Promise<TeamMembersResponse[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as TeamMembersResponse[];
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<TeamMembersResponse[]>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    teamMembersPOST(body: TeamMembersPostRequest | undefined): Promise<void> {
+    teamMembersPOST(body: TeamMembersPostRequest | undefined): Promise<TeamMembersResponse> {
         let url_ = this.baseUrl + "/api/TeamMembers";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1382,6 +1727,7 @@ export class Client {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -1390,25 +1736,27 @@ export class Client {
         });
     }
 
-    protected processTeamMembersPOST(response: Response): Promise<void> {
+    protected processTeamMembersPOST(response: Response): Promise<TeamMembersResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as TeamMembersResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<TeamMembersResponse>(null as any);
     }
 
     /**
      * @return OK
      */
-    teamMembersGET2(id: number): Promise<void> {
+    teamMembersGET(id: number): Promise<TeamMembersResponse> {
         let url_ = this.baseUrl + "/api/TeamMembers/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -1418,34 +1766,37 @@ export class Client {
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processTeamMembersGET2(_response);
+            return this.processTeamMembersGET(_response);
         });
     }
 
-    protected processTeamMembersGET2(response: Response): Promise<void> {
+    protected processTeamMembersGET(response: Response): Promise<TeamMembersResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as TeamMembersResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<TeamMembersResponse>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    teamMembersPATCH(id: number, body: TeamMembersPatchRequest | undefined): Promise<void> {
+    teamMembersPATCH(id: number, body: TeamMembersPatchRequest | undefined): Promise<TeamMembersResponse> {
         let url_ = this.baseUrl + "/api/TeamMembers/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -1459,6 +1810,7 @@ export class Client {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -1467,19 +1819,21 @@ export class Client {
         });
     }
 
-    protected processTeamMembersPATCH(response: Response): Promise<void> {
+    protected processTeamMembersPATCH(response: Response): Promise<TeamMembersResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as TeamMembersResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<TeamMembersResponse>(null as any);
     }
 
     /**
@@ -1521,41 +1875,44 @@ export class Client {
     /**
      * @return OK
      */
-    testimonialsGET(): Promise<void> {
+    testimonialsAll(): Promise<TestimonialResponse[]> {
         let url_ = this.baseUrl + "/api/Testimonials";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processTestimonialsGET(_response);
+            return this.processTestimonialsAll(_response);
         });
     }
 
-    protected processTestimonialsGET(response: Response): Promise<void> {
+    protected processTestimonialsAll(response: Response): Promise<TestimonialResponse[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as TestimonialResponse[];
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<TestimonialResponse[]>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    testimonialsPOST(body: TestimonialPostRequest | undefined): Promise<void> {
+    testimonialsPOST(body: TestimonialPostRequest | undefined): Promise<TestimonialResponse> {
         let url_ = this.baseUrl + "/api/Testimonials";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1566,6 +1923,7 @@ export class Client {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -1574,25 +1932,27 @@ export class Client {
         });
     }
 
-    protected processTestimonialsPOST(response: Response): Promise<void> {
+    protected processTestimonialsPOST(response: Response): Promise<TestimonialResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as TestimonialResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<TestimonialResponse>(null as any);
     }
 
     /**
      * @return OK
      */
-    testimonialsGET2(id: number): Promise<void> {
+    testimonialsGET(id: number): Promise<TestimonialResponse> {
         let url_ = this.baseUrl + "/api/Testimonials/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -1602,34 +1962,37 @@ export class Client {
         let options_: RequestInit = {
             method: "GET",
             headers: {
+                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processTestimonialsGET2(_response);
+            return this.processTestimonialsGET(_response);
         });
     }
 
-    protected processTestimonialsGET2(response: Response): Promise<void> {
+    protected processTestimonialsGET(response: Response): Promise<TestimonialResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as TestimonialResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<TestimonialResponse>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return OK
      */
-    testimonialsPATCH(id: number, body: TestimonialPatchRequest | undefined): Promise<void> {
+    testimonialsPATCH(id: number, body: TestimonialPatchRequest | undefined): Promise<TestimonialResponse> {
         let url_ = this.baseUrl + "/api/Testimonials/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -1643,6 +2006,7 @@ export class Client {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "application/json"
             }
         };
 
@@ -1651,19 +2015,21 @@ export class Client {
         });
     }
 
-    protected processTestimonialsPATCH(response: Response): Promise<void> {
+    protected processTestimonialsPATCH(response: Response): Promise<TestimonialResponse> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as TestimonialResponse;
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<TestimonialResponse>(null as any);
     }
 
     /**
@@ -1703,57 +2069,7 @@ export class Client {
     }
 }
 
-export class AchievementPatchRequest implements IAchievementPatchRequest {
-    id!: number;
-    title!: string;
-    achievementYear?: number;
-    description!: string;
-    imageUrl!: string;
-    achivementType?: number;
-    displayOrder?: number;
-
-    constructor(data?: IAchievementPatchRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.title = _data["title"];
-            this.achievementYear = _data["achievementYear"];
-            this.description = _data["description"];
-            this.imageUrl = _data["imageUrl"];
-            this.achivementType = _data["achivementType"];
-            this.displayOrder = _data["displayOrder"];
-        }
-    }
-
-    static fromJS(data: any): AchievementPatchRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new AchievementPatchRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["title"] = this.title;
-        data["achievementYear"] = this.achievementYear;
-        data["description"] = this.description;
-        data["imageUrl"] = this.imageUrl;
-        data["achivementType"] = this.achivementType;
-        data["displayOrder"] = this.displayOrder;
-        return data;
-    }
-}
-
-export interface IAchievementPatchRequest {
+export interface AchievementPatchRequest {
     id: number;
     title: string;
     achievementYear?: number;
@@ -1763,54 +2079,7 @@ export interface IAchievementPatchRequest {
     displayOrder?: number;
 }
 
-export class AchievementPostRequest implements IAchievementPostRequest {
-    title!: string;
-    achievementYear?: number;
-    description!: string;
-    imageUrl!: string;
-    achivementType?: number;
-    displayOrder?: number;
-
-    constructor(data?: IAchievementPostRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.title = _data["title"];
-            this.achievementYear = _data["achievementYear"];
-            this.description = _data["description"];
-            this.imageUrl = _data["imageUrl"];
-            this.achivementType = _data["achivementType"];
-            this.displayOrder = _data["displayOrder"];
-        }
-    }
-
-    static fromJS(data: any): AchievementPostRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new AchievementPostRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["title"] = this.title;
-        data["achievementYear"] = this.achievementYear;
-        data["description"] = this.description;
-        data["imageUrl"] = this.imageUrl;
-        data["achivementType"] = this.achivementType;
-        data["displayOrder"] = this.displayOrder;
-        return data;
-    }
-}
-
-export interface IAchievementPostRequest {
+export interface AchievementPostRequest {
     title: string;
     achievementYear?: number;
     description: string;
@@ -1819,57 +2088,17 @@ export interface IAchievementPostRequest {
     displayOrder?: number;
 }
 
-export class AffiliatePatchRequest implements IAffiliatePatchRequest {
-    id!: number;
-    name!: string;
-    logoImageUrl!: string;
-    websiteUrl!: string;
-    affiliateType?: number;
+export interface AchievementResponse {
+    id?: number;
+    title: string;
+    achievementYear?: number;
+    description: string;
+    imageUrl: string;
+    achivementType?: number;
     displayOrder?: number;
-    isActive?: boolean;
-
-    constructor(data?: IAffiliatePatchRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.logoImageUrl = _data["logoImageUrl"];
-            this.websiteUrl = _data["websiteUrl"];
-            this.affiliateType = _data["affiliateType"];
-            this.displayOrder = _data["displayOrder"];
-            this.isActive = _data["isActive"];
-        }
-    }
-
-    static fromJS(data: any): AffiliatePatchRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new AffiliatePatchRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["logoImageUrl"] = this.logoImageUrl;
-        data["websiteUrl"] = this.websiteUrl;
-        data["affiliateType"] = this.affiliateType;
-        data["displayOrder"] = this.displayOrder;
-        data["isActive"] = this.isActive;
-        return data;
-    }
 }
 
-export interface IAffiliatePatchRequest {
+export interface AffiliatePatchRequest {
     id: number;
     name: string;
     logoImageUrl: string;
@@ -1879,54 +2108,7 @@ export interface IAffiliatePatchRequest {
     isActive?: boolean;
 }
 
-export class AffiliatePostRequest implements IAffiliatePostRequest {
-    name!: string;
-    logoImageUrl!: string;
-    websiteUrl!: string;
-    affiliateType?: number;
-    displayOrder?: number;
-    isActive?: boolean;
-
-    constructor(data?: IAffiliatePostRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.logoImageUrl = _data["logoImageUrl"];
-            this.websiteUrl = _data["websiteUrl"];
-            this.affiliateType = _data["affiliateType"];
-            this.displayOrder = _data["displayOrder"];
-            this.isActive = _data["isActive"];
-        }
-    }
-
-    static fromJS(data: any): AffiliatePostRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new AffiliatePostRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["logoImageUrl"] = this.logoImageUrl;
-        data["websiteUrl"] = this.websiteUrl;
-        data["affiliateType"] = this.affiliateType;
-        data["displayOrder"] = this.displayOrder;
-        data["isActive"] = this.isActive;
-        return data;
-    }
-}
-
-export interface IAffiliatePostRequest {
+export interface AffiliatePostRequest {
     name: string;
     logoImageUrl: string;
     websiteUrl: string;
@@ -1935,51 +2117,17 @@ export interface IAffiliatePostRequest {
     isActive?: boolean;
 }
 
-export class ContactSettingsPatchRequest implements IContactSettingsPatchRequest {
-    id!: number;
-    contactPhone!: string;
-    contactEmail!: string;
-    physicalAddress!: string;
-    businessHours!: string;
-
-    constructor(data?: IContactSettingsPatchRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.contactPhone = _data["contactPhone"];
-            this.contactEmail = _data["contactEmail"];
-            this.physicalAddress = _data["physicalAddress"];
-            this.businessHours = _data["businessHours"];
-        }
-    }
-
-    static fromJS(data: any): ContactSettingsPatchRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new ContactSettingsPatchRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["contactPhone"] = this.contactPhone;
-        data["contactEmail"] = this.contactEmail;
-        data["physicalAddress"] = this.physicalAddress;
-        data["businessHours"] = this.businessHours;
-        return data;
-    }
+export interface AffiliateResponse {
+    id?: number;
+    name: string;
+    logoImageUrl: string;
+    websiteUrl: string;
+    affiliateType?: number;
+    displayOrder?: number;
+    isActive?: boolean;
 }
 
-export interface IContactSettingsPatchRequest {
+export interface ContactSettingsPatchRequest {
     id: number;
     contactPhone: string;
     contactEmail: string;
@@ -1987,187 +2135,47 @@ export interface IContactSettingsPatchRequest {
     businessHours: string;
 }
 
-export class CoreValuesPatchRequest implements ICoreValuesPatchRequest {
-    id!: number;
-    title!: string;
-    description!: string;
-    displayOrder?: number;
-
-    constructor(data?: ICoreValuesPatchRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.title = _data["title"];
-            this.description = _data["description"];
-            this.displayOrder = _data["displayOrder"];
-        }
-    }
-
-    static fromJS(data: any): CoreValuesPatchRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new CoreValuesPatchRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["title"] = this.title;
-        data["description"] = this.description;
-        data["displayOrder"] = this.displayOrder;
-        return data;
-    }
+export interface ContactSettingsResponse {
+    id?: number;
+    contactPhone: string;
+    contactEmail: string;
+    physicalAddress: string;
+    businessHours: string;
 }
 
-export interface ICoreValuesPatchRequest {
+export interface CoreValuesPatchRequest {
     id: number;
     title: string;
     description: string;
     displayOrder?: number;
 }
 
-export class CoreValuesPostRequest implements ICoreValuesPostRequest {
-    title!: string;
-    description!: string;
-    displayOrder?: number;
-
-    constructor(data?: ICoreValuesPostRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.title = _data["title"];
-            this.description = _data["description"];
-            this.displayOrder = _data["displayOrder"];
-        }
-    }
-
-    static fromJS(data: any): CoreValuesPostRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new CoreValuesPostRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["title"] = this.title;
-        data["description"] = this.description;
-        data["displayOrder"] = this.displayOrder;
-        return data;
-    }
-}
-
-export interface ICoreValuesPostRequest {
+export interface CoreValuesPostRequest {
     title: string;
     description: string;
     displayOrder?: number;
 }
 
-export class MissionVisionPatchRequest implements IMissionVisionPatchRequest {
-    id!: number;
-    missionStatement!: string;
-    visionStatement!: string;
-
-    constructor(data?: IMissionVisionPatchRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.missionStatement = _data["missionStatement"];
-            this.visionStatement = _data["visionStatement"];
-        }
-    }
-
-    static fromJS(data: any): MissionVisionPatchRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new MissionVisionPatchRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["missionStatement"] = this.missionStatement;
-        data["visionStatement"] = this.visionStatement;
-        return data;
-    }
+export interface CoreValuesResponse {
+    id?: number;
+    title: string;
+    description: string;
+    displayOrder?: number;
 }
 
-export interface IMissionVisionPatchRequest {
+export interface MissionVisionPatchRequest {
     id: number;
     missionStatement: string;
     visionStatement: string;
 }
 
-export class OCRCEventDetailsPatchRequest implements IOCRCEventDetailsPatchRequest {
-    eventDate?: number;
-    eventTime!: string;
-    venueName!: string;
-    eligibility!: string;
-    rulesPdfUrl!: string;
-
-    constructor(data?: IOCRCEventDetailsPatchRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.eventDate = _data["eventDate"];
-            this.eventTime = _data["eventTime"];
-            this.venueName = _data["venueName"];
-            this.eligibility = _data["eligibility"];
-            this.rulesPdfUrl = _data["rulesPdfUrl"];
-        }
-    }
-
-    static fromJS(data: any): OCRCEventDetailsPatchRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new OCRCEventDetailsPatchRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["eventDate"] = this.eventDate;
-        data["eventTime"] = this.eventTime;
-        data["venueName"] = this.venueName;
-        data["eligibility"] = this.eligibility;
-        data["rulesPdfUrl"] = this.rulesPdfUrl;
-        return data;
-    }
+export interface MissionVisionResponse {
+    id?: number;
+    missionStatement: string;
+    visionStatement: string;
 }
 
-export interface IOCRCEventDetailsPatchRequest {
+export interface OCRCEventDetailsPatchRequest {
     eventDate?: number;
     eventTime: string;
     venueName: string;
@@ -2175,54 +2183,16 @@ export interface IOCRCEventDetailsPatchRequest {
     rulesPdfUrl: string;
 }
 
-export class OCRCEventHighlightsPatchRequest implements IOCRCEventHighlightsPatchRequest {
-    id!: number;
-    title!: string;
-    eventYear?: number;
-    description!: string;
-    imageUrl!: string;
-    displayOrder?: number;
-
-    constructor(data?: IOCRCEventHighlightsPatchRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.title = _data["title"];
-            this.eventYear = _data["eventYear"];
-            this.description = _data["description"];
-            this.imageUrl = _data["imageUrl"];
-            this.displayOrder = _data["displayOrder"];
-        }
-    }
-
-    static fromJS(data: any): OCRCEventHighlightsPatchRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new OCRCEventHighlightsPatchRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["title"] = this.title;
-        data["eventYear"] = this.eventYear;
-        data["description"] = this.description;
-        data["imageUrl"] = this.imageUrl;
-        data["displayOrder"] = this.displayOrder;
-        return data;
-    }
+export interface OCRCEventDetailsResponse {
+    id?: number;
+    eventDate?: number;
+    eventTime: string;
+    venueName: string;
+    eligibility: string;
+    rulesPdfUrl: string;
 }
 
-export interface IOCRCEventHighlightsPatchRequest {
+export interface OCRCEventHighlightsPatchRequest {
     id: number;
     title: string;
     eventYear?: number;
@@ -2231,51 +2201,7 @@ export interface IOCRCEventHighlightsPatchRequest {
     displayOrder?: number;
 }
 
-export class OCRCEventHighlightsPostRequest implements IOCRCEventHighlightsPostRequest {
-    title!: string;
-    eventYear?: number;
-    description!: string;
-    imageUrl!: string;
-    displayOrder?: number;
-
-    constructor(data?: IOCRCEventHighlightsPostRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.title = _data["title"];
-            this.eventYear = _data["eventYear"];
-            this.description = _data["description"];
-            this.imageUrl = _data["imageUrl"];
-            this.displayOrder = _data["displayOrder"];
-        }
-    }
-
-    static fromJS(data: any): OCRCEventHighlightsPostRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new OCRCEventHighlightsPostRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["title"] = this.title;
-        data["eventYear"] = this.eventYear;
-        data["description"] = this.description;
-        data["imageUrl"] = this.imageUrl;
-        data["displayOrder"] = this.displayOrder;
-        return data;
-    }
-}
-
-export interface IOCRCEventHighlightsPostRequest {
+export interface OCRCEventHighlightsPostRequest {
     title: string;
     eventYear?: number;
     description: string;
@@ -2283,146 +2209,36 @@ export interface IOCRCEventHighlightsPostRequest {
     displayOrder?: number;
 }
 
-export class OCRCTimelinePatchRequest implements IOCRCTimelinePatchRequest {
+export interface OCRCEventHighlightsResponse {
     id?: number;
-    timelineYear?: number;
-    eventDescription!: string;
+    title: string;
+    eventYear?: number;
+    description: string;
+    imageUrl: string;
     displayOrder?: number;
-
-    constructor(data?: IOCRCTimelinePatchRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.timelineYear = _data["timelineYear"];
-            this.eventDescription = _data["eventDescription"];
-            this.displayOrder = _data["displayOrder"];
-        }
-    }
-
-    static fromJS(data: any): OCRCTimelinePatchRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new OCRCTimelinePatchRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["timelineYear"] = this.timelineYear;
-        data["eventDescription"] = this.eventDescription;
-        data["displayOrder"] = this.displayOrder;
-        return data;
-    }
 }
 
-export interface IOCRCTimelinePatchRequest {
+export interface OCRCTimelinePatchRequest {
     id?: number;
     timelineYear?: number;
     eventDescription: string;
     displayOrder?: number;
 }
 
-export class OCRCTimelinePostRequest implements IOCRCTimelinePostRequest {
-    timelineYear?: number;
-    eventDescription!: string;
-    displayOrder?: number;
-
-    constructor(data?: IOCRCTimelinePostRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.timelineYear = _data["timelineYear"];
-            this.eventDescription = _data["eventDescription"];
-            this.displayOrder = _data["displayOrder"];
-        }
-    }
-
-    static fromJS(data: any): OCRCTimelinePostRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new OCRCTimelinePostRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["timelineYear"] = this.timelineYear;
-        data["eventDescription"] = this.eventDescription;
-        data["displayOrder"] = this.displayOrder;
-        return data;
-    }
-}
-
-export interface IOCRCTimelinePostRequest {
+export interface OCRCTimelinePostRequest {
     timelineYear?: number;
     eventDescription: string;
     displayOrder?: number;
 }
 
-export class ServicePatchRequest implements IServicePatchRequest {
-    id!: number;
-    title!: string;
-    shortDescription!: string;
-    iconName!: string;
+export interface OCRCTimelineResponse {
+    id?: number;
+    timelineYear?: number;
+    eventDescription: string;
     displayOrder?: number;
-    isActive?: boolean;
-
-    constructor(data?: IServicePatchRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.title = _data["title"];
-            this.shortDescription = _data["shortDescription"];
-            this.iconName = _data["iconName"];
-            this.displayOrder = _data["displayOrder"];
-            this.isActive = _data["isActive"];
-        }
-    }
-
-    static fromJS(data: any): ServicePatchRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new ServicePatchRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["title"] = this.title;
-        data["shortDescription"] = this.shortDescription;
-        data["iconName"] = this.iconName;
-        data["displayOrder"] = this.displayOrder;
-        data["isActive"] = this.isActive;
-        return data;
-    }
 }
 
-export interface IServicePatchRequest {
+export interface ServicePatchRequest {
     id: number;
     title: string;
     shortDescription: string;
@@ -2431,51 +2247,7 @@ export interface IServicePatchRequest {
     isActive?: boolean;
 }
 
-export class ServicePostRequest implements IServicePostRequest {
-    title!: string;
-    shortDescription!: string;
-    iconName!: string;
-    displayOrder?: number;
-    isActive?: boolean;
-
-    constructor(data?: IServicePostRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.title = _data["title"];
-            this.shortDescription = _data["shortDescription"];
-            this.iconName = _data["iconName"];
-            this.displayOrder = _data["displayOrder"];
-            this.isActive = _data["isActive"];
-        }
-    }
-
-    static fromJS(data: any): ServicePostRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new ServicePostRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["title"] = this.title;
-        data["shortDescription"] = this.shortDescription;
-        data["iconName"] = this.iconName;
-        data["displayOrder"] = this.displayOrder;
-        data["isActive"] = this.isActive;
-        return data;
-    }
-}
-
-export interface IServicePostRequest {
+export interface ServicePostRequest {
     title: string;
     shortDescription: string;
     iconName: string;
@@ -2483,60 +2255,16 @@ export interface IServicePostRequest {
     isActive?: boolean;
 }
 
-export class TeamMembersPatchRequest implements ITeamMembersPatchRequest {
-    id!: number;
-    firstName!: string;
-    lastName!: string;
-    roleTitle!: string;
-    bio!: string;
-    profileImageUrl!: string;
+export interface ServiceResponse {
+    id?: number;
+    title: string;
+    shortDescription: string;
+    iconName: string;
     displayOrder?: number;
     isActive?: boolean;
-
-    constructor(data?: ITeamMembersPatchRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.firstName = _data["firstName"];
-            this.lastName = _data["lastName"];
-            this.roleTitle = _data["roleTitle"];
-            this.bio = _data["bio"];
-            this.profileImageUrl = _data["profileImageUrl"];
-            this.displayOrder = _data["displayOrder"];
-            this.isActive = _data["isActive"];
-        }
-    }
-
-    static fromJS(data: any): TeamMembersPatchRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new TeamMembersPatchRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["firstName"] = this.firstName;
-        data["lastName"] = this.lastName;
-        data["roleTitle"] = this.roleTitle;
-        data["bio"] = this.bio;
-        data["profileImageUrl"] = this.profileImageUrl;
-        data["displayOrder"] = this.displayOrder;
-        data["isActive"] = this.isActive;
-        return data;
-    }
 }
 
-export interface ITeamMembersPatchRequest {
+export interface TeamMembersPatchRequest {
     id: number;
     firstName: string;
     lastName: string;
@@ -2547,57 +2275,7 @@ export interface ITeamMembersPatchRequest {
     isActive?: boolean;
 }
 
-export class TeamMembersPostRequest implements ITeamMembersPostRequest {
-    firstName!: string;
-    lastName!: string;
-    roleTitle!: string;
-    bio!: string;
-    profileImageUrl!: string;
-    displayOrder?: number;
-    isActive?: boolean;
-
-    constructor(data?: ITeamMembersPostRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.firstName = _data["firstName"];
-            this.lastName = _data["lastName"];
-            this.roleTitle = _data["roleTitle"];
-            this.bio = _data["bio"];
-            this.profileImageUrl = _data["profileImageUrl"];
-            this.displayOrder = _data["displayOrder"];
-            this.isActive = _data["isActive"];
-        }
-    }
-
-    static fromJS(data: any): TeamMembersPostRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new TeamMembersPostRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["firstName"] = this.firstName;
-        data["lastName"] = this.lastName;
-        data["roleTitle"] = this.roleTitle;
-        data["bio"] = this.bio;
-        data["profileImageUrl"] = this.profileImageUrl;
-        data["displayOrder"] = this.displayOrder;
-        data["isActive"] = this.isActive;
-        return data;
-    }
-}
-
-export interface ITeamMembersPostRequest {
+export interface TeamMembersPostRequest {
     firstName: string;
     lastName: string;
     roleTitle: string;
@@ -2607,54 +2285,18 @@ export interface ITeamMembersPostRequest {
     isActive?: boolean;
 }
 
-export class TestimonialPatchRequest implements ITestimonialPatchRequest {
-    id!: number;
-    rate!: number;
-    authorName!: string;
-    authorRole!: string;
-    content!: string;
-    isApproved?: boolean;
-
-    constructor(data?: ITestimonialPatchRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.rate = _data["rate"];
-            this.authorName = _data["authorName"];
-            this.authorRole = _data["authorRole"];
-            this.content = _data["content"];
-            this.isApproved = _data["isApproved"];
-        }
-    }
-
-    static fromJS(data: any): TestimonialPatchRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new TestimonialPatchRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["rate"] = this.rate;
-        data["authorName"] = this.authorName;
-        data["authorRole"] = this.authorRole;
-        data["content"] = this.content;
-        data["isApproved"] = this.isApproved;
-        return data;
-    }
+export interface TeamMembersResponse {
+    id?: number;
+    firstName: string;
+    lastName: string;
+    roleTitle: string;
+    bio: string;
+    profileImageUrl: string;
+    displayOrder?: number;
+    isActive?: boolean;
 }
 
-export interface ITestimonialPatchRequest {
+export interface TestimonialPatchRequest {
     id: number;
     rate: number;
     authorName: string;
@@ -2663,51 +2305,7 @@ export interface ITestimonialPatchRequest {
     isApproved?: boolean;
 }
 
-export class TestimonialPostRequest implements ITestimonialPostRequest {
-    rate!: number;
-    authorName!: string;
-    authorRole!: string;
-    content!: string;
-    isApproved?: boolean;
-
-    constructor(data?: ITestimonialPostRequest) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.rate = _data["rate"];
-            this.authorName = _data["authorName"];
-            this.authorRole = _data["authorRole"];
-            this.content = _data["content"];
-            this.isApproved = _data["isApproved"];
-        }
-    }
-
-    static fromJS(data: any): TestimonialPostRequest {
-        data = typeof data === 'object' ? data : {};
-        let result = new TestimonialPostRequest();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["rate"] = this.rate;
-        data["authorName"] = this.authorName;
-        data["authorRole"] = this.authorRole;
-        data["content"] = this.content;
-        data["isApproved"] = this.isApproved;
-        return data;
-    }
-}
-
-export interface ITestimonialPostRequest {
+export interface TestimonialPostRequest {
     rate: number;
     authorName: string;
     authorRole: string;
@@ -2715,7 +2313,17 @@ export interface ITestimonialPostRequest {
     isApproved?: boolean;
 }
 
-export class ApiException extends Error {
+export interface TestimonialResponse {
+    id?: number;
+    rate?: number;
+    authorName: string;
+    authorRole: string;
+    content: string;
+    isApproved?: boolean;
+    createdAt?: Date;
+}
+
+export class SwaggerException extends Error {
     override message: string;
     status: number;
     response: string;
@@ -2732,10 +2340,10 @@ export class ApiException extends Error {
         this.result = result;
     }
 
-    protected isApiException = true;
+    protected isSwaggerException = true;
 
-    static isApiException(obj: any): obj is ApiException {
-        return obj.isApiException === true;
+    static isSwaggerException(obj: any): obj is SwaggerException {
+        return obj.isSwaggerException === true;
     }
 }
 
@@ -2743,5 +2351,5 @@ function throwException(message: string, status: number, response: string, heade
     if (result !== null && result !== undefined)
         throw result;
     else
-        throw new ApiException(message, status, response, headers, null);
+        throw new SwaggerException(message, status, response, headers, null);
 }

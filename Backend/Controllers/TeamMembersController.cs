@@ -16,14 +16,14 @@ public class TeamMembersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllTeamMemberss()
+    public async Task<ActionResult<IEnumerable<TeamMembersResponse>>> GetAllTeamMemberss()
     {
         var teamMemberss = await _teamMembersService.GetAllAsync();
         return Ok(teamMemberss);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetTeamMembersById(int id)
+    public async Task<ActionResult<TeamMembersResponse>> GetTeamMembersById(int id)
     {
         var teamMembers = await _teamMembersService.GetByIdAsync(id);
         
@@ -31,7 +31,7 @@ public class TeamMembersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTeamMembers([FromBody] TeamMembersPostRequest teamMembersDto)
+    public async Task<ActionResult<TeamMembersResponse>> CreateTeamMembers([FromBody] TeamMembersPostRequest teamMembersDto)
     {
         if (!ModelState.IsValid)
         {
@@ -44,7 +44,7 @@ public class TeamMembersController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateTeamMembers(int id, [FromBody] TeamMembersPatchRequest teamMembersDto)
+    public async Task<ActionResult<TeamMembersResponse>> UpdateTeamMembers(int id, [FromBody] TeamMembersPatchRequest teamMembersDto)
     {
         if (!ModelState.IsValid)
         {

@@ -16,14 +16,14 @@ public class CoreValuesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllCoreValuess()
+    public async Task<ActionResult<IEnumerable<CoreValuesResponse>>> GetAllCoreValuess()
     {
         var coreValuess = await _coreValuesService.GetAllAsync();
         return Ok(coreValuess);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetCoreValuesById(int id)
+    public async Task<ActionResult<CoreValuesResponse>> GetCoreValuesById(int id)
     {
         var coreValues = await _coreValuesService.GetByIdAsync(id);
         
@@ -31,7 +31,7 @@ public class CoreValuesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCoreValues([FromBody] CoreValuesPostRequest coreValuesDto)
+    public async Task<ActionResult<CoreValuesResponse>> CreateCoreValues([FromBody] CoreValuesPostRequest coreValuesDto)
     {
         if (!ModelState.IsValid)
         {
@@ -44,7 +44,7 @@ public class CoreValuesController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateCoreValues(int id, [FromBody] CoreValuesPatchRequest coreValuesDto)
+    public async Task<ActionResult<CoreValuesResponse>> UpdateCoreValues(int id, [FromBody] CoreValuesPatchRequest coreValuesDto)
     {
         if (!ModelState.IsValid)
         {

@@ -16,14 +16,14 @@ public class OCRCTimelinesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllOCRCTimelines()
+    public async Task<ActionResult<IEnumerable<OCRCTimelineResponse>>> GetAllOCRCTimelines()
     {
         var timelines = await _timelineService.GetAllAsync();
         return Ok(timelines);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetOCRCTimelineById(int id)
+    public async Task<ActionResult<OCRCTimelineResponse>> GetOCRCTimelineById(int id)
     {
         var timeline = await _timelineService.GetByIdAsync(id);
         
@@ -31,7 +31,7 @@ public class OCRCTimelinesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateOCRCTimeline([FromBody] OCRCTimelinePostRequest timelineDto)
+    public async Task<ActionResult<OCRCTimelineResponse>> CreateOCRCTimeline([FromBody] OCRCTimelinePostRequest timelineDto)
     {
         if (!ModelState.IsValid)
         {
@@ -44,7 +44,7 @@ public class OCRCTimelinesController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateOCRCTimeline(int id, [FromBody] OCRCTimelinePatchRequest timelineDto)
+    public async Task<ActionResult<OCRCTimelineResponse>> UpdateOCRCTimeline(int id, [FromBody] OCRCTimelinePatchRequest timelineDto)
     {
         if (!ModelState.IsValid)
         {

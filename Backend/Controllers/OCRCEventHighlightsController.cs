@@ -16,14 +16,14 @@ public class OCRCEventHighlightsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllOCRCEventHighlightss()
+    public async Task<ActionResult<IEnumerable<OCRCEventHighlightsResponse>>> GetAllOCRCEventHighlightss()
     {
         var eventHighlightss = await _eventHighlightsService.GetAllAsync();
         return Ok(eventHighlightss);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetOCRCEventHighlightsById(int id)
+    public async Task<ActionResult<OCRCEventHighlightsResponse>> GetOCRCEventHighlightsById(int id)
     {
         var eventHighlights = await _eventHighlightsService.GetByIdAsync(id);
         
@@ -31,7 +31,7 @@ public class OCRCEventHighlightsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateOCRCEventHighlights([FromBody] OCRCEventHighlightsPostRequest eventHighlightsDto)
+    public async Task<ActionResult<OCRCEventHighlightsResponse>> CreateOCRCEventHighlights([FromBody] OCRCEventHighlightsPostRequest eventHighlightsDto)
     {
         if (!ModelState.IsValid)
         {
@@ -44,7 +44,7 @@ public class OCRCEventHighlightsController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateOCRCEventHighlights(int id, [FromBody] OCRCEventHighlightsPatchRequest eventHighlightsDto)
+    public async Task<ActionResult<OCRCEventHighlightsResponse>> UpdateOCRCEventHighlights(int id, [FromBody] OCRCEventHighlightsPatchRequest eventHighlightsDto)
     {
         if (!ModelState.IsValid)
         {
