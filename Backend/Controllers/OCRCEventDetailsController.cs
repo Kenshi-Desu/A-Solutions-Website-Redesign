@@ -16,14 +16,14 @@ public class OCRCEventDetailsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetOCRCEventDetailss()
+    public async Task<ActionResult<OCRCEventDetailsResponse>> GetOCRCEventDetailss()
     {
         var eventDetailss = await _eventDetailsService.GetAsync();
         return Ok(eventDetailss);
     }
 
     [HttpPatch]
-    public async Task<IActionResult> UpdateOCRCEventDetails([FromBody] OCRCEventDetailsPatchRequest eventDetailsDto)
+    public async Task<ActionResult<OCRCEventDetailsResponse>> UpdateOCRCEventDetails([FromBody] OCRCEventDetailsPatchRequest eventDetailsDto)
     {
         if (!ModelState.IsValid)
         {

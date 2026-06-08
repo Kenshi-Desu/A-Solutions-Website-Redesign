@@ -16,14 +16,14 @@ public class TestimonialsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllTestimonials()
+    public async Task<ActionResult<IEnumerable<TestimonialResponse>>> GetAllTestimonials()
     {
         var testimonials = await _testimonialService.GetAllAsync();
         return Ok(testimonials);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetTestimonialById(int id)
+    public async Task<ActionResult<TestimonialResponse>> GetTestimonialById(int id)
     {
         var testimonial = await _testimonialService.GetByIdAsync(id);
         
@@ -31,7 +31,7 @@ public class TestimonialsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTestimonial([FromBody] TestimonialPostRequest testimonialDto)
+    public async Task<ActionResult<TestimonialResponse>> CreateTestimonial([FromBody] TestimonialPostRequest testimonialDto)
     {
         if (!ModelState.IsValid)
         {
@@ -44,7 +44,7 @@ public class TestimonialsController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateTestimonial(int id, [FromBody] TestimonialPatchRequest testimonialDto)
+    public async Task<ActionResult<TestimonialResponse>> UpdateTestimonial(int id, [FromBody] TestimonialPatchRequest testimonialDto)
     {
         if (!ModelState.IsValid)
         {

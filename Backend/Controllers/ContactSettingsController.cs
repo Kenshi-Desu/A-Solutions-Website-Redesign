@@ -16,14 +16,14 @@ public class ContactSettingsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetContactSettingss()
+    public async Task<ActionResult<ContactSettingsResponse>> GetContactSettingss()
     {
         var contactSettingss = await _contactSettingsService.GetAsync();
         return Ok(contactSettingss);
     }
 
     [HttpPatch]
-    public async Task<IActionResult> UpdateContactSettings([FromBody] ContactSettingsPatchRequest contactSettingsDto)
+    public async Task<ActionResult<ContactSettingsResponse>> UpdateContactSettings([FromBody] ContactSettingsPatchRequest contactSettingsDto)
     {
         if (!ModelState.IsValid)
         {

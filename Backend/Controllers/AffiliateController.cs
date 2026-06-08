@@ -16,14 +16,14 @@ public class AffiliatesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllAffiliates()
+    public async Task<ActionResult<IEnumerable<AffiliateResponse>>> GetAllAffiliates()
     {
         var affiliates = await _affiliateService.GetAllAsync();
         return Ok(affiliates);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAffiliateById(int id)
+    public async Task<ActionResult<AffiliateResponse>> GetAffiliateById(int id)
     {
         var affiliate = await _affiliateService.GetByIdAsync(id);
         
@@ -31,7 +31,7 @@ public class AffiliatesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateAffiliate([FromBody] AffiliatePostRequest affiliateDto)
+    public async Task<ActionResult<AffiliateResponse>> CreateAffiliate([FromBody] AffiliatePostRequest affiliateDto)
     {
         if (!ModelState.IsValid)
         {
@@ -44,7 +44,7 @@ public class AffiliatesController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateAffiliate(int id, [FromBody] AffiliatePatchRequest affiliateDto)
+    public async Task<ActionResult<AffiliateResponse>> UpdateAffiliate(int id, [FromBody] AffiliatePatchRequest affiliateDto)
     {
         if (!ModelState.IsValid)
         {

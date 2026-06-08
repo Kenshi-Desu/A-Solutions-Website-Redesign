@@ -16,14 +16,14 @@ public class MissionVisionController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetMissionVisions()
+    public async Task<ActionResult<MissionVisionResponse>> GetMissionVisions()
     {
         var missionVissions = await _missionVissionService.GetAsync();
         return Ok(missionVissions);
     }
 
     [HttpPatch]
-    public async Task<IActionResult> UpdateMissionVision([FromBody] MissionVisionPatchRequest missionVissionDto)
+    public async Task<ActionResult<MissionVisionResponse>> UpdateMissionVision([FromBody] MissionVisionPatchRequest missionVissionDto)
     {
         if (!ModelState.IsValid)
         {

@@ -16,14 +16,14 @@ public class ServicesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllServices()
+    public async Task<ActionResult<IEnumerable<ServiceResponse>>> GetAllServices()
     {
         var services = await _serviceService.GetAllAsync();
         return Ok(services);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetServiceById(int id)
+    public async Task<ActionResult<ServiceResponse>> GetServiceById(int id)
     {
         var service = await _serviceService.GetByIdAsync(id);
         
@@ -31,7 +31,7 @@ public class ServicesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateService([FromBody] ServicePostRequest serviceDto)
+    public async Task<ActionResult<ServiceResponse>> CreateService([FromBody] ServicePostRequest serviceDto)
     {
         if (!ModelState.IsValid)
         {
@@ -44,7 +44,7 @@ public class ServicesController : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateService(int id, [FromBody] ServicePatchRequest serviceDto)
+    public async Task<ActionResult<ServiceResponse>> UpdateService(int id, [FromBody] ServicePatchRequest serviceDto)
     {
         if (!ModelState.IsValid)
         {
