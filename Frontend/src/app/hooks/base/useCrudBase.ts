@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 
 interface CrudOperations<T, TPost, TPatch> {
     getAll: () => Promise<any>;
+    getById: (id: number) => Promise<T>;
     create?: (body: TPost) => Promise<any>;
     update?: (id: number, body: TPatch) => Promise<any>;
     remove?: (id: number) => Promise<any>;
@@ -29,6 +30,16 @@ export function useCrudBase<T, TPost = Partial<T>, TPatch = Partial<T>>(operatio
     useEffect(() => {
         loadData();
     }, [loadData]);
+
+    const fetchById = async (id: number): Promise<T | null> => {
+        if (!operations.getById) return null;
+        try {
+            return await operations.getById(id);
+        } catch (err) {
+            console.error(`Failed to fetch item with id ${id}`, err);
+            throw err;
+        }
+    };
 
     const createItem = async (body: TPost) => {
         if (!operations.create) return;
