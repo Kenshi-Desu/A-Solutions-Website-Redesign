@@ -7,16 +7,19 @@ import {
   AffiliatePatchRequest,
 } from "../../api/api-client";
 
+const operations = {
+  getAll: () => apiClient.affiliatesAll(),
+  getById: (id: number) => apiClient.affiliatesGET(id),
+  create: (body: AffiliatePostRequest) => apiClient.affiliatesPOST(body),
+  update: (id: number, body: AffiliatePatchRequest) =>
+    apiClient.affiliatesPATCH(id, body),
+  remove: (id: number) => apiClient.affiliatesDELETE(id),
+};
+
 export function useAffiliates() {
   return useCrudBase<
     AffiliateResponse,
     AffiliatePostRequest,
     AffiliatePatchRequest
-  >({
-    getAll: () => apiClient.affiliatesAll(),
-    getById: (id) => apiClient.affiliatesGET(id),
-    create: (body) => apiClient.affiliatesPOST(body),
-    update: (id, body) => apiClient.affiliatesPATCH(id, body),
-    remove: (id) => apiClient.affiliatesDELETE(id),
-  });
+  >(operations);
 }

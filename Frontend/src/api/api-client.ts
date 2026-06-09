@@ -2176,7 +2176,8 @@ export interface MissionVisionResponse {
 }
 
 export interface OCRCEventDetailsPatchRequest {
-    eventDate?: number;
+    id: number;
+    eventDate?: Date;
     eventTime: string;
     venueName: string;
     eligibility: string;
@@ -2185,7 +2186,7 @@ export interface OCRCEventDetailsPatchRequest {
 
 export interface OCRCEventDetailsResponse {
     id?: number;
-    eventDate?: number;
+    eventDate?: Date;
     eventTime: string;
     venueName: string;
     eligibility: string;

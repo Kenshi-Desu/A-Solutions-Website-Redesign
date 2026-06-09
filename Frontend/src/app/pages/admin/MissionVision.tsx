@@ -1,21 +1,53 @@
-import { useState } from 'react';
-import { Save, Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { Save, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { useMissionVisions } from "../../hooks/useMissionVision";
+import { MissionVisionPatchRequest } from "../../../api/api-client";
 
 export default function MissionVision() {
   const [isSaving, setIsSaving] = useState(false);
 
-  const handleSave = (e: React.FormEvent) => {
+  // 1. Destructure our state from the custom hook
+  const { data: settings, isLoading, updateItem } = useMissionVisions();
+
+  // 2. Wait for data before rendering the form to prevent empty textareas
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="animate-spin text-[#6F67BA]" size={40} />
+      </div>
+    );
+  }
+
+  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSaving(true);
-    
-    // Simulate API call to save data
-    setTimeout(() => {
-      setIsSaving(false);
-      toast.success("Global content updated successfully!", {
-        style: { background: '#f0fdf4', color: '#16a34a', borderColor: '#4ade80' }
+
+    // Automatically extract all form values via their "name" attributes
+    const formData = new FormData(e.currentTarget);
+
+    const payload: MissionVisionPatchRequest = {
+      id: settings?.id ?? 1,
+      missionStatement: formData.get("missionStatement") as string,
+      visionStatement: formData.get("visionStatement") as string,
+    };
+
+    try {
+      if (updateItem) {
+        await updateItem(payload);
+      }
+      toast.success("Mission & Vision updated successfully!", {
+        style: {
+          background: "#f0fdf4",
+          color: "#16a34a",
+          borderColor: "#4ade80",
+        },
       });
-    }, 1500);
+    } catch (error) {
+      toast.error("Failed to update Mission & Vision.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -23,7 +55,9 @@ export default function MissionVision() {
       {/* Header Bar */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-[#333333]">Manage Mission & Vision</h1>
+          <h1 className="text-3xl font-bold text-[#333333]">
+            Manage Mission & Vision
+          </h1>
           <div className="text-sm text-gray-500 mt-1 flex items-center space-x-2">
             <span>About Us Content</span>
             <span>/</span>
@@ -34,49 +68,66 @@ export default function MissionVision() {
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden max-w-4xl">
         <div className="p-6 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
-          <h2 className="font-semibold text-[#333333] text-lg">Global Content Edit</h2>
-          <span className="text-xs bg-[#E37F4E]/10 text-[#E37F4E] px-3 py-1 rounded-full font-bold uppercase tracking-wider">
-            Live on site
-          </span>
+          <div>
+            <h2 className="text-lg font-semibold text-[#333333]">
+              Global Content
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Update the organization's core statements
+            </p>
+          </div>
         </div>
 
-        <form onSubmit={handleSave} className="p-8 space-y-8">
-          {/* Mission Field */}
+        {/* 3. Wrap everything in a form and attach onSubmit */}
+        <form onSubmit={handleSave} className="p-6 space-y-8">
+          
+          {/* Mission Statement */}
           <div>
-            <label className="block text-sm font-bold text-[#333333] mb-2 uppercase tracking-wide">
-              Our Mission
+            <label className="block text-sm font-semibold text-[#333333] mb-2">
+              Mission Statement
             </label>
-            <p className="text-xs text-gray-500 mb-3">This text appears in the hero section of the About Us page.</p>
-            <textarea 
+            <p className="text-sm text-gray-500 mb-3">
+              This text defines the core purpose and focus of the organization.
+            </p>
+            <textarea
+              name="missionStatement" // Matches the payload property
               rows={5}
               className="w-full p-4 bg-white border border-gray-300 rounded-lg text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent transition-shadow resize-y"
-              defaultValue="To empower the next generation with the knowledge, skills, and confidence to thrive in a technology-driven world through innovative education in coding, robotics, and STEM."
+              defaultValue={settings?.missionStatement || ""}
+              required
             />
           </div>
 
-          {/* Vision Field */}
+          <hr className="border-gray-100" />
+
+          {/* Vision Statement */}
           <div>
-            <label className="block text-sm font-bold text-[#333333] mb-2 uppercase tracking-wide">
-              Our Vision
+            <label className="block text-sm font-semibold text-[#333333] mb-2">
+              Vision Statement
             </label>
-            <p className="text-xs text-gray-500 mb-3">This text defines the long-term goal of the organization.</p>
-            <textarea 
+            <p className="text-sm text-gray-500 mb-3">
+              This text defines the long-term goal of the organization.
+            </p>
+            <textarea
+              name="visionStatement" // Matches the payload property
               rows={5}
               className="w-full p-4 bg-white border border-gray-300 rounded-lg text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent transition-shadow resize-y"
-              defaultValue="To be the premier development center recognized globally for nurturing innovative thinkers, problem solvers, and tech leaders of tomorrow."
+              defaultValue={settings?.visionStatement || ""}
+              required
             />
           </div>
 
+          {/* Form Actions */}
           <div className="pt-6 border-t border-gray-100 flex justify-end space-x-4">
-            <button 
-              type="button" 
+            <button
+              type="button"
               disabled={isSaving}
               className="px-6 py-2.5 text-[#333333] font-semibold hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
             >
               Cancel
             </button>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isSaving}
               className="bg-[#6F67BA] hover:bg-[#5d57a0] text-white px-6 py-2.5 rounded-lg flex items-center space-x-2 font-semibold shadow-sm transition-colors duration-200 disabled:opacity-75"
             >
@@ -85,7 +136,7 @@ export default function MissionVision() {
               ) : (
                 <Save size={18} />
               )}
-              <span>{isSaving ? 'Saving...' : 'Save Changes'}</span>
+              <span>{isSaving ? "Saving..." : "Save Changes"}</span>
             </button>
           </div>
         </form>
