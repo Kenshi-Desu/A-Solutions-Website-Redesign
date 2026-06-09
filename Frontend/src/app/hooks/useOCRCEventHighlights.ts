@@ -7,16 +7,20 @@ import {
   OCRCEventHighlightsPatchRequest,
 } from "../../api/api-client";
 
-export function useOCRCEventHighlights() {
+const operations = {
+  getAll: () => apiClient.oCRCEventHighlightsAll(),
+  getById: (id: number) => apiClient.oCRCEventHighlightsGET(id),
+  create: (body: OCRCEventHighlightsPostRequest) =>
+    apiClient.oCRCEventHighlightsPOST(body),
+  update: (id: number, body: OCRCEventHighlightsPatchRequest) =>
+    apiClient.oCRCEventHighlightsPATCH(id, body),
+  remove: (id: number) => apiClient.oCRCEventHighlightsDELETE(id),
+};
+
+export function useOCRCEventHighlightss() {
   return useCrudBase<
     OCRCEventHighlightsResponse,
     OCRCEventHighlightsPostRequest,
     OCRCEventHighlightsPatchRequest
-  >({
-    getAll: () => apiClient.oCRCEventHighlightsAll(),
-    getById: (id) => apiClient.oCRCEventHighlightsGET(id),
-    create: (body) => apiClient.oCRCEventHighlightsPOST(body),
-    update: (id, body) => apiClient.oCRCEventHighlightsPATCH(id, body),
-    remove: (id) => apiClient.oCRCEventHighlightsDELETE(id),
-  });
+  >(operations);
 }

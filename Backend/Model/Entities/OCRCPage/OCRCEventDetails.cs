@@ -20,7 +20,7 @@ public class OCRCEventDetails : BaseModel
     public int Id { get; set; }
 
     [Column("event_date")]
-    public int EventDate { get; set; }
+    public DateOnly EventDate { get; set; }
 
     [Column("event_time")]
     public string EventTime { get; set; }

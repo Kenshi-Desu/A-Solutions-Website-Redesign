@@ -18,8 +18,8 @@ public class OCRCEventDetailsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<OCRCEventDetailsResponse>> GetOCRCEventDetailss()
     {
-        var eventDetailss = await _eventDetailsService.GetAsync();
-        return Ok(eventDetailss);
+        var eventDetails = await _eventDetailsService.GetAsync();
+        return Ok(eventDetails);
     }
 
     [HttpPatch]

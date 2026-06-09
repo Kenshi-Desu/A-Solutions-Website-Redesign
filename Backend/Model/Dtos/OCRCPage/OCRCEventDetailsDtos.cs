@@ -6,20 +6,7 @@ public class OCRCEventDetailsResponse
 {
     [Key]
     public int Id { get; set; }
-    public int EventDate { get; set; }
-    [Required]
-    public required string EventTime { get; set; }
-    [Required]
-    public required string VenueName { get; set; }
-    [Required]
-    public required string Eligibility { get; set; }
-    [Required]
-    public required string RulesPdfUrl { get; set; }
-}
-
-public class OCRCEventDetailsPostRequest
-{
-    public int EventDate { get; set; }
+    public DateOnly EventDate { get; set; }
     [Required]
     public required string EventTime { get; set; }
     [Required]
@@ -32,7 +19,9 @@ public class OCRCEventDetailsPostRequest
 
 public class OCRCEventDetailsPatchRequest
 {
-    public int EventDate { get; set; }
+    [Required]
+    public int Id { get; set; }
+    public DateOnly EventDate { get; set; }
     [Required]
     public required string EventTime { get; set; }
     [Required]
