@@ -17,7 +17,7 @@ const operations = {
   remove: (id: number) => apiClient.oCRCEventHighlightsDELETE(id),
 };
 
-export function useOCRCEventHighlightss() {
+export function useOCRCEventHighlights() {
   return useCrudBase<
     OCRCEventHighlightsResponse,
     OCRCEventHighlightsPostRequest,

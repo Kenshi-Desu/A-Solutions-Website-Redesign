@@ -2,44 +2,46 @@ import { useState } from "react";
 import {
   Save,
   Loader2,
+  MessageSquare,
   User,
   Briefcase,
+  Star,
   Plus,
   Edit,
   Trash2,
   ArrowLeft,
-  Image as ImageIcon,
-  AlignLeft,
+  CheckCircle,
+  XCircle,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useTeamMemberss } from "../../hooks/useTeamMembers";
+import { useTestimonials } from "../../hooks/useTestimonials";
 import {
-  TeamMembersPostRequest,
-  TeamMembersPatchRequest,
-  TeamMembersResponse,
+  TestimonialPostRequest,
+  TestimonialPatchRequest,
+  TestimonialResponse,
 } from "../../../api/api-client";
 
-export default function TeamMembers() {
+export default function Testimonials() {
   const [view, setView] = useState<"list" | "form">("list");
-  const [editingItem, setEditingItem] = useState<TeamMembersResponse | null>(
+  const [editingItem, setEditingItem] = useState<TestimonialResponse | null>(
     null,
   );
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const {
-    data: teamMembers,
+    data: testimonials,
     isLoading,
     createItem,
     updateItem,
     deleteItem,
-  } = useTeamMemberss();
+  } = useTestimonials();
 
   const handleAddNew = (): void => {
     setEditingItem(null);
     setView("form");
   };
 
-  const handleEdit = (item: TeamMembersResponse): void => {
+  const handleEdit = (item: TestimonialResponse): void => {
     setEditingItem(item);
     setView("form");
   };
@@ -48,9 +50,9 @@ export default function TeamMembers() {
     if (!id || !deleteItem) return;
     try {
       await deleteItem(id);
-      toast.success("Team member deleted successfully.");
+      toast.success("Testimonial deleted successfully.");
     } catch (error) {
-      toast.error("Failed to delete team member.");
+      toast.error("Failed to delete testimonial.");
     }
   };
 
@@ -61,30 +63,28 @@ export default function TeamMembers() {
     setIsSaving(true);
     const formData = new FormData(e.currentTarget);
 
-    const payload: TeamMembersPostRequest | TeamMembersPatchRequest = {
-      firstName: formData.get("firstName") as string,
-      lastName: formData.get("lastName") as string,
-      roleTitle: formData.get("roleTitle") as string,
-      bio: formData.get("bio") as string,
-      profileImageUrl: formData.get("profileImageUrl") as string,
-      displayOrder: Number(formData.get("displayOrder")) || 0,
-      isActive: formData.get("isActive") === "true",
+    const payload: TestimonialPostRequest | TestimonialPatchRequest = {
+      authorName: formData.get("authorName") as string,
+      authorRole: formData.get("authorRole") as string,
+      content: formData.get("content") as string,
+      rate: Number(formData.get("rate")) || 5,
+      isApproved: formData.get("isApproved") === "true",
     };
 
     try {
       if (editingItem?.id && updateItem) {
-        await updateItem(editingItem.id, payload as TeamMembersPatchRequest);
-        toast.success("Team member updated successfully!");
+        await updateItem(editingItem.id, payload as TestimonialPatchRequest);
+        toast.success("Testimonial updated successfully!");
       } else if (createItem) {
-        await createItem(payload as TeamMembersPostRequest);
-        toast.success("Team member created successfully!");
+        await createItem(payload as TestimonialPostRequest);
+        toast.success("Testimonial created successfully!");
       }
       setView("list");
     } catch (error) {
       toast.error(
         editingItem
-          ? "Failed to update team member."
-          : "Failed to create team member.",
+          ? "Failed to update testimonial."
+          : "Failed to create testimonial.",
       );
     } finally {
       setIsSaving(false);
@@ -97,15 +97,15 @@ export default function TeamMembers() {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-[#333333]">
-              {editingItem ? "Edit Member" : "Add New Member"}
+              {editingItem ? "Edit Testimonial" : "Add New Testimonial"}
             </h1>
             <div className="text-sm text-gray-500 mt-1 flex items-center space-x-2">
-              <span>About Us Content</span> /{" "}
+              <span>Home Content</span> /{" "}
               <button
                 onClick={() => setView("list")}
                 className="hover:text-[#6F67BA]"
               >
-                Team Members
+                Testimonials
               </button>{" "}
               /
               <span className="text-[#E37F4E] font-medium">
@@ -126,58 +126,38 @@ export default function TeamMembers() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
-                  First Name
+                  Author Name
                 </label>
                 <input
-                  name="firstName"
-                  defaultValue={editingItem?.firstName}
+                  name="authorName"
+                  defaultValue={editingItem?.authorName}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                   required
                 />
               </div>
               <div>
                 <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
-                  Last Name
+                  Author Role
                 </label>
                 <input
-                  name="lastName"
-                  defaultValue={editingItem?.lastName}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
-                  Role Title
-                </label>
-                <input
-                  name="roleTitle"
-                  defaultValue={editingItem?.roleTitle}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
-                  Profile Image URL
-                </label>
-                <input
-                  type="url"
-                  name="profileImageUrl"
-                  defaultValue={editingItem?.profileImageUrl}
+                  name="authorRole"
+                  defaultValue={editingItem?.authorRole}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                   required
                 />
               </div>
               <div>
                 <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
-                  Display Order
+                  Rating (1-5)
                 </label>
                 <input
                   type="number"
-                  name="displayOrder"
-                  defaultValue={editingItem?.displayOrder ?? 0}
+                  name="rate"
+                  min="1"
+                  max="5"
+                  defaultValue={editingItem?.rate ?? 5}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  required
                 />
               </div>
               <div>
@@ -185,22 +165,22 @@ export default function TeamMembers() {
                   Status
                 </label>
                 <select
-                  name="isActive"
-                  defaultValue={String(editingItem?.isActive ?? true)}
+                  name="isApproved"
+                  defaultValue={String(editingItem?.isApproved ?? true)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                 >
-                  <option value="true">Active</option>
-                  <option value="false">Inactive</option>
+                  <option value="true">Approved</option>
+                  <option value="false">Pending</option>
                 </select>
               </div>
               <div className="md:col-span-2">
                 <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
-                  Bio
+                  Content
                 </label>
                 <textarea
-                  name="bio"
+                  name="content"
                   rows={4}
-                  defaultValue={editingItem?.bio}
+                  defaultValue={editingItem?.content}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                   required
                 />
@@ -237,10 +217,12 @@ export default function TeamMembers() {
     <div className="animate-in fade-in duration-300">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-[#333333]">Manage Team</h1>
+          <h1 className="text-3xl font-bold text-[#333333]">
+            Manage Testimonials
+          </h1>
           <div className="text-sm text-gray-500 mt-1">
-            About Us Content /{" "}
-            <span className="text-[#E37F4E] font-medium">Team Members</span>
+            Home Content /{" "}
+            <span className="text-[#E37F4E] font-medium">Testimonials</span>
           </div>
         </div>
         <button
@@ -260,35 +242,40 @@ export default function TeamMembers() {
           <table className="w-full text-left">
             <thead className="bg-gray-50 border-b text-xs uppercase text-gray-500">
               <tr>
-                <th className="px-6 py-4">Image</th>
-                <th className="px-6 py-4">Name</th>
-                <th className="px-6 py-4">Role</th>
-                <th className="px-6 py-4">Order</th>
+                <th className="px-6 py-4">Author</th>
+                <th className="px-6 py-4">Rating</th>
+                <th className="px-6 py-4">Content</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y">
-              {teamMembers?.map((item) => (
+              {testimonials?.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">
-                    <img
-                      src={item.profileImageUrl}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
+                    <div className="font-semibold text-[#333333]">
+                      {item.authorName}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {item.authorRole}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 font-semibold text-[#333333]">
-                    {item.firstName} {item.lastName}
+                  <td className="px-6 py-4 text-yellow-500 flex items-center gap-1">
+                    {item.rate} <Star size={14} fill="currentColor" />
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {item.roleTitle}
+                  <td className="px-6 py-4 text-sm text-gray-600 max-w-[300px] truncate">
+                    {item.content}
                   </td>
-                  <td className="px-6 py-4">{item.displayOrder}</td>
                   <td className="px-6 py-4">
                     <span
-                      className={`px-2 py-1 rounded text-xs ${item.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
+                      className={`px-2 py-1 rounded text-xs flex w-fit items-center gap-1 ${item.isApproved ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}`}
                     >
-                      {item.isActive ? "Active" : "Inactive"}
+                      {item.isApproved ? (
+                        <CheckCircle size={12} />
+                      ) : (
+                        <XCircle size={12} />
+                      )}
+                      {item.isApproved ? "Approved" : "Pending"}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right flex justify-end gap-2">
