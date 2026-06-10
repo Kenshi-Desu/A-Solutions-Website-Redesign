@@ -10,6 +10,7 @@ namespace A_Solutions_Website_Redesign.Backend.Model.Entities
         [SetsRequiredMembers]
         public OCRCTimeline()
         {
+            Title = string.Empty;
             EventDescription = string.Empty;
         }
 
@@ -18,6 +19,9 @@ namespace A_Solutions_Website_Redesign.Backend.Model.Entities
 
         [Column("timeline_year")]
         public int TimelineYear { get; set; }
+
+        [Column("title")]
+        public string Title { get; set; }
 
         [Column("event_description")]
         public string EventDescription { get; set; }

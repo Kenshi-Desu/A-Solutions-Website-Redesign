@@ -60,9 +60,10 @@ export default function OCRCTimelines() {
     setIsSaving(true);
     const formData = new FormData(e.currentTarget);
 
-    const payload: OCRCTimelinePostRequest | OCRCTimelinePatchRequest = {
+    const payload = {
       timelineYear:
         Number(formData.get("timelineYear")) || new Date().getFullYear(),
+      title: formData.get("title") as string,
       eventDescription: formData.get("eventDescription") as string,
       displayOrder: Number(formData.get("displayOrder")) || 0,
     };
@@ -148,6 +149,18 @@ export default function OCRCTimelines() {
               </div>
               <div className="md:col-span-2">
                 <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  defaultValue={editingItem?.title ?? ""}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  required
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
                   Event Description
                 </label>
                 <textarea
@@ -215,6 +228,7 @@ export default function OCRCTimelines() {
             <thead className="bg-gray-50 border-b text-xs uppercase text-gray-500">
               <tr>
                 <th className="px-6 py-4">Year</th>
+                <th className="px-6 py-4">Title</th>
                 <th className="px-6 py-4">Description</th>
                 <th className="px-6 py-4">Order</th>
                 <th className="px-6 py-4 text-right">Actions</th>
@@ -225,6 +239,9 @@ export default function OCRCTimelines() {
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 font-bold text-[#6F67BA]">
                     {item.timelineYear}
+                  </td>
+                  <td className="px-6 py-4 font-semibold text-[#333333]">
+                    {item.title}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 max-w-[400px] truncate">
                     {item.eventDescription}

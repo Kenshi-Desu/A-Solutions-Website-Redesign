@@ -25,7 +25,7 @@ public class ContactSettingsService : SingletonServiceBase<ContactSettings, Cont
             Id = entity.Id,
             ContactPhone = entity.ContactPhone,
             ContactEmail = entity.ContactEmail,
-            PhysicalAddress = entity.ContactEmail,
+            PhysicalAddress = entity.PhysicalAddress,
             BusinessHours = entity.BusinessHours
         };
     }

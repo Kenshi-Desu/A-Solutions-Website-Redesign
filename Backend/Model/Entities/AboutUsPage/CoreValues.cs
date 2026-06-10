@@ -10,12 +10,16 @@ public class CoreValues : BaseModel
     [SetsRequiredMembers]
     public CoreValues()
     {
+        IconName = string.Empty;
         Title = string.Empty;
         Description = string.Empty;
     }
 
     [PrimaryKey("id", false)]
     public int Id { get; set; }
+
+    [Column("icon_name")]
+    public string IconName { get; set; }
 
     [Column("title")]
     public string Title { get; set; }

@@ -64,6 +64,18 @@ export interface IClient {
     affiliatesDELETE(id: number): Promise<void>;
 
     /**
+     * @param body (optional) 
+     * @return OK
+     */
+    login(body: LoginRequest | undefined): Promise<void>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    register(body: UsersPostRequest | undefined): Promise<void>;
+
+    /**
      * @return OK
      */
     contactSettingsGET(): Promise<ContactSettingsResponse>;
@@ -647,6 +659,82 @@ export class Client implements IClient {
     }
 
     protected processAffiliatesDELETE(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    login(body: LoginRequest | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Auth/login";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processLogin(_response);
+        });
+    }
+
+    protected processLogin(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    register(body: UsersPostRequest | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Auth/register";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processRegister(_response);
+        });
+    }
+
+    protected processRegister(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2145,12 +2233,14 @@ export interface ContactSettingsResponse {
 
 export interface CoreValuesPatchRequest {
     id: number;
+    iconName: string;
     title: string;
     description: string;
     displayOrder?: number;
 }
 
 export interface CoreValuesPostRequest {
+    iconName: string;
     title: string;
     description: string;
     displayOrder?: number;
@@ -2158,9 +2248,15 @@ export interface CoreValuesPostRequest {
 
 export interface CoreValuesResponse {
     id?: number;
+    iconName: string;
     title: string;
     description: string;
     displayOrder?: number;
+}
+
+export interface LoginRequest {
+    email: string;
+    password: string;
 }
 
 export interface MissionVisionPatchRequest {
@@ -2222,12 +2318,14 @@ export interface OCRCEventHighlightsResponse {
 export interface OCRCTimelinePatchRequest {
     id?: number;
     timelineYear?: number;
+    title: string;
     eventDescription: string;
     displayOrder?: number;
 }
 
 export interface OCRCTimelinePostRequest {
     timelineYear?: number;
+    title: string;
     eventDescription: string;
     displayOrder?: number;
 }
@@ -2235,6 +2333,7 @@ export interface OCRCTimelinePostRequest {
 export interface OCRCTimelineResponse {
     id?: number;
     timelineYear?: number;
+    title: string;
     eventDescription: string;
     displayOrder?: number;
 }
@@ -2322,6 +2421,13 @@ export interface TestimonialResponse {
     content: string;
     isApproved?: boolean;
     createdAt?: Date;
+}
+
+export interface UsersPostRequest {
+    username: string;
+    email: string;
+    password: string;
+    role: string;
 }
 
 export class SwaggerException extends Error {

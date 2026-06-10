@@ -8,6 +8,9 @@ public class CoreValuesResponse
     public int Id { get; set; }
 
     [Required]
+    public required string IconName { get; set; }
+
+    [Required]
     public required string Title { get; set; }
 
     [Required]
@@ -18,6 +21,9 @@ public class CoreValuesResponse
 
 public class CoreValuesPostRequest
 {
+    [Required]
+    public required string IconName { get; set; }
+    
     [Required]
     public required string Title { get; set; }
 
@@ -31,6 +37,9 @@ public class CoreValuesPatchRequest
 {
     [Required]
     public int Id { get; set; }
+
+    [Required]
+    public required string IconName { get; set; }
 
     [Required]
     public required string Title { get; set; }
