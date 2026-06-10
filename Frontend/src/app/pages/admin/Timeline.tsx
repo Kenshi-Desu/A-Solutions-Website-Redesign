@@ -1,109 +1,254 @@
-import { useState } from 'react';
-import { Save, Loader2, Plus, Trash2 } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState } from "react";
+import {
+  Save,
+  Loader2,
+  Calendar,
+  AlignLeft,
+  Plus,
+  Edit,
+  Trash2,
+  ArrowLeft,
+  Hash,
+} from "lucide-react";
+import { toast } from "sonner";
+import { useOCRCTimelines } from "../../hooks/useOCRCTimeline";
+import {
+  OCRCTimelinePostRequest,
+  OCRCTimelinePatchRequest,
+  OCRCTimelineResponse,
+} from "../../../api/api-client";
 
-export default function Timeline() {
-  const [isSaving, setIsSaving] = useState(false);
-  const [timelineEvents, setTimelineEvents] = useState([
-    { id: 1, year: '2018', description: 'Inaugural Olongapo City Robotics Cup with 50 participating schools.' },
-    { id: 2, year: '2020', description: 'Transitioned to virtual competition format due to the pandemic.' },
-    { id: 3, year: '2023', description: 'Largest attendance with over 500 student participants.' },
-  ]);
+export default function OCRCTimelines() {
+  const [view, setView] = useState<"list" | "form">("list");
+  const [editingItem, setEditingItem] = useState<OCRCTimelineResponse | null>(
+    null,
+  );
+  const [isSaving, setIsSaving] = useState<boolean>(false);
 
-  const handleAddEvent = () => {
-    setTimelineEvents([...timelineEvents, { id: Date.now(), year: '', description: '' }]);
+  const {
+    data: timelines,
+    isLoading,
+    createItem,
+    updateItem,
+    deleteItem,
+  } = useOCRCTimelines();
+
+  const handleAddNew = (): void => {
+    setEditingItem(null);
+    setView("form");
   };
 
-  const handleRemoveEvent = (id: number) => {
-    setTimelineEvents(timelineEvents.filter(e => e.id !== id));
+  const handleEdit = (item: OCRCTimelineResponse): void => {
+    setEditingItem(item);
+    setView("form");
   };
 
-  const handleChange = (id: number, field: 'year' | 'description', value: string) => {
-    setTimelineEvents(timelineEvents.map(e => e.id === id ? { ...e, [field]: value } : e));
+  const handleDelete = async (id: number | undefined): Promise<void> => {
+    if (!id || !deleteItem) return;
+    try {
+      await deleteItem(id);
+      toast.success("Timeline event deleted successfully.");
+    } catch (error) {
+      toast.error("Failed to delete timeline event.");
+    }
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
     setIsSaving(true);
-    setTimeout(() => {
+    const formData = new FormData(e.currentTarget);
+
+    const payload: OCRCTimelinePostRequest | OCRCTimelinePatchRequest = {
+      timelineYear:
+        Number(formData.get("timelineYear")) || new Date().getFullYear(),
+      eventDescription: formData.get("eventDescription") as string,
+      displayOrder: Number(formData.get("displayOrder")) || 0,
+    };
+
+    try {
+      if (editingItem?.id && updateItem) {
+        await updateItem(editingItem.id, payload as OCRCTimelinePatchRequest);
+        toast.success("Timeline updated successfully!");
+      } else if (createItem) {
+        await createItem(payload as OCRCTimelinePostRequest);
+        toast.success("Timeline created successfully!");
+      }
+      setView("list");
+    } catch (error) {
+      toast.error(
+        editingItem
+          ? "Failed to update timeline."
+          : "Failed to create timeline.",
+      );
+    } finally {
       setIsSaving(false);
-      toast.success("Timeline updated successfully", {
-        style: { background: '#f0fdf4', color: '#16a34a', borderColor: '#4ade80' }
-      });
-    }, 1200);
+    }
   };
 
+  // --- FORM VIEW ---
+  if (view === "form") {
+    return (
+      <div className="animate-in fade-in duration-300">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-[#333333]">
+              {editingItem ? "Edit Event" : "Add New Event"}
+            </h1>
+            <div className="text-sm text-gray-500 mt-1 flex items-center space-x-2">
+              <span>OCRC Event Info</span> /{" "}
+              <button
+                onClick={() => setView("list")}
+                className="hover:text-[#6F67BA]"
+              >
+                Timeline
+              </button>{" "}
+              /
+              <span className="text-[#E37F4E] font-medium">
+                {editingItem ? "Edit" : "New"}
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={() => setView("list")}
+            className="px-4 py-2 hover:bg-gray-100 rounded-lg flex items-center gap-2"
+          >
+            <ArrowLeft size={18} /> Back
+          </button>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 max-w-4xl p-8">
+          <form onSubmit={handleSave} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
+                  Year
+                </label>
+                <input
+                  type="number"
+                  name="timelineYear"
+                  defaultValue={
+                    editingItem?.timelineYear ?? new Date().getFullYear()
+                  }
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
+                  Display Order
+                </label>
+                <input
+                  type="number"
+                  name="displayOrder"
+                  defaultValue={editingItem?.displayOrder ?? 0}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
+                  Event Description
+                </label>
+                <textarea
+                  name="eventDescription"
+                  rows={4}
+                  defaultValue={editingItem?.eventDescription}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  required
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-4 pt-4">
+              <button
+                type="button"
+                onClick={() => setView("list")}
+                className="px-6 py-2"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isSaving}
+                className="bg-[#6F67BA] text-white px-6 py-2 rounded-lg flex items-center gap-2"
+              >
+                {isSaving ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  <Save size={18} />
+                )}{" "}
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  // --- LIST VIEW ---
   return (
     <div className="animate-in fade-in duration-300">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-[#333333]">Manage OCRC Timeline</h1>
-          <div className="text-sm text-gray-500 mt-1 flex items-center space-x-2">
-            <span>OCRC Event Info</span>
-            <span>/</span>
+          <h1 className="text-3xl font-bold text-[#333333]">Manage Timeline</h1>
+          <div className="text-sm text-gray-500 mt-1">
+            OCRC Event Info /{" "}
             <span className="text-[#E37F4E] font-medium">Timeline</span>
           </div>
         </div>
+        <button
+          onClick={handleAddNew}
+          className="bg-[#6F67BA] text-white px-5 py-2.5 rounded-lg flex items-center gap-2"
+        >
+          <Plus size={18} /> Add New
+        </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden max-w-4xl">
-        <form onSubmit={handleSave} className="p-8 space-y-6">
-          <div className="space-y-4">
-            {timelineEvents.map((event) => (
-              <div key={event.id} className="flex items-start space-x-4 bg-gray-50 p-4 rounded-lg border border-gray-100">
-                <div className="w-32">
-                  <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wider">Year</label>
-                  <input
-                    type="text"
-                    value={event.year}
-                    onChange={(e) => handleChange(event.id, 'year', e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent"
-                    placeholder="e.g. 2026"
-                    required
-                  />
-                </div>
-                <div className="flex-1">
-                  <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-wider">Event Description</label>
-                  <textarea
-                    value={event.description}
-                    onChange={(e) => handleChange(event.id, 'description', e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent resize-y"
-                    rows={2}
-                    placeholder="Enter description..."
-                    required
-                  />
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveEvent(event.id)}
-                  className="mt-6 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            ))}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        {isLoading ? (
+          <div className="flex justify-center p-20">
+            <Loader2 className="animate-spin text-[#6F67BA]" size={40} />
           </div>
-
-          <button
-            type="button"
-            onClick={handleAddEvent}
-            className="w-full py-3 border-2 border-dashed border-gray-300 text-gray-500 rounded-lg font-semibold hover:border-[#6F67BA] hover:text-[#6F67BA] transition-colors flex items-center justify-center space-x-2"
-          >
-            <Plus size={18} />
-            <span>Add Timeline Year</span>
-          </button>
-
-          <div className="pt-6 border-t border-gray-100 flex justify-end space-x-4">
-             <button 
-              type="submit" 
-              disabled={isSaving}
-              className="bg-[#6F67BA] hover:bg-[#5d57a0] text-white px-6 py-2.5 rounded-lg flex items-center space-x-2 font-semibold shadow-sm transition-colors duration-200 disabled:opacity-75"
-            >
-              {isSaving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
-              <span>{isSaving ? 'Saving...' : 'Save Changes'}</span>
-            </button>
-          </div>
-        </form>
+        ) : (
+          <table className="w-full text-left">
+            <thead className="bg-gray-50 border-b text-xs uppercase text-gray-500">
+              <tr>
+                <th className="px-6 py-4">Year</th>
+                <th className="px-6 py-4">Description</th>
+                <th className="px-6 py-4">Order</th>
+                <th className="px-6 py-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              {timelines?.map((item) => (
+                <tr key={item.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 font-bold text-[#6F67BA]">
+                    {item.timelineYear}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600 max-w-[400px] truncate">
+                    {item.eventDescription}
+                  </td>
+                  <td className="px-6 py-4">{item.displayOrder}</td>
+                  <td className="px-6 py-4 text-right flex justify-end gap-2">
+                    <button
+                      onClick={() => handleEdit(item)}
+                      className="p-2 text-gray-500 hover:text-[#6F67BA]"
+                    >
+                      <Edit size={18} />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="p-2 text-gray-500 hover:text-red-600"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

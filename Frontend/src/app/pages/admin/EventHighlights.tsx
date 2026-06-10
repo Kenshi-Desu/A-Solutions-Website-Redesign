@@ -2,44 +2,43 @@ import { useState } from "react";
 import {
   Save,
   Loader2,
-  User,
-  Briefcase,
+  Calendar,
+  AlignLeft,
   Plus,
   Edit,
   Trash2,
   ArrowLeft,
   Image as ImageIcon,
-  AlignLeft,
+  Trophy,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useTeamMemberss } from "../../hooks/useTeamMembers";
+import { useOCRCEventHighlights } from "../../hooks/useOCRCEventHighlights";
 import {
-  TeamMembersPostRequest,
-  TeamMembersPatchRequest,
-  TeamMembersResponse,
+  OCRCEventHighlightsPostRequest,
+  OCRCEventHighlightsPatchRequest,
+  OCRCEventHighlightsResponse,
 } from "../../../api/api-client";
 
-export default function TeamMembers() {
+export default function EventHighlights() {
   const [view, setView] = useState<"list" | "form">("list");
-  const [editingItem, setEditingItem] = useState<TeamMembersResponse | null>(
-    null,
-  );
+  const [editingItem, setEditingItem] =
+    useState<OCRCEventHighlightsResponse | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const {
-    data: teamMembers,
+    data: events,
     isLoading,
     createItem,
     updateItem,
     deleteItem,
-  } = useTeamMemberss();
+  } = useOCRCEventHighlights();
 
   const handleAddNew = (): void => {
     setEditingItem(null);
     setView("form");
   };
 
-  const handleEdit = (item: TeamMembersResponse): void => {
+  const handleEdit = (item: OCRCEventHighlightsResponse): void => {
     setEditingItem(item);
     setView("form");
   };
@@ -48,9 +47,9 @@ export default function TeamMembers() {
     if (!id || !deleteItem) return;
     try {
       await deleteItem(id);
-      toast.success("Team member deleted successfully.");
+      toast.success("Event highlight deleted successfully.");
     } catch (error) {
-      toast.error("Failed to delete team member.");
+      toast.error("Failed to delete event highlight.");
     }
   };
 
@@ -61,51 +60,55 @@ export default function TeamMembers() {
     setIsSaving(true);
     const formData = new FormData(e.currentTarget);
 
-    const payload: TeamMembersPostRequest | TeamMembersPatchRequest = {
-      firstName: formData.get("firstName") as string,
-      lastName: formData.get("lastName") as string,
-      roleTitle: formData.get("roleTitle") as string,
-      bio: formData.get("bio") as string,
-      profileImageUrl: formData.get("profileImageUrl") as string,
+    const payload:
+      | OCRCEventHighlightsPostRequest
+      | OCRCEventHighlightsPatchRequest = {
+      title: formData.get("title") as string,
+      eventYear: Number(formData.get("eventYear")) || new Date().getFullYear(),
+      description: formData.get("description") as string,
+      imageUrl: formData.get("imageUrl") as string,
       displayOrder: Number(formData.get("displayOrder")) || 0,
-      isActive: formData.get("isActive") === "true",
     };
 
     try {
       if (editingItem?.id && updateItem) {
-        await updateItem(editingItem.id, payload as TeamMembersPatchRequest);
-        toast.success("Team member updated successfully!");
+        await updateItem(
+          editingItem.id,
+          payload as OCRCEventHighlightsPatchRequest,
+        );
+        toast.success("Event highlight updated successfully!");
       } else if (createItem) {
-        await createItem(payload as TeamMembersPostRequest);
-        toast.success("Team member created successfully!");
+        await createItem(payload as OCRCEventHighlightsPostRequest);
+        toast.success("Event highlight created successfully!");
       }
       setView("list");
     } catch (error) {
       toast.error(
         editingItem
-          ? "Failed to update team member."
-          : "Failed to create team member.",
+          ? "Failed to update event highlight."
+          : "Failed to create event highlight.",
       );
     } finally {
       setIsSaving(false);
     }
   };
 
+  // --- FORM VIEW ---
   if (view === "form") {
     return (
       <div className="animate-in fade-in duration-300">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-[#333333]">
-              {editingItem ? "Edit Member" : "Add New Member"}
+              {editingItem ? "Edit Event" : "Add New Event"}
             </h1>
             <div className="text-sm text-gray-500 mt-1 flex items-center space-x-2">
-              <span>About Us Content</span> /{" "}
+              <span>OCRC Event Info</span> /{" "}
               <button
                 onClick={() => setView("list")}
                 className="hover:text-[#6F67BA]"
               >
-                Team Members
+                Event Highlights
               </button>{" "}
               /
               <span className="text-[#E37F4E] font-medium">
@@ -124,49 +127,28 @@ export default function TeamMembers() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 max-w-4xl p-8">
           <form onSubmit={handleSave} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
-                  First Name
-                </label>
-                <input
-                  name="firstName"
-                  defaultValue={editingItem?.firstName}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div>
-                <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
-                  Last Name
-                </label>
-                <input
-                  name="lastName"
-                  defaultValue={editingItem?.lastName}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
               <div className="md:col-span-2">
                 <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
-                  Role Title
+                  Event Title
                 </label>
                 <input
-                  name="roleTitle"
-                  defaultValue={editingItem?.roleTitle}
+                  name="title"
+                  defaultValue={editingItem?.title}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                   required
                 />
               </div>
-              <div className="md:col-span-2">
+              <div>
                 <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
-                  Profile Image URL
+                  Event Year
                 </label>
                 <input
-                  type="url"
-                  name="profileImageUrl"
-                  defaultValue={editingItem?.profileImageUrl}
+                  type="number"
+                  name="eventYear"
+                  defaultValue={
+                    editingItem?.eventYear ?? new Date().getFullYear()
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                  required
                 />
               </div>
               <div>
@@ -180,27 +162,26 @@ export default function TeamMembers() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                 />
               </div>
-              <div>
+              <div className="md:col-span-2">
                 <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
-                  Status
+                  Image URL
                 </label>
-                <select
-                  name="isActive"
-                  defaultValue={String(editingItem?.isActive ?? true)}
+                <input
+                  type="url"
+                  name="imageUrl"
+                  defaultValue={editingItem?.imageUrl}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-                >
-                  <option value="true">Active</option>
-                  <option value="false">Inactive</option>
-                </select>
+                  required
+                />
               </div>
               <div className="md:col-span-2">
                 <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
-                  Bio
+                  Description
                 </label>
                 <textarea
-                  name="bio"
+                  name="description"
                   rows={4}
-                  defaultValue={editingItem?.bio}
+                  defaultValue={editingItem?.description}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                   required
                 />
@@ -233,14 +214,17 @@ export default function TeamMembers() {
     );
   }
 
+  // --- LIST VIEW ---
   return (
     <div className="animate-in fade-in duration-300">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-[#333333]">Manage Team</h1>
+          <h1 className="text-3xl font-bold text-[#333333]">
+            Manage Event Highlights
+          </h1>
           <div className="text-sm text-gray-500 mt-1">
-            About Us Content /{" "}
-            <span className="text-[#E37F4E] font-medium">Team Members</span>
+            OCRC Event Info /{" "}
+            <span className="text-[#E37F4E] font-medium">Event Highlights</span>
           </div>
         </div>
         <button
@@ -261,35 +245,30 @@ export default function TeamMembers() {
             <thead className="bg-gray-50 border-b text-xs uppercase text-gray-500">
               <tr>
                 <th className="px-6 py-4">Image</th>
-                <th className="px-6 py-4">Name</th>
-                <th className="px-6 py-4">Role</th>
+                <th className="px-6 py-4">Title</th>
+                <th className="px-6 py-4">Year</th>
                 <th className="px-6 py-4">Order</th>
-                <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y">
-              {teamMembers?.map((item) => (
+              {events?.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4">
                     <img
-                      src={item.profileImageUrl}
-                      className="w-10 h-10 rounded-full object-cover"
+                      src={item.imageUrl}
+                      alt={item.title}
+                      className="w-12 h-12 rounded object-cover border border-gray-200"
                     />
                   </td>
                   <td className="px-6 py-4 font-semibold text-[#333333]">
-                    {item.firstName} {item.lastName}
+                    {item.title}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">
-                    {item.roleTitle}
+                    {item.eventYear}
                   </td>
-                  <td className="px-6 py-4">{item.displayOrder}</td>
-                  <td className="px-6 py-4">
-                    <span
-                      className={`px-2 py-1 rounded text-xs ${item.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}
-                    >
-                      {item.isActive ? "Active" : "Inactive"}
-                    </span>
+                  <td className="px-6 py-4 text-sm text-gray-600">
+                    {item.displayOrder}
                   </td>
                   <td className="px-6 py-4 text-right flex justify-end gap-2">
                     <button
