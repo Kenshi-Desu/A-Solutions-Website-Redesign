@@ -2,14 +2,13 @@ import { useState } from "react";
 import {
   Save,
   Loader2,
-  Trophy,
-  AlignLeft,
   Plus,
   Edit,
   Trash2,
   ArrowLeft,
-  Hash,
+  Trophy,
 } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 import { toast } from "sonner";
 import { useCoreValuess } from "../../hooks/useCoreValues";
 import {
@@ -18,12 +17,28 @@ import {
   CoreValuesResponse,
 } from "../../../api/api-client";
 
+const ICON_LIST: string[] = [
+  "Trophy",
+  "Star",
+  "Target",
+  "Heart",
+  "Shield",
+  "Users",
+  "Lightbulb",
+  "TrendingUp",
+  "Award",
+  "Zap",
+  "CheckCircle",
+  "Handshake",
+];
+
 export default function CoreValues() {
   const [view, setView] = useState<"list" | "form">("list");
   const [editingItem, setEditingItem] = useState<CoreValuesResponse | null>(
     null,
   );
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [selectedIcon, setSelectedIcon] = useState<string>(ICON_LIST[0]);
 
   const {
     data: coreValues,
@@ -33,13 +48,25 @@ export default function CoreValues() {
     deleteItem,
   } = useCoreValuess();
 
+  const renderIcon = (
+    name: string | undefined,
+    className: string = "",
+  ): JSX.Element => {
+    const iconName = name ?? "Trophy";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const IconComponent = (LucideIcons as any)[iconName] || Trophy;
+    return <IconComponent className={className} />;
+  };
+
   const handleAddNew = (): void => {
     setEditingItem(null);
+    setSelectedIcon(ICON_LIST[0]);
     setView("form");
   };
 
   const handleEdit = (item: CoreValuesResponse): void => {
     setEditingItem(item);
+    setSelectedIcon(item.iconName ?? ICON_LIST[0]);
     setView("form");
   };
 
@@ -63,6 +90,7 @@ export default function CoreValues() {
     const payload: CoreValuesPostRequest | CoreValuesPatchRequest = {
       title: formData.get("title") as string,
       description: formData.get("description") as string,
+      iconName: selectedIcon,
       displayOrder: Number(formData.get("displayOrder")) || 0,
     };
 
@@ -144,6 +172,23 @@ export default function CoreValues() {
               </div>
               <div className="md:col-span-2">
                 <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
+                  Select Icon
+                </label>
+                <div className="grid grid-cols-6 sm:grid-cols-12 gap-2 border border-gray-200 p-4 rounded-lg bg-gray-50">
+                  {ICON_LIST.map((icon) => (
+                    <button
+                      key={icon}
+                      type="button"
+                      onClick={() => setSelectedIcon(icon)}
+                      className={`p-3 rounded-lg flex justify-center ${selectedIcon === icon ? "bg-[#6F67BA] text-white" : "bg-white hover:bg-gray-100"}`}
+                    >
+                      {renderIcon(icon, "size-6")}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="md:col-span-2">
+                <label className="text-xs font-bold text-[#333333] mb-2 block uppercase">
                   Description
                 </label>
                 <textarea
@@ -208,10 +253,16 @@ export default function CoreValues() {
           <div className="flex justify-center p-20">
             <Loader2 className="animate-spin text-[#6F67BA]" size={40} />
           </div>
+        ) : coreValues?.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+            <Trophy size={48} className="text-gray-300 mb-4" />
+            <p className="text-lg font-medium">No core values found</p>
+          </div>
         ) : (
           <table className="w-full text-left">
             <thead className="bg-gray-50 border-b text-xs uppercase text-gray-500">
               <tr>
+                <th className="px-6 py-4">Icon</th>
                 <th className="px-6 py-4">Title</th>
                 <th className="px-6 py-4">Description</th>
                 <th className="px-6 py-4">Order</th>
@@ -221,13 +272,18 @@ export default function CoreValues() {
             <tbody className="divide-y">
               {coreValues?.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 font-semibold text-[#333333] flex items-center gap-2">
-                    <Trophy size={16} className="text-[#6F67BA]" /> {item.title}
+                  <td className="px-6 py-4">
+                    <div className="w-12 h-12 rounded bg-gray-100 flex items-center justify-center text-[#6F67BA]">
+                      {renderIcon(item.iconName, "size-6")}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 font-semibold text-[#333333]">
+                    {item.title}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 max-w-[400px] truncate">
                     {item.description}
                   </td>
-                  <td className="px-6 py-4">{item.displayOrder}</td>
+                  <td className="px-6 py-4 text-sm">{item.displayOrder}</td>
                   <td className="px-6 py-4 text-right flex justify-end gap-2">
                     <button
                       onClick={() => handleEdit(item)}

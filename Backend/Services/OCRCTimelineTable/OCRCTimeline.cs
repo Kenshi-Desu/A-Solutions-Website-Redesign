@@ -15,6 +15,7 @@ public class OCRCTimelineService : CrudServiceBase<OCRCTimeline, OCRCTimelineRes
         return new OCRCTimeline
         {
             TimelineYear = dto.TimelineYear,
+            Title = dto.Title,
             EventDescription = dto.EventDescription,
             DisplayOrder = dto.DisplayOrder
         };
@@ -23,6 +24,7 @@ public class OCRCTimelineService : CrudServiceBase<OCRCTimeline, OCRCTimelineRes
     protected override void ApplyPatch(OCRCTimelinePatchRequest dto, OCRCTimeline entity)
     {
         if (dto.TimelineYear != 0) entity.TimelineYear = dto.TimelineYear;
+        if (!string.IsNullOrEmpty(dto.Title)) entity.Title = dto.Title;
         if (!string.IsNullOrEmpty(dto.EventDescription)) entity.EventDescription = dto.EventDescription;
         entity.DisplayOrder = dto.DisplayOrder;
     }
@@ -33,6 +35,7 @@ public class OCRCTimelineService : CrudServiceBase<OCRCTimeline, OCRCTimelineRes
         {
             Id = entity.Id,
             TimelineYear = entity.TimelineYear,
+            Title = entity.Title,
             EventDescription = entity.EventDescription,
             DisplayOrder = entity.DisplayOrder
         };

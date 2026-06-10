@@ -8,6 +8,8 @@ public class OCRCTimelineResponse
     public int Id { get; set; }
     public int TimelineYear { get; set; }
     [Required]
+    public required string Title { get; set; }
+    [Required]
     public required string EventDescription { get; set; }
     public int DisplayOrder { get; set; }
 }
@@ -15,6 +17,8 @@ public class OCRCTimelineResponse
 public class OCRCTimelinePostRequest
 {
     public int TimelineYear { get; set; }
+    [Required]
+    public required string Title { get; set; }
     [Required]
     public required string EventDescription { get; set; }
     public int DisplayOrder { get; set; }
@@ -24,6 +28,8 @@ public class OCRCTimelinePatchRequest
 {
     public int Id { get; set; }
     public int TimelineYear { get; set; }
+    [Required]
+    public required string Title { get; set; }
     [Required]
     public required string EventDescription { get; set; }
     public int DisplayOrder { get; set; }
