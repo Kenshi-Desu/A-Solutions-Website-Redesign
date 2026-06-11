@@ -1,88 +1,141 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from "react";
+import { SwaggerException } from "../../../api/api-client"; // Make sure this path points to your api-client.ts
 
 interface CrudOperations<T, TPost, TPatch> {
-    getAll: () => Promise<any>;
-    getById: (id: number) => Promise<T>;
-    create?: (body: TPost) => Promise<any>;
-    update?: (id: number, body: TPatch) => Promise<any>;
-    remove?: (id: number) => Promise<any>;
+  getAll: () => Promise<T[]>;
+  getById: (id: number) => Promise<T>;
+  create?: (body: TPost) => Promise<T | void>;
+  update?: (id: number, body: TPatch) => Promise<T | void>;
+  remove?: (id: number) => Promise<void>;
 }
 
-export function useCrudBase<T, TPost = Partial<T>, TPatch = Partial<T>>(operations: CrudOperations<T, TPost, TPatch>) {
-    const [data, setData] = useState<T[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+export function useCrudBase<T, TPost = Partial<T>, TPatch = Partial<T>>(
+  operations: CrudOperations<T, TPost, TPatch>,
+) {
+  const [data, setData] = useState<T[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-    const loadData = useCallback(async () => {
-        try {
-            setIsLoading(true);
-            setError(null);
-            const result = await operations.getAll();
-            setData(result || []);
-        } catch (err: any){
-            console.error("Failed to Fetch Data: ", err);
-            setError(err?.message || "Failed to load data.");
-        } finally {
-            setIsLoading(false);
-        }
-    }, [operations]);
+  // HELPER: Safely extract the error message using NSwag's built-in class
+  const extractErrorMessage = (
+    err: unknown,
+    fallbackMessage: string,
+  ): string => {
+    // If NSwag proves it's an API error, we can safely access .response
+    if (SwaggerException.isSwaggerException(err)) {
+      try {
+        const parsed = JSON.parse(err.response);
+        if (parsed && parsed.Message) return String(parsed.Message);
+        if (parsed && parsed.message) return String(parsed.message);
+      } catch (parseError) {
+        // Fall through if not JSON
+      }
+      return err.message || fallbackMessage;
+    }
 
-    useEffect(() => {
-        loadData();
-    }, [loadData]);
+    // If it's a standard JS error
+    if (err instanceof Error) {
+      return err.message;
+    }
+    return fallbackMessage;
+  };
 
-    const fetchById = async (id: number): Promise<T | null> => {
-        if (!operations.getById) return null;
-        try {
-            return await operations.getById(id);
-        } catch (err) {
-            console.error(`Failed to fetch item with id ${id}`, err);
-            throw err;
-        }
-    };
+  // HELPER: Check if a "fake" parsing error is actually a 200/204 success
+  const isSuccessError = (err: unknown) => {
+    if (SwaggerException.isSwaggerException(err)) {
+      if (err.status >= 200 && err.status < 300) return true;
+    }
+    if (err instanceof SyntaxError) return true;
+    if (err instanceof Error && err.message.includes("JSON")) return true;
+    return false;
+  };
 
-    const createItem = async (body: TPost) => {
-        if (!operations.create) return;
-        try {
-            await operations.create(body);
-            await loadData();
-        } catch (err: any) {
-            console.error("Create failed:", err);
-            throw err;
-        }
-    };
+  const loadData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const result = await operations.getAll();
+      setData(result || []);
+    } catch (err: unknown) {
+      const backendError = extractErrorMessage(err, "Failed to load data.");
+      console.error("Failed to Fetch Data: ", backendError);
+      setError(backendError);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [operations]);
 
-    const updateItem = async (id: number, body: TPatch) => {
-        if (!operations.update) return;
-        try {
-            await operations.update(id, body);
-            await loadData();
-        } catch (err: any) {
-            console.error("Update Failed:", err);
-            throw err;
-        }
-    };
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
-    const deleteItem = async (id: number) => {
-        if (!operations.remove) return;
-        if (!window.confirm("Are you sure you want to delete this item?")) return;
+  const fetchById = async (id: number): Promise<T | null> => {
+    if (!operations.getById) return null;
+    try {
+      return await operations.getById(id);
+    } catch (err: unknown) {
+      const backendError = extractErrorMessage(
+        err,
+        `Failed to fetch item with id ${id}`,
+      );
+      throw new Error(backendError);
+    }
+  };
 
-        try {
-            await operations.remove(id);
-            await loadData();
-        } catch (err) {
-            console.error("Delete failed:", err);
-            throw err;
-        }
-    };
+  const createItem = async (body: TPost): Promise<void> => {
+    if (!operations.create) return;
+    try {
+      await operations.create(body);
+      await loadData();
+    } catch (err: unknown) {
+      if (isSuccessError(err)) {
+        await loadData();
+        return;
+      }
+      const backendError = extractErrorMessage(err, "Create failed.");
+      throw new Error(backendError);
+    }
+  };
 
-    return {
-        data,
-        isLoading,
-        error,
-        loadData,
-        createItem,
-        updateItem,
-        deleteItem
-    };
+  const updateItem = async (id: number, body: TPatch): Promise<void> => {
+    if (!operations.update) return;
+    try {
+      await operations.update(id, body);
+      await loadData();
+    } catch (err: unknown) {
+      if (isSuccessError(err)) {
+        await loadData();
+        return;
+      }
+      const backendError = extractErrorMessage(err, "Update failed.");
+      throw new Error(backendError);
+    }
+  };
+
+  const deleteItem = async (id: number): Promise<void> => {
+    if (!operations.remove) return;
+
+    try {
+      await operations.remove(id);
+      await loadData();
+    } catch (err: unknown) {
+      if (isSuccessError(err)) {
+        await loadData();
+        return;
+      }
+      const backendError = extractErrorMessage(err, "Delete failed.");
+      throw new Error(backendError);
+    }
+  };
+
+  return {
+    data,
+    isLoading,
+    error,
+    loadData,
+    fetchById,
+    createItem,
+    updateItem,
+    deleteItem,
+  };
 }

@@ -10,14 +10,37 @@ import {
   Trash2,
   ArrowLeft,
   Globe,
+  Hash,
+  AlertTriangle,
+  LayoutTemplate,
 } from "lucide-react";
-import { toast } from "sonner";
+
 import { useAffiliates } from "../../hooks/useAffiliates";
 import {
   AffiliatePostRequest,
   AffiliatePatchRequest,
   AffiliateResponse,
 } from "../../../api/api-client";
+import {
+  handleAdminDelete,
+  handleAdminFormSubmit,
+} from "../../utils/adminFormUitils";
+
+// ============================================================================
+// IMPORTING YOUR REUSABLE UI COMPONENTS
+// ============================================================================
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../components/ui/table";
+import { Card, CardContent } from "../../components/ui/card";
 
 export default function Affiliates() {
   const [view, setView] = useState<"list" | "form">("list");
@@ -25,6 +48,10 @@ export default function Affiliates() {
     null,
   );
   const [isSaving, setIsSaving] = useState(false);
+
+  // Modal State
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const {
     data: affiliates,
@@ -34,6 +61,7 @@ export default function Affiliates() {
     deleteItem,
   } = useAffiliates();
 
+  // --- UI STATE HANDLERS ---
   const handleAddNew = () => {
     setEditingItem(null);
     setView("form");
@@ -44,58 +72,66 @@ export default function Affiliates() {
     setView("form");
   };
 
-  const handleDelete = async (id: number | undefined) => {
-    if (!id || !deleteItem) return;
-    try {
-      await deleteItem(id);
-      toast.success("Affiliate deleted successfully.");
-    } catch (error) {
-      toast.error("Failed to delete affiliate.");
-    }
+  const handleDeleteClick = (id: number | undefined) => {
+    if (id) setItemToDelete(id);
   };
 
+  // --- HELPER: Display Affiliate Type Text ---
+  const getAffiliateTypeText = (type: number | undefined) => {
+    if (type === 1) return "OCRC Page Only";
+    if (type === 2) return "All Pages";
+    return "Home Page Only"; // Default 0
+  };
+
+  // --- DELETE HANDLER ---
+  const confirmDelete = async () => {
+    if (!itemToDelete || !deleteItem) return;
+    setIsDeleting(true);
+    await handleAdminDelete({
+      action: () => deleteItem(itemToDelete),
+      successMessage: "Affiliate deleted successfully.",
+    });
+    setIsDeleting(false);
+    setItemToDelete(null);
+  };
+
+  // --- SAVE HANDLER ---
   const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSaving(true);
+    const isUpdate = !!editingItem?.id;
 
-    const formData = new FormData(e.currentTarget);
-
-    const payload: AffiliatePostRequest | AffiliatePatchRequest = {
-      name: formData.get("name") as string,
-      logoImageUrl: formData.get("logoImageUrl") as string,
-      websiteUrl: formData.get("websiteUrl") as string,
-    };
-
-    try {
-      if (editingItem?.id && updateItem) {
-        await updateItem(editingItem.id, payload as AffiliatePatchRequest);
-        toast.success("Affiliate updated successfully!");
-      } else if (createItem) {
-        await createItem(payload as AffiliatePostRequest);
-        toast.success("Affiliate created successfully!");
-      }
-      setView("list");
-    } catch (error) {
-      toast.error(
-        editingItem
-          ? "Failed to update affiliate."
-          : "Failed to create affiliate.",
-      );
-    } finally {
-      setIsSaving(false);
-    }
+    await handleAdminFormSubmit<AffiliatePostRequest, AffiliatePatchRequest>({
+      event: e,
+      isUpdate,
+      editingId: editingItem?.id,
+      createItem,
+      updateItem,
+      setIsSaving,
+      successMessage: `Affiliate/Partner ${isUpdate ? "updated" : "created"} successfully!`,
+      onSuccess: () => setView("list"),
+      buildPayload: (formData) => ({
+        name: formData.get("name") as string,
+        logoImageUrl: formData.get("logoImageUrl") as string,
+        websiteUrl: formData.get("websiteUrl") as string,
+        affiliateType: Number(formData.get("affiliateType")) || 0, // Reads from the <select> dropdown
+        displayOrder: Number(formData.get("displayOrder")) || 0,
+        isActive: formData.get("isActive") === "on", // Checkbox returns "on"
+      }),
+    });
   };
 
+  // ============================================================================
+  // RENDER: FORM VIEW
+  // ============================================================================
   if (view === "form") {
     return (
       <div className="animate-in fade-in duration-300">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-[#333333]">
-              {editingItem ? "Edit Affiliate" : "Add New Affiliate"}
+              {editingItem ? "Edit Affiliate/Partner" : "Add New Affiliate"}
             </h1>
             <div className="text-sm text-gray-500 mt-1 flex items-center space-x-2">
-              <span>OCRC Event Info</span>
+              <span>Home Content</span>
               <span>/</span>
               <button
                 onClick={() => setView("list")}
@@ -109,111 +145,178 @@ export default function Affiliates() {
               </span>
             </div>
           </div>
-          <button
+          <Button
+            variant="outline"
             onClick={() => setView("list")}
-            className="px-4 py-2 text-[#333333] hover:bg-gray-100 rounded-lg flex items-center space-x-2 transition-colors font-medium"
+            className="flex items-center space-x-2"
           >
-            <ArrowLeft size={18} />
+            <ArrowLeft size={16} />
             <span>Back to List</span>
-          </button>
+          </Button>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden max-w-4xl">
-          <form onSubmit={handleSave} className="p-8 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="md:col-span-2">
-                <label className="flex items-center space-x-2 text-xs font-bold text-[#333333] mb-2 uppercase tracking-wide">
-                  <Handshake size={16} className="text-[#6F67BA]" />
-                  <span>Affiliate Name</span>
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent"
-                  defaultValue={editingItem?.name || ""}
-                  required
-                />
+        <Card className="max-w-4xl border-gray-200 shadow-sm">
+          <CardContent className="p-8">
+            <form onSubmit={handleSave} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Affiliate Name */}
+                <div className="md:col-span-2 space-y-2">
+                  <Label className="flex items-center space-x-2">
+                    <Handshake size={16} className="text-[#6F67BA]" />
+                    <span>Affiliate / Partner Name</span>
+                  </Label>
+                  <Input
+                    name="name"
+                    defaultValue={editingItem?.name || ""}
+                    placeholder="e.g., TechCorp Solutions"
+                    required
+                  />
+                </div>
+
+                {/* Website URL */}
+                <div className="space-y-2">
+                  <Label className="flex items-center space-x-2">
+                    <Globe size={16} className="text-[#6F67BA]" />
+                    <span>Website URL</span>
+                  </Label>
+                  <Input
+                    type="url"
+                    name="websiteUrl"
+                    defaultValue={editingItem?.websiteUrl || ""}
+                    placeholder="https://example.com"
+                  />
+                </div>
+
+                {/* Display Order */}
+                <div className="space-y-2">
+                  <Label className="flex items-center space-x-2">
+                    <Hash size={16} className="text-[#6F67BA]" />
+                    <span>Display Order</span>
+                  </Label>
+                  <Input
+                    type="number"
+                    name="displayOrder"
+                    defaultValue={editingItem?.displayOrder || 0}
+                    placeholder="e.g., 1 (Lower numbers show first)"
+                  />
+                </div>
+
+                {/* Affiliate Type (Custom Dropdown) */}
+                <div className="md:col-span-2 p-5 bg-purple-50/50 border border-purple-100 rounded-xl space-y-3">
+                  <Label className="flex items-center space-x-2 text-[#6F67BA]">
+                    <LayoutTemplate size={16} />
+                    <span>Where should this partner be displayed?</span>
+                  </Label>
+                  <p className="text-xs text-gray-500 leading-relaxed mb-2">
+                    Select where the logo will appear. "Home page only" is
+                    perfect for general corporate sponsors, "OCRC page only" is
+                    for event-specific sponsors, and "All pages" will show them
+                    everywhere.
+                  </p>
+
+                  {/* Native HTML Select styled exactly like shadcn Input */}
+                  <select
+                    name="affiliateType"
+                    defaultValue={editingItem?.affiliateType ?? 0}
+                    className="flex w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-[#333333] shadow-sm transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6F67BA] focus-visible:border-transparent cursor-pointer"
+                  >
+                    <option value={0}>Home page only</option>
+                    <option value={1}>OCRC page only</option>
+                    <option value={2}>All pages</option>
+                  </select>
+                </div>
+
+                {/* Image URL */}
+                <div className="md:col-span-2 space-y-2">
+                  <Label className="flex items-center space-x-2">
+                    <ImageIcon size={16} className="text-[#6F67BA]" />
+                    <span>Logo Image URL</span>
+                  </Label>
+                  <Input
+                    type="url"
+                    name="logoImageUrl"
+                    defaultValue={editingItem?.logoImageUrl || ""}
+                    placeholder="https://example.com/logo.png"
+                    required
+                  />
+                </div>
+
+                {/* Is Active Toggle */}
+                <div className="md:col-span-2 flex items-center space-x-3 pt-2">
+                  <input
+                    type="checkbox"
+                    id="isActive"
+                    name="isActive"
+                    defaultChecked={
+                      editingItem ? editingItem.isActive !== false : true
+                    }
+                    className="w-5 h-5 text-[#6F67BA] bg-gray-50 border-gray-300 rounded focus:ring-[#6F67BA] cursor-pointer"
+                  />
+                  <Label
+                    htmlFor="isActive"
+                    className="cursor-pointer normal-case tracking-normal"
+                  >
+                    Active (Visible on Website)
+                  </Label>
+                </div>
               </div>
 
-              <div>
-                <label className="flex items-center space-x-2 text-xs font-bold text-[#333333] mb-2 uppercase tracking-wide">
-                  <ImageIcon size={16} className="text-[#6F67BA]" />
-                  <span>Logo URL</span>
-                </label>
-                <input
-                  type="url"
-                  name="logoUrl"
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent"
-                  defaultValue={editingItem?.logoImageUrl || ""}
-                  required
-                />
+              {/* Form Actions */}
+              <div className="pt-6 border-t border-gray-100 flex justify-end space-x-4">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => setView("list")}
+                  disabled={isSaving}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={isSaving}
+                  className="bg-[#6F67BA] hover:bg-[#5d57a0] text-white flex items-center space-x-2"
+                >
+                  {isSaving ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    <Save size={16} />
+                  )}
+                  <span>{isSaving ? "Saving..." : "Save Affiliate"}</span>
+                </Button>
               </div>
-
-              <div>
-                <label className="flex items-center space-x-2 text-xs font-bold text-[#333333] mb-2 uppercase tracking-wide">
-                  <Globe size={16} className="text-[#6F67BA]" />
-                  <span>Website URL</span>
-                </label>
-                <input
-                  type="url"
-                  name="websiteUrl"
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent"
-                  defaultValue={editingItem?.websiteUrl || ""}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="pt-6 border-t border-gray-100 flex justify-end space-x-4">
-              <button
-                type="button"
-                onClick={() => setView("list")}
-                className="px-6 py-2.5 text-[#333333] font-semibold hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={isSaving}
-                className="bg-[#6F67BA] hover:bg-[#5d57a0] text-white px-6 py-2.5 rounded-lg flex items-center space-x-2 font-semibold shadow-sm transition-colors duration-200"
-              >
-                {isSaving ? (
-                  <Loader2 size={18} className="animate-spin" />
-                ) : (
-                  <Save size={18} />
-                )}
-                <span>{isSaving ? "Saving..." : "Save Affiliate"}</span>
-              </button>
-            </div>
-          </form>
-        </div>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
+  // ============================================================================
+  // RENDER: LIST VIEW
+  // ============================================================================
   return (
-    <div className="animate-in fade-in duration-300">
+    <div className="animate-in fade-in duration-300 relative">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-[#333333]">
             Manage Affiliates
           </h1>
           <div className="text-sm text-gray-500 mt-1 flex items-center space-x-2">
-            <span>OCRC Event Info</span>
+            <span>Home Content</span>
             <span>/</span>
             <span className="text-[#E37F4E] font-medium">Affiliates</span>
           </div>
         </div>
-        <button
+        <Button
           onClick={handleAddNew}
-          className="bg-[#6F67BA] hover:bg-[#5d57a0] text-white px-5 py-2.5 rounded-lg flex items-center space-x-2 font-semibold shadow-sm"
+          className="bg-[#6F67BA] hover:bg-[#5d57a0] flex items-center space-x-2"
         >
-          <Plus size={18} />
+          <Plus size={16} />
           <span>Add New</span>
-        </button>
+        </Button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <Card className="shadow-sm border-gray-200 overflow-hidden">
         {isLoading ? (
           <div className="flex justify-center items-center h-64">
             <Loader2 className="animate-spin text-[#6F67BA]" size={40} />
@@ -221,70 +324,154 @@ export default function Affiliates() {
         ) : affiliates?.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-gray-500">
             <Handshake size={48} className="text-gray-300 mb-4" />
-            <p className="text-lg font-medium">No affiliates found</p>
+            <p className="text-lg font-medium">
+              No affiliates or partners found
+            </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-gray-50 border-b border-gray-200 text-xs uppercase tracking-wider text-gray-500 font-semibold">
-                  <th className="px-6 py-4">Logo</th>
-                  <th className="px-6 py-4">Name</th>
-                  <th className="px-6 py-4">Website</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {affiliates.map((item) => (
-                  <tr
-                    key={item.id}
-                    className="hover:bg-gray-50 transition-colors"
-                  >
-                    <td className="px-6 py-4">
-                      <div className="w-12 h-12 rounded bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center">
+          <Table>
+            <TableHeader className="bg-gray-50">
+              <TableRow>
+                <TableHead className="w-30 text-center">Logo</TableHead>
+                <TableHead>Company Info</TableHead>
+                <TableHead>Display Location</TableHead>
+                <TableHead>Order</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {affiliates?.map((item) => (
+                <TableRow key={item.id} className="hover:bg-gray-50/50">
+                  {/* Image Cell */}
+                  <TableCell className="text-center">
+                    {item.logoImageUrl ? (
+                      <div className="w-16 h-10 rounded bg-white border border-gray-200 overflow-hidden flex items-center justify-center mx-auto p-1">
                         <img
                           src={item.logoImageUrl}
                           alt={item.name}
-                          className="w-full h-full object-contain p-1"
+                          className="max-w-full max-h-full object-contain"
                         />
                       </div>
-                    </td>
-                    <td className="px-6 py-4 font-semibold text-[#333333]">
-                      {item.name}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-blue-600 truncate max-w-[200px]">
+                    ) : (
+                      <div className="w-16 h-10 rounded bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-400 mx-auto">
+                        <ImageIcon size={20} />
+                      </div>
+                    )}
+                  </TableCell>
+
+                  {/* Info Cell */}
+                  <TableCell>
+                    <p className="font-semibold text-[#333333]">{item.name}</p>
+                    {item.websiteUrl && (
                       <a
                         href={item.websiteUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1 hover:underline"
+                        className="text-xs text-[#6F67BA] hover:underline flex items-center gap-1 mt-0.5 w-fit"
                       >
-                        <LinkIcon size={14} /> {item.websiteUrl}
+                        <LinkIcon size={12} />{" "}
+                        {item.websiteUrl.replace(/^https?:\/\//, "")}
                       </a>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex justify-end space-x-2">
-                        <button
-                          onClick={() => handleEdit(item)}
-                          className="p-2 text-gray-500 hover:text-[#6F67BA] rounded-lg transition-colors"
-                        >
-                          <Edit size={18} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item.id)}
-                          className="p-2 text-gray-500 hover:text-red-600 rounded-lg transition-colors"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    )}
+                  </TableCell>
+
+                  {/* Affiliate Type Cell */}
+                  <TableCell>
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-purple-50 text-[#6F67BA] border border-purple-100">
+                      <LayoutTemplate size={12} className="mr-1.5" />
+                      {getAffiliateTypeText(item.affiliateType)}
+                    </span>
+                  </TableCell>
+
+                  <TableCell className="text-gray-600">
+                    {item.displayOrder}
+                  </TableCell>
+
+                  {/* Status Cell */}
+                  <TableCell>
+                    <span
+                      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                        item.isActive !== false
+                          ? "bg-green-100 text-green-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {item.isActive !== false ? "Active" : "Inactive"}
+                    </span>
+                  </TableCell>
+
+                  {/* Actions Cell */}
+                  <TableCell className="text-right">
+                    <div className="flex justify-end space-x-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEdit(item)}
+                        className="text-gray-500 hover:text-[#6F67BA] hover:bg-purple-50"
+                      >
+                        <Edit size={16} />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDeleteClick(item.id)}
+                        className="text-gray-500 hover:text-red-600 hover:bg-red-50"
+                      >
+                        <Trash2 size={16} />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         )}
-      </div>
+      </Card>
+
+      {/* DELETE CONFIRMATION MODAL */}
+      {itemToDelete !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <Card className="w-full max-w-md p-6 m-4 shadow-xl border-gray-100 animate-in zoom-in-95 duration-200">
+            <div className="flex items-start space-x-4">
+              <div className="shrink-0 bg-red-100 p-3 rounded-full">
+                <AlertTriangle size={24} className="text-red-600" />
+              </div>
+              <div className="flex-1 pt-1">
+                <h2 className="text-xl font-bold text-gray-900 mb-2">
+                  Delete Affiliate?
+                </h2>
+                <p className="text-gray-600 text-sm mb-6 leading-relaxed">
+                  Are you sure you want to completely remove this partner logo?
+                  This action cannot be undone.
+                </p>
+                <div className="flex justify-end space-x-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setItemToDelete(null)}
+                    disabled={isDeleting}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={confirmDelete}
+                    disabled={isDeleting}
+                    className="flex items-center space-x-2"
+                  >
+                    {isDeleting ? (
+                      <Loader2 size={16} className="animate-spin" />
+                    ) : (
+                      <Trash2 size={16} />
+                    )}
+                    <span>{isDeleting ? "Deleting..." : "Yes, Delete"}</span>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

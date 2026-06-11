@@ -6,16 +6,44 @@ import {
   Clock,
   MapPin,
   Users,
-  Link as LinkIcon,
+  FileText,
 } from "lucide-react";
-import { toast } from "sonner";
+
 import { useOCRCEventDetailss } from "../../hooks/useOCRCEventDetails";
 import { OCRCEventDetailsPatchRequest } from "../../../api/api-client";
+import { handleAdminFormSubmit } from "../../utils/adminFormUitils"; // Make sure the spelling matches your utility file name
+
+// ============================================================================
+// IMPORTING YOUR REUSABLE UI COMPONENTS
+// ============================================================================
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import { Card, CardContent } from "../../components/ui/card";
 
 export default function EventDetails() {
   const [isSaving, setIsSaving] = useState(false);
 
   const { data: settings, isLoading, updateItem } = useOCRCEventDetailss();
+
+  // --- SAVE HANDLER ---
+  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+    await handleAdminFormSubmit<any, OCRCEventDetailsPatchRequest>({
+      event: e,
+      isUpdate: true, // Always true for singleton settings pages
+      editingId: settings?.id || 1,
+      updateSingletonItem: updateItem,
+      setIsSaving,
+      successMessage: "Event details updated successfully!",
+      buildPayload: (formData) => ({
+        eventDate: formData.get("eventDate") as string,
+        eventTime: formData.get("eventTime") as string,
+        venueName: formData.get("venueName") as string,
+        eligibility: formData.get("eligibility") as string,
+        rulesPdfUrl: formData.get("rulesPdfUrl") as string,
+      }),
+    });
+  };
 
   if (isLoading) {
     return (
@@ -25,171 +53,124 @@ export default function EventDetails() {
     );
   }
 
-  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSaving(true);
-
-    const formData = new FormData(e.currentTarget);
-
-    // Added '| any' to prevent TypeScript errors if the ID property isn't fully registered in api-client.ts yet
-    const payload: OCRCEventDetailsPatchRequest | any = {
-      // The crucial missing ID for the backend singleton update
-      id: settings?.id ?? 1,
-      // Extracted as a string to match the DateOnly API
-      eventDate: formData.get("eventDate") as any,
-      eventTime: formData.get("eventTime") as string,
-      venueName: formData.get("venueName") as string,
-      eligibility: formData.get("eligibility") as string,
-      rulesPdfUrl: formData.get("rulesPdfUrl") as string,
-    };
-
-    try {
-      if (updateItem) {
-        await updateItem(payload);
-      }
-      toast.success("Event details updated successfully!", {
-        style: {
-          background: "#f0fdf4",
-          color: "#16a34a",
-          borderColor: "#4ade80",
-        },
-      });
-    } catch (error) {
-      toast.error("Failed to update event details.");
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
   return (
     <div className="animate-in fade-in duration-300">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-[#333333]">
-            Manage Next Event Details
+            Manage Event Details
           </h1>
           <div className="text-sm text-gray-500 mt-1 flex items-center space-x-2">
-            <span>OCRC Event Info</span>
+            <span>OCRC Content</span>
             <span>/</span>
-            <span className="text-[#E37F4E] font-medium">
-              Next Event Details
-            </span>
+            <span className="text-[#E37F4E] font-medium">Event Details</span>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden max-w-3xl">
-        <form onSubmit={handleSave} className="p-8 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Event Date (Updated for DateOnly) */}
-            <div>
-              <label className="flex items-center space-x-2 text-xs font-bold text-[#333333] mb-2 uppercase tracking-wide">
-                <Calendar size={16} className="text-[#6F67BA]" />
-                <span>Event Date</span>
-              </label>
-              <input
-                type="date"
-                name="eventDate"
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent transition-shadow"
-                // .split('T')[0] guarantees it strictly matches YYYY-MM-DD for the HTML date input
-                defaultValue={
-                  settings?.eventDate
-                    ? String(settings.eventDate).split("T")[0]
-                    : ""
-                }
-                required
-              />
+      <Card className="max-w-4xl border-gray-200 shadow-sm">
+        <CardContent className="p-8">
+          <form onSubmit={handleSave} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Event Date */}
+              <div className="space-y-2">
+                <Label className="flex items-center space-x-2">
+                  <Calendar size={16} className="text-[#6F67BA]" />
+                  <span>Event Date</span>
+                </Label>
+                <Input
+                  type="date"
+                  name="eventDate"
+                  defaultValue={
+                    settings?.eventDate
+                      ? new Date(settings.eventDate).toISOString().split("T")[0]
+                      : ""
+                  }
+                  required
+                />
+              </div>
+
+              {/* Event Time */}
+              <div className="space-y-2">
+                <Label className="flex items-center space-x-2">
+                  <Clock size={16} className="text-[#6F67BA]" />
+                  <span>Event Time</span>
+                </Label>
+                <Input
+                  type="text"
+                  name="eventTime"
+                  defaultValue={settings?.eventTime || ""}
+                  placeholder="e.g., 8:00 AM - 5:00 PM"
+                  required
+                />
+              </div>
+
+              {/* Venue Name */}
+              <div className="md:col-span-2 space-y-2">
+                <Label className="flex items-center space-x-2">
+                  <MapPin size={16} className="text-[#6F67BA]" />
+                  <span>Venue Name</span>
+                </Label>
+                <Input
+                  type="text"
+                  name="venueName"
+                  defaultValue={settings?.venueName || ""}
+                  placeholder="e.g., SMX Convention Center"
+                  required
+                />
+              </div>
+
+              {/* Eligibility */}
+              <div className="md:col-span-2 space-y-2">
+                <Label className="flex items-center space-x-2">
+                  <Users size={16} className="text-[#6F67BA]" />
+                  <span>Eligibility Requirements</span>
+                </Label>
+                <Input
+                  type="text"
+                  name="eligibility"
+                  defaultValue={settings?.eligibility || ""}
+                  placeholder="e.g., High School and College Students"
+                  required
+                />
+              </div>
+
+              {/* Rules PDF URL */}
+              <div className="md:col-span-2 space-y-2">
+                <Label className="flex items-center space-x-2">
+                  <FileText size={16} className="text-[#6F67BA]" />
+                  <span>Rules & Guidelines (PDF URL)</span>
+                </Label>
+                <Input
+                  type="url"
+                  name="rulesPdfUrl"
+                  defaultValue={settings?.rulesPdfUrl || ""}
+                  placeholder="https://example.com/rules.pdf"
+                  required
+                />
+              </div>
             </div>
 
-            {/* Event Time */}
-            <div>
-              <label className="flex items-center space-x-2 text-xs font-bold text-[#333333] mb-2 uppercase tracking-wide">
-                <Clock size={16} className="text-[#6F67BA]" />
-                <span>Event Time</span>
-              </label>
-              <input
-                type="text"
-                name="eventTime"
-                className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent transition-shadow"
-                defaultValue={settings?.eventTime || ""}
-                placeholder="e.g., 8:00 AM - 5:00 PM"
-                required
-              />
+            {/* Form Actions */}
+            <div className="pt-6 border-t border-gray-100 flex justify-end">
+              <Button
+                type="submit"
+                disabled={isSaving}
+                className="bg-[#6F67BA] hover:bg-[#5d57a0] text-white flex items-center space-x-2 px-8"
+              >
+                {isSaving ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Save size={16} />
+                )}
+                <span>
+                  {isSaving ? "Saving Changes..." : "Save Event Details"}
+                </span>
+              </Button>
             </div>
-          </div>
-
-          {/* Venue Name */}
-          <div>
-            <label className="flex items-center space-x-2 text-xs font-bold text-[#333333] mb-2 uppercase tracking-wide">
-              <MapPin size={16} className="text-[#6F67BA]" />
-              <span>Venue Name</span>
-            </label>
-            <input
-              type="text"
-              name="venueName"
-              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent transition-shadow"
-              defaultValue={settings?.venueName || ""}
-              placeholder="e.g., SMX Convention Center"
-              required
-            />
-          </div>
-
-          {/* Eligibility */}
-          <div>
-            <label className="flex items-center space-x-2 text-xs font-bold text-[#333333] mb-2 uppercase tracking-wide">
-              <Users size={16} className="text-[#6F67BA]" />
-              <span>Eligibility Requirements</span>
-            </label>
-            <input
-              type="text"
-              name="eligibility"
-              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent transition-shadow"
-              defaultValue={settings?.eligibility || ""}
-              placeholder="e.g., High School and College Students"
-              required
-            />
-          </div>
-
-          {/* Rules PDF URL */}
-          <div>
-            <label className="flex items-center space-x-2 text-xs font-bold text-[#333333] mb-2 uppercase tracking-wide">
-              <LinkIcon size={16} className="text-[#6F67BA]" />
-              <span>Rules & Guidelines (PDF URL)</span>
-            </label>
-            <input
-              type="url"
-              name="rulesPdfUrl"
-              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent transition-shadow"
-              defaultValue={settings?.rulesPdfUrl || ""}
-              placeholder="https://example.com/rules.pdf"
-              required
-            />
-          </div>
-
-          {/* Form Actions */}
-          <div className="pt-6 border-t border-gray-100 flex justify-end space-x-4">
-            <button
-              type="button"
-              disabled={isSaving}
-              className="px-6 py-2.5 text-[#333333] font-semibold hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isSaving}
-              className="bg-[#6F67BA] hover:bg-[#5d57a0] text-white px-6 py-2.5 rounded-lg flex items-center space-x-2 font-semibold shadow-sm transition-colors duration-200 disabled:opacity-75"
-            >
-              {isSaving ? (
-                <Loader2 size={18} className="animate-spin" />
-              ) : (
-                <Save size={18} />
-              )}
-              <span>{isSaving ? "Saving..." : "Save Changes"}</span>
-            </button>
-          </div>
-        </form>
-      </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

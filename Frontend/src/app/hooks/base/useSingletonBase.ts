@@ -30,12 +30,23 @@ export function useSingletonBase<T, TPatch = Partial<T>>(
     loadData();
   }, [loadData]);
 
+  const isSuccessError = (err: any) => {
+    if (err && err.status >= 200 && err.status < 300) return true;
+    if (err instanceof SyntaxError || err?.message?.includes("JSON"))
+      return true;
+    return false;
+  };
+
   const updateItem = async (body: TPatch) => {
     try {
       await operations.update(body);
       await loadData();
-    } catch (err) {
-      console.error("Update failed:", err);
+    } catch (err: any) {
+      if (isSuccessError(err)) {
+        await loadData();
+        return;
+      }
+      console.error("Update Failed:", err);
       throw err;
     }
   };

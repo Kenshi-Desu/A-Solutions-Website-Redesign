@@ -1,16 +1,42 @@
 import { useState } from "react";
 import { Save, Loader2 } from "lucide-react";
-import { toast } from "sonner";
+
 import { useMissionVisions } from "../../hooks/useMissionVision";
 import { MissionVisionPatchRequest } from "../../../api/api-client";
+import { handleAdminFormSubmit } from "../../utils/adminFormUitils"; // Ensure this matches your file spelling exactly
+
+// ============================================================================
+// IMPORTING YOUR REUSABLE UI COMPONENTS
+// ============================================================================
+import { Button } from "../../components/ui/button";
+import { Label } from "../../components/ui/label";
+import { Card, CardContent } from "../../components/ui/card";
 
 export default function MissionVision() {
   const [isSaving, setIsSaving] = useState(false);
 
-  // 1. Destructure our state from the custom hook
   const { data: settings, isLoading, updateItem } = useMissionVisions();
 
-  // 2. Wait for data before rendering the form to prevent empty textareas
+  // --- SAVE HANDLER ---
+  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
+    // We pass `any` for TCreate since a singleton page only ever updates (PATCH)
+    await handleAdminFormSubmit<any, MissionVisionPatchRequest>({
+      event: e,
+      isUpdate: true, // Always true for singleton settings pages
+      editingId: settings?.id || 1,
+
+      // Magic fix: Using the new Singleton update property
+      updateSingletonItem: updateItem,
+
+      setIsSaving,
+      successMessage: "Mission & Vision updated successfully!",
+      buildPayload: (formData) => ({
+        missionStatement: formData.get("missionStatement") as string,
+        visionStatement: formData.get("visionStatement") as string,
+      }),
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -18,37 +44,6 @@ export default function MissionVision() {
       </div>
     );
   }
-
-  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSaving(true);
-
-    // Automatically extract all form values via their "name" attributes
-    const formData = new FormData(e.currentTarget);
-
-    const payload: MissionVisionPatchRequest = {
-      id: settings?.id ?? 1,
-      missionStatement: formData.get("missionStatement") as string,
-      visionStatement: formData.get("visionStatement") as string,
-    };
-
-    try {
-      if (updateItem) {
-        await updateItem(payload);
-      }
-      toast.success("Mission & Vision updated successfully!", {
-        style: {
-          background: "#f0fdf4",
-          color: "#16a34a",
-          borderColor: "#4ade80",
-        },
-      });
-    } catch (error) {
-      toast.error("Failed to update Mission & Vision.");
-    } finally {
-      setIsSaving(false);
-    }
-  };
 
   return (
     <div className="animate-in fade-in duration-300">
@@ -66,7 +61,8 @@ export default function MissionVision() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden max-w-4xl">
+      <Card className="max-w-4xl border-gray-200 shadow-sm overflow-hidden">
+        {/* Custom Header matching the old design */}
         <div className="p-6 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold text-[#333333]">
@@ -78,69 +74,63 @@ export default function MissionVision() {
           </div>
         </div>
 
-        {/* 3. Wrap everything in a form and attach onSubmit */}
-        <form onSubmit={handleSave} className="p-6 space-y-8">
-          
-          {/* Mission Statement */}
-          <div>
-            <label className="block text-sm font-semibold text-[#333333] mb-2">
-              Mission Statement
-            </label>
-            <p className="text-sm text-gray-500 mb-3">
-              This text defines the core purpose and focus of the organization.
-            </p>
-            <textarea
-              name="missionStatement" // Matches the payload property
-              rows={5}
-              className="w-full p-4 bg-white border border-gray-300 rounded-lg text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent transition-shadow resize-y"
-              defaultValue={settings?.missionStatement || ""}
-              required
-            />
-          </div>
+        <CardContent className="p-6">
+          <form onSubmit={handleSave} className="space-y-8">
+            {/* Mission Statement */}
+            <div className="space-y-2">
+              <Label className="block text-sm font-semibold text-[#333333] mb-1 normal-case tracking-normal">
+                Mission Statement
+              </Label>
+              <p className="text-sm text-gray-500 mb-3">
+                This text defines the core purpose and focus of the
+                organization.
+              </p>
+              <textarea
+                name="missionStatement"
+                rows={5}
+                className="flex min-h-25 w-full rounded-lg border border-gray-300 bg-gray-50 focus:bg-white px-4 py-3 text-sm text-[#333333] shadow-sm transition-colors placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6F67BA] focus-visible:border-transparent resize-y"
+                defaultValue={settings?.missionStatement || ""}
+                required
+              />
+            </div>
 
-          <hr className="border-gray-100" />
+            <hr className="border-gray-100" />
 
-          {/* Vision Statement */}
-          <div>
-            <label className="block text-sm font-semibold text-[#333333] mb-2">
-              Vision Statement
-            </label>
-            <p className="text-sm text-gray-500 mb-3">
-              This text defines the long-term goal of the organization.
-            </p>
-            <textarea
-              name="visionStatement" // Matches the payload property
-              rows={5}
-              className="w-full p-4 bg-white border border-gray-300 rounded-lg text-sm text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#6F67BA] focus:border-transparent transition-shadow resize-y"
-              defaultValue={settings?.visionStatement || ""}
-              required
-            />
-          </div>
+            {/* Vision Statement */}
+            <div className="space-y-2">
+              <Label className="block text-sm font-semibold text-[#333333] mb-1 normal-case tracking-normal">
+                Vision Statement
+              </Label>
+              <p className="text-sm text-gray-500 mb-3">
+                This text defines the long-term goal of the organization.
+              </p>
+              <textarea
+                name="visionStatement"
+                rows={5}
+                className="flex min-h-25 w-full rounded-lg border border-gray-300 bg-gray-50 focus:bg-white px-4 py-3 text-sm text-[#333333] shadow-sm transition-colors placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6F67BA] focus-visible:border-transparent resize-y"
+                defaultValue={settings?.visionStatement || ""}
+                required
+              />
+            </div>
 
-          {/* Form Actions */}
-          <div className="pt-6 border-t border-gray-100 flex justify-end space-x-4">
-            <button
-              type="button"
-              disabled={isSaving}
-              className="px-6 py-2.5 text-[#333333] font-semibold hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isSaving}
-              className="bg-[#6F67BA] hover:bg-[#5d57a0] text-white px-6 py-2.5 rounded-lg flex items-center space-x-2 font-semibold shadow-sm transition-colors duration-200 disabled:opacity-75"
-            >
-              {isSaving ? (
-                <Loader2 size={18} className="animate-spin" />
-              ) : (
-                <Save size={18} />
-              )}
-              <span>{isSaving ? "Saving..." : "Save Changes"}</span>
-            </button>
-          </div>
-        </form>
-      </div>
+            {/* Form Actions */}
+            <div className="pt-6 border-t border-gray-100 flex justify-end">
+              <Button
+                type="submit"
+                disabled={isSaving}
+                className="bg-[#6F67BA] hover:bg-[#5d57a0] text-white flex items-center space-x-2 px-8"
+              >
+                {isSaving ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Save size={16} />
+                )}
+                <span>{isSaving ? "Saving Changes..." : "Save Changes"}</span>
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
