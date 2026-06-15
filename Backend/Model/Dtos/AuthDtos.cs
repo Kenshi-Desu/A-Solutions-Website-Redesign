@@ -12,6 +12,17 @@ public class LoginRequest
     public required string Password { get; set; }
 }
 
+public class VerifyOtpRequest
+{
+    [Required]
+    [EmailAddress]
+    public required string Email { get; set; }
+
+    [Required]
+    [StringLength(6, MinimumLength = 6, ErrorMessage = "Verification code must be exactly 6 digits.")]
+    public required string Code { get; set; }
+}
+
 public class AuthResponse
 {
     public required string AccessToken { get; set; }
