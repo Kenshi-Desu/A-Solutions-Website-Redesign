@@ -13,7 +13,7 @@ public class UsersResponse
     public required string Email { get; set; }
     [Required]
     public required string Role { get; set; }
-    public TimeOnly LastLoginAt { get; set; }
+    public DateTime LastLoginAt { get; set; }
 }
 
 public class UsersPostRequest

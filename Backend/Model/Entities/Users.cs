@@ -8,7 +8,7 @@ namespace A_Solutions_Website_Redesign.Backend.Model.Entities;
 public class Users : BaseModel
 {
     [SetsRequiredMembers]
-    public Users()
+        public Users()
     {
         Id = string.Empty;
         Username = string.Empty;
@@ -16,7 +16,7 @@ public class Users : BaseModel
         Role = string.Empty;
     }
 
-    [PrimaryKey("id", false)]
+    [PrimaryKey("id", true)]
     public string Id { get; set; }
 
     [Column("username")]
@@ -29,5 +29,5 @@ public class Users : BaseModel
     public string Role { get; set; }
 
     [Column("last_login_at")]
-    public TimeOnly LastLoginAt { get; set; }
+    public DateTime LastLoginAt { get; set; }
 }
